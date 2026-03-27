@@ -97,9 +97,8 @@ export default function FormularioReservaProfesional() {
 
 
 
-    // handleSubmit: se ejecuta al enviar el formulario
-    // Envía los datos al backend que crea la preferencia de Mercado Pago
-    async function pagarMercadoPago(
+ /*
+     async function pagarMercadoPago(
         nombrePaciente,
         apellidoPaciente,
         rut,
@@ -182,7 +181,77 @@ export default function FormularioReservaProfesional() {
         }
     }
 
+ * */
 
+
+
+
+
+
+        id_profesional
+
+    function comprobanteAgendamiento() {
+        setNombrePaciente("");
+        setApellidoPaciente("");
+        setDescripcionProfesional("");
+        setRut("");
+        setTelefono("");
+        setEmail("");
+        router.push(`/reserva-hora?fecha=${fechaInicio}&hora=${horaInicio}`);
+    }
+
+
+
+
+    async function agendarSinPago(
+        nombrePaciente,
+        apellidoPaciente,
+        rut,
+        telefono,
+        email,
+        fechaInicio,
+        horaInicio,
+        fechaFinalizacion,
+        horaFinalizacion,
+        id_profesional
+    ){
+        try {
+
+            if (!nombrePaciente || !apellidoPaciente || !rut || !telefono || !email || !fechaInicio || !horaInicio || !horaFinalizacion || !id_profesional) {
+                toast.error('Debe llenar todos los campos');
+                return false;
+            }
+
+            const res = await fetch(`${API}/reservaPacientes/insertarReservaPacienteFicha`, {
+                method: "POST",
+                headers: {Accept: "application/json", "Content-Type": "application/json"},
+                mode: "cors",
+                body: JSON.stringify({
+                    nombrePaciente,
+                    apellidoPaciente,
+                    rut,
+                    telefono,
+                    email,
+                    fechaInicio,
+                    horaInicio,
+                    fechaFinalizacion,
+                    horaFinalizacion,
+                    estadoReserva: "reservada" ,
+                    id_profesional})
+            });
+
+            if (!res.ok) return toast.error('Hubo un problema, intente agendar por otro medio');
+
+            const respuestaBackend = await res.json();
+
+            if(respuestaBackend.message === true){
+                comprobanteAgendamiento();
+                return toast.success('Cita Agendada');
+            }
+        }catch (error) {
+            return toast.error('Hubo un problema, intente agendar por otro medio');
+        }
+    }
 
     const formatoCLP = new Intl.NumberFormat("es-CL", {
         style: "currency",
@@ -355,7 +424,7 @@ export default function FormularioReservaProfesional() {
                                 if (e?.preventDefault) e.preventDefault();
                                 if (e?.stopPropagation) e.stopPropagation();
 
-                                return pagarMercadoPago(
+                                return agendarSinPago(
                                     nombrePaciente,
                                     apellidoPaciente,
                                     rut,
@@ -365,9 +434,6 @@ export default function FormularioReservaProfesional() {
                                     horaInicio,
                                     fechaFinalizacion,
                                     horaFin,
-                                    totalPago,
-                                    profesionalSeleccionado,
-                                    servicioSeleccionado,
                                     id_profesional
                                 );
                             }}
