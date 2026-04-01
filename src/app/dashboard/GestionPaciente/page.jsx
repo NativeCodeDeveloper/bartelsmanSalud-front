@@ -12,6 +12,7 @@ import ShadcnDatePicker from "@/Componentes/shadcnDatePicker";
 import {useRouter} from "next/navigation";
 import {UserIcon} from "@heroicons/react/24/outline";
 import {InfoButton} from "@/Componentes/InfoButton";
+import {Textarea} from "@/components/ui/textarea";
 
 
 export default function GestionPaciente() {
@@ -28,6 +29,12 @@ export default function GestionPaciente() {
     const [correo, setCorreo] = useState("");
     const [direccion, setDireccion] = useState("");
     const [pais, setPais] = useState("");
+    const [observacion1, setObservacion1] = useState("");
+    const [apoderado, setApoderado] = useState("");
+    const [apoderadoRut, setApoderadoRut] = useState("");
+    const [medicamentosUsados, setMedicamentosUsados] = useState("");
+    const [habitos, setHabitos] = useState("");
+    const [comentariosAdicionales, setComentariosAdicionales] = useState("");
 
     const [nombreBuscado, setNombreBuscado] = useState("");
     const [rutBuscado, setRutBuscado] = useState("");
@@ -110,7 +117,7 @@ export default function GestionPaciente() {
         }
     }
 
-    async function insertarPaciente(nombre, apellido, rut, nacimiento, sexo, prevision, telefono, correo, direccion, pais) {
+    async function insertarPaciente(nombre, apellido, rut, nacimiento, sexo, prevision, telefono, correo, direccion, pais, observacion1, apoderado, apoderado_rut, medicamentosUsados, habitos, comentariosAdicionales) {
         try {
             let prevision_id = null;
 
@@ -142,7 +149,13 @@ export default function GestionPaciente() {
                     telefono,
                     correo,
                     direccion,
-                    pais
+                    pais,
+                    observacion1,
+                    apoderado,
+                    apoderado_rut,
+                    medicamentosUsados,
+                    habitos,
+                    comentariosAdicionales
                 }),
                 mode: "cors"
             })
@@ -160,6 +173,12 @@ export default function GestionPaciente() {
                     setCorreo("");
                     setDireccion("");
                     setPais("");
+                    setObservacion1("");
+                    setApoderado("");
+                    setApoderadoRut("");
+                    setMedicamentosUsados("");
+                    setHabitos("");
+                    setComentariosAdicionales("");
                     await listarPacientes();
                     return toast.success("Paciente ingresado correctamente.");
                 }
@@ -226,7 +245,7 @@ export default function GestionPaciente() {
                         </div>
 
                         <div className="p-5 md:p-6">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 mb-1.5">Nombre</label>
                                     <ShadcnInput
@@ -269,10 +288,11 @@ export default function GestionPaciente() {
 
                                 <div>
                                     <label className="block text-sm font-medium text-slate-700 mb-1.5">Previsión</label>
-                                    <div className="w-full sm:max-w-xs">
+                                    <div className="w-full [&_button]:w-full [&_button]:h-10 [&_button]:justify-between [&_button]:rounded-md [&_button]:border-slate-200 [&_button]:bg-white [&_button]:px-3 [&_button]:text-sm [&_button]:text-slate-700 [&_button]:shadow-none">
                                         <ShadcnSelect
                                             nombreDefault={"Seleccion Prevision"}
                                             value1={"NO APLICA"}
+                                            value2={"ISAPRE"}
                                             onChange={(value) => setPrevision(value)}
                                         />
                                     </div>
@@ -323,11 +343,69 @@ export default function GestionPaciente() {
                                     />
                                 </div>
 
-                                <div className="sm:col-span-2 flex justify-end pt-2">
+                                <div className="sm:col-span-2 xl:col-span-3 pt-2">
+                                    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-5">
+                                        <div>
+                                            <label className="block text-sm font-medium text-slate-700 mb-1.5">Apoderado</label>
+                                            <ShadcnInput
+                                                value={apoderado}
+                                                placeholder={"Nombre completo del apoderado"}
+                                                onChange={(e) => setApoderado(e.target.value)}
+                                                className="w-full"/>
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-medium text-slate-700 mb-1.5">RUT Apoderado</label>
+                                            <ShadcnInput
+                                                value={apoderadoRut}
+                                                placeholder={"11222333K"}
+                                                onChange={(e) => setApoderadoRut(e.target.value)}
+                                                className="w-full"/>
+                                        </div>
+
+                                        <div className="md:col-span-2 xl:col-span-3">
+                                            <label className="block text-sm font-medium text-slate-700 mb-1.5">Observación 1</label>
+                                            <Textarea
+                                                value={observacion1}
+                                                onChange={(e) => setObservacion1(e.target.value)}
+                                                placeholder="Observación clínica o administrativa"
+                                                className="min-h-[96px] resize-y"/>
+                                        </div>
+
+                                        <div className="md:col-span-2 xl:col-span-3">
+                                            <label className="block text-sm font-medium text-slate-700 mb-1.5">Medicamentos Usados</label>
+                                            <Textarea
+                                                value={medicamentosUsados}
+                                                onChange={(e) => setMedicamentosUsados(e.target.value)}
+                                                placeholder="Medicamentos actuales o de uso frecuente"
+                                                className="min-h-[96px] resize-y"/>
+                                        </div>
+
+                                        <div className="md:col-span-2 xl:col-span-3">
+                                            <label className="block text-sm font-medium text-slate-700 mb-1.5">Hábitos</label>
+                                            <Textarea
+                                                value={habitos}
+                                                onChange={(e) => setHabitos(e.target.value)}
+                                                placeholder="Hábitos del paciente relevantes para la atención"
+                                                className="min-h-[96px] resize-y"/>
+                                        </div>
+
+                                        <div className="md:col-span-2 xl:col-span-3">
+                                            <label className="block text-sm font-medium text-slate-700 mb-1.5">Comentarios Adicionales</label>
+                                            <Textarea
+                                                value={comentariosAdicionales}
+                                                onChange={(e) => setComentariosAdicionales(e.target.value)}
+                                                placeholder="Comentarios adicionales sin límite visual corto"
+                                                className="min-h-[120px] resize-y"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="sm:col-span-2 xl:col-span-3 flex justify-end pt-2">
                                     <button
                                         className="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-sky-600 to-cyan-500 rounded-lg hover:from-sky-700 hover:to-cyan-600 transition-all duration-150 shadow-md hover:shadow-lg"
                                         type={"button"}
-                                        onClick={() => insertarPaciente(nombre, apellido, rut, nacimiento, sexo, prevision, telefono, correo, direccion, pais)}
+                                        onClick={() => insertarPaciente(nombre, apellido, rut, nacimiento, sexo, prevision, telefono, correo, direccion, pais, observacion1, apoderado, apoderadoRut, medicamentosUsados, habitos, comentariosAdicionales)}
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4"/>

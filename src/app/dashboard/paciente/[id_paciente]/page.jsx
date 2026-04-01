@@ -11,6 +11,7 @@ import {ShadcnSelect} from "@/Componentes/shadcnSelect";
 import ShadcnDatePicker from "@/Componentes/shadcnDatePicker";
 import * as React from "react";
 import {InfoButton} from "@/Componentes/InfoButton";
+import {Textarea} from "@/components/ui/textarea";
 
 
 
@@ -37,6 +38,12 @@ export default function Paciente(){
     const [correo, setCorreo] = useState("");
     const [direccion, setDireccion] = useState("");
     const[pais, setPais] = useState("");
+    const [observacion1, setObservacion1] = useState("");
+    const [apoderado, setApoderado] = useState("");
+    const [apoderadoRut, setApoderadoRut] = useState("");
+    const [medicamentosUsados, setMedicamentosUsados] = useState("");
+    const [habitos, setHabitos] = useState("");
+    const [comentariosAdicionales, setComentariosAdicionales] = useState("");
 
     function volverAingreso(){
         router.push("/dashboard/GestionPaciente");
@@ -52,7 +59,7 @@ export default function Paciente(){
 
 
     //FUNCION PARA LA ACTUALIZACION DE DATOS DEL PACIENTE
-    async function actualizarDatosPacientes(nombre,apellido,rut,nacimiento,sexo, prevision,telefono,correo,direccion,pais,id_paciente ) {
+    async function actualizarDatosPacientes(nombre,apellido,rut,nacimiento,sexo, prevision,telefono,correo,direccion,pais,observacion1,apoderado,apoderado_rut,medicamentosUsados,habitos,comentariosAdicionales,id_paciente ) {
 
         let prevision_id = null;
 
@@ -85,6 +92,12 @@ export default function Paciente(){
                     correo,
                     direccion,
                     pais,
+                    observacion1,
+                    apoderado,
+                    apoderado_rut,
+                    medicamentosUsados,
+                    habitos,
+                    comentariosAdicionales,
                     id_paciente})
             })
 
@@ -105,6 +118,12 @@ export default function Paciente(){
                     setRut("");
                     setSexo("");
                     setPais("");
+                    setObservacion1("");
+                    setApoderado("");
+                    setApoderadoRut("");
+                    setMedicamentosUsados("");
+                    setHabitos("");
+                    setComentariosAdicionales("");
                     await buscarPacientePorId(id_paciente);
                     return toast.success("Datos del paciente actualizados con Exito!");
 
@@ -162,10 +181,17 @@ export default function Paciente(){
             setRut(paciente.rut);
             setNacimiento(paciente.nacimiento);
             setSexo(paciente.sexo);
+            setPrevision(previsionDeterminacion(paciente.prevision_id));
             setTelefono(paciente.telefono);
             setCorreo(paciente.correo);
             setDireccion(paciente.direccion);
             setPais(paciente.pais);
+            setObservacion1(paciente.observacion1 ?? "");
+            setApoderado(paciente.apoderado ?? "");
+            setApoderadoRut(paciente.apoderado_rut ?? "");
+            setMedicamentosUsados(paciente.medicamentosUsados ?? "");
+            setHabitos(paciente.habitos ?? "");
+            setComentariosAdicionales(paciente.comentariosAdicionales ?? "");
         }
     }, [detallePaciente]);
 
@@ -228,12 +254,12 @@ export default function Paciente(){
 
             <div className="max-w-5xl mx-auto px-4">
                 <header className="mb-5 sm:mb-6">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <div>
                             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">Datos del Paciente</h1>
                             <p className="mt-1 text-sm text-slate-600">Información de contacto del Paciente </p>
                         </div>
-                        <div className="hidden sm:flex items-center gap-2">
+                        <div className="flex flex-wrap items-center gap-2">
                             <span className="text-xs text-slate-500">Registros:</span>
                             <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-sky-100 text-sky-900 font-semibold text-xs">{detallePaciente.length}</span>
                             <ShadcnButton nombre={"Volver a Ingreso"} funcion={()=> volverAingreso()}/>
@@ -246,57 +272,121 @@ export default function Paciente(){
                         <div className="rounded-xl border border-dashed border-slate-200 bg-white p-5 text-center text-sm text-slate-600 shadow-sm">No hay datos disponibles o se están cargando...</div>
                     ) : (
                         detallePaciente.map(paciente => (
-                            <article key={paciente.id_paciente} className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden ring-1 ring-slate-100/60">
-                                <div className="p-4 sm:p-5 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 items-start">
-                                    {/* Left: identidad */}
-                                    <div className="sm:col-span-2">
-                                        <div className="flex items-start justify-between">
+                            <article key={paciente.id_paciente} className="overflow-hidden rounded-[28px] border border-sky-100 bg-white shadow-[0_20px_60px_-30px_rgba(14,116,144,0.35)] ring-1 ring-sky-100/60">
+                                <div className="relative overflow-hidden bg-gradient-to-r from-sky-700 via-sky-600 to-cyan-500 px-5 py-6 sm:px-6">
+                                    <div className="absolute inset-0 opacity-20">
+                                        <div className="absolute -top-10 right-0 h-36 w-36 rounded-full bg-white blur-3xl" />
+                                        <div className="absolute bottom-0 left-10 h-24 w-24 rounded-full bg-cyan-200 blur-2xl" />
+                                    </div>
+                                    <div className="relative flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                                        <div className="flex items-start gap-4">
+                                            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/20 text-lg font-bold text-white backdrop-blur-sm ring-1 ring-white/30">
+                                                {paciente.nombre?.charAt(0)}{paciente.apellido?.charAt(0)}
+                                            </div>
                                             <div>
-                                                <h2 className="text-base sm:text-lg font-semibold text-slate-900 leading-tight">{paciente.nombre} {paciente.apellido}</h2>
-                                                <p className="mt-1 text-xs sm:text-sm text-slate-600">RUT: <span className="font-semibold text-slate-800">{paciente.rut}</span></p>
-                                            </div>
-                                            <div className="text-right">
-                                                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-100 text-sky-900">{previsionDeterminacion(paciente.prevision_id)}</span>
+                                                <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-100/80">Ficha de paciente</p>
+                                                <h2 className="mt-1 text-2xl font-bold tracking-tight text-white sm:text-3xl">{paciente.nombre} {paciente.apellido}</h2>
+                                                <p className="mt-2 text-sm text-sky-50/90">RUT <span className="font-semibold text-white">{paciente.rut || "---"}</span></p>
                                             </div>
                                         </div>
-
-                                        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                            <div className="bg-slate-50/70 p-3 rounded-xl border border-slate-100">
-                                                <p className="text-xs text-slate-600">Fecha de nacimiento</p>
-                                                <p className="mt-1 font-medium text-slate-700">{(formatearFecha(paciente.nacimiento)??'---')}</p>
-                                            </div>
-                                            <div className="bg-slate-50/70 p-3 rounded-xl border border-slate-100">
-                                                <p className="text-xs text-slate-600">Sexo</p>
-                                                <p className="mt-1 font-semibold text-slate-900">{paciente.sexo ?? '---'}</p>
-                                            </div>
+                                        <div className="flex flex-wrap items-center gap-2">
+                                            <span className="inline-flex items-center rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white ring-1 ring-white/20 backdrop-blur-sm">
+                                                {previsionDeterminacion(paciente.prevision_id)}
+                                            </span>
+                                            <span className="inline-flex items-center rounded-full bg-sky-950/20 px-3 py-1 text-xs font-medium text-white/90 ring-1 ring-white/10 backdrop-blur-sm">
+                                                ID #{paciente.id_paciente}
+                                            </span>
                                         </div>
                                     </div>
+                                </div>
 
+                                <div className="space-y-5 p-4 sm:p-6">
+                                    <section className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
+                                        <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 px-4 py-3">
+                                            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Nacimiento</p>
+                                            <p className="mt-2 text-sm font-semibold text-slate-800">{formatearFecha(paciente.nacimiento) ?? "---"}</p>
+                                        </div>
+                                        <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 px-4 py-3">
+                                            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Sexo</p>
+                                            <p className="mt-2 text-sm font-semibold text-slate-800 break-words whitespace-pre-wrap">{paciente.sexo ?? "---"}</p>
+                                        </div>
+                                        <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 px-4 py-3">
+                                            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Teléfono</p>
+                                            <p className="mt-2 text-sm font-semibold text-slate-800 break-words whitespace-pre-wrap">{paciente.telefono ?? "---"}</p>
+                                        </div>
+                                        <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 px-4 py-3">
+                                            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">País</p>
+                                            <p className="mt-2 text-sm font-semibold text-slate-800 break-words whitespace-pre-wrap">{paciente.pais ?? "---"}</p>
+                                        </div>
+                                    </section>
 
-                                    {/* Right: contacto */}
-                                    <div className="sm:col-span-1">
-                                        <div className="flex flex-col gap-3">
-                                            <div className="text-sm">
-                                                <p className="text-[11px] uppercase tracking-wide text-slate-500">Teléfono</p>
-                                                <p className="mt-1 font-semibold text-slate-900">{paciente.telefono ?? '---'} </p>
+                                    <section className="grid grid-cols-1 gap-4 xl:grid-cols-[1.15fr_0.85fr]">
+                                        <div className="rounded-3xl border border-sky-100 bg-gradient-to-br from-sky-50 via-white to-cyan-50/70 p-5">
+                                            <div className="mb-4 flex items-center gap-3">
+                                                <div className="h-9 w-1 rounded-full bg-gradient-to-b from-sky-500 to-cyan-400" />
+                                                <div>
+                                                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-600">Contacto</p>
+                                                    <h3 className="text-lg font-semibold text-slate-900">Información principal</h3>
+                                                </div>
                                             </div>
-                                            <div className="text-sm">
-                                                <p className="text-[11px] uppercase tracking-wide text-slate-500">Correo</p>
-                                                <p className="mt-1 font-semibold text-slate-900 break-all">{paciente.correo ?? '---'}</p>
-                                            </div>
-                                            <div className="text-sm">
-                                                <p className="text-[11px] uppercase tracking-wide text-slate-500">Dirección</p>
-                                                <p className="mt-1 font-semibold text-slate-900">{paciente.direccion ?? '---'}</p>
+                                            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                                                <div className="rounded-2xl border border-white/80 bg-white/90 p-4 shadow-sm">
+                                                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Correo</p>
+                                                    <p className="mt-2 text-sm font-medium text-slate-800 break-words whitespace-pre-wrap">{paciente.correo || "---"}</p>
+                                                </div>
+                                                <div className="rounded-2xl border border-white/80 bg-white/90 p-4 shadow-sm">
+                                                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Dirección</p>
+                                                    <p className="mt-2 text-sm font-medium text-slate-800 break-words whitespace-pre-wrap">{paciente.direccion || "---"}</p>
+                                                </div>
+                                                <div className="rounded-2xl border border-white/80 bg-white/90 p-4 shadow-sm md:col-span-2">
+                                                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Observación</p>
+                                                    <p className="mt-2 text-sm font-medium leading-6 text-slate-800 break-words whitespace-pre-wrap">{paciente.observacion1 || "---"}</p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+
+                                        <div className="rounded-3xl border border-slate-200 bg-slate-50/70 p-5">
+                                            <div className="mb-4">
+                                                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Referencia</p>
+                                                <h3 className="text-lg font-semibold text-slate-900">Apoderado</h3>
+                                            </div>
+                                            <div className="space-y-4">
+                                                <div className="rounded-2xl border border-white/80 bg-white p-4 shadow-sm">
+                                                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">Nombre</p>
+                                                    <p className="mt-2 text-sm font-medium text-slate-800 break-words whitespace-pre-wrap">{paciente.apoderado || "---"}</p>
+                                                </div>
+                                                <div className="rounded-2xl border border-white/80 bg-white p-4 shadow-sm">
+                                                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">RUT Apoderado</p>
+                                                    <p className="mt-2 text-sm font-medium text-slate-800 break-words whitespace-pre-wrap">{paciente.apoderado_rut || "---"}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                    <section className="grid grid-cols-1 gap-4 xl:grid-cols-3">
+                                        <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+                                            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Antecedentes</p>
+                                            <h3 className="mt-1 text-lg font-semibold text-slate-900">Medicamentos usados</h3>
+                                            <p className="mt-3 text-sm leading-6 text-slate-700 break-words whitespace-pre-wrap">{paciente.medicamentosUsados || "---"}</p>
+                                        </div>
+                                        <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+                                            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Rutina</p>
+                                            <h3 className="mt-1 text-lg font-semibold text-slate-900">Hábitos</h3>
+                                            <p className="mt-3 text-sm leading-6 text-slate-700 break-words whitespace-pre-wrap">{paciente.habitos || "---"}</p>
+                                        </div>
+                                        <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+                                            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Notas</p>
+                                            <h3 className="mt-1 text-lg font-semibold text-slate-900">Comentarios adicionales</h3>
+                                            <p className="mt-3 text-sm leading-6 text-slate-700 break-words whitespace-pre-wrap">{paciente.comentariosAdicionales || "---"}</p>
+                                        </div>
+                                    </section>
                                 </div>
                             </article>
                         ))
                     )}
                 </div>
 
-                <div className="mt-6 flex justify-center sm:justify-end gap-6">
+                <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-end">
                     <ShadcnButton nombre={'Eliminar Paciente'} funcion={()=> eliminarPaciente(id_paciente)}/>
                     <ShadcnButton nombre={mostrarFormulario ?  "Ocultar Formulario" : "Actualizar Datos" } funcion={()=> setMostrarFormulario((estadoBooleano) => !estadoBooleano)}/></div>
 
@@ -304,12 +394,21 @@ export default function Paciente(){
 
             {/* FORMULARIO DE ACTUALIZACION */}
             {mostrarFormulario ? (
-                <div className="mt-6 max-w-5xl mx-auto bg-white/90 backdrop-blur rounded-2xl p-5 sm:p-6 border border-slate-100 shadow-sm ring-1 ring-slate-100/60">
-                    <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-base sm:text-lg font-semibold text-slate-900">Actualizar Datos Paciente</h2>
+                <div className="mt-6 max-w-5xl mx-auto overflow-hidden rounded-[28px] border border-sky-100 bg-white shadow-[0_20px_60px_-30px_rgba(14,116,144,0.28)] ring-1 ring-sky-100/60">
+                    <div className="border-b border-sky-100 bg-gradient-to-r from-sky-50 via-white to-cyan-50 px-5 py-4 sm:px-6">
+                        <p className="text-xs font-semibold uppercase tracking-[0.26em] text-sky-600">Edición</p>
+                        <h2 className="mt-1 text-lg font-semibold text-slate-900">Actualizar Datos del Paciente</h2>
+                        <p className="mt-1 text-sm text-slate-500">Ajusta los datos demográficos y clínicos manteniendo la misma línea visual de la ficha.</p>
                     </div>
 
-                    <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-6 p-5 sm:p-6">
+                        <section>
+                            <div className="mb-4">
+                                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Identidad</p>
+                                <h3 className="text-base font-semibold text-slate-900">Datos básicos</h3>
+                            </div>
+
+                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
 
                         <div className="">
                             <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Nombre</label>
@@ -361,9 +460,10 @@ export default function Paciente(){
 
                         <div className="">
                             <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Seleccione Previsión</label>
-                            <div className="mt-1">
+                            <div className="mt-1 [&_button]:w-full [&_button]:justify-between [&_button]:rounded-md [&_button]:border-slate-200 [&_button]:bg-slate-50/70 [&_button]:text-sm [&_button]:text-slate-700 [&_button]:shadow-none">
                                 <ShadcnSelect nombreDefault={"Seleccion Prevision"}
                                               value1={"NO APLICA"}
+                                              value2={"ISAPRE"}
                                               onChange={(value) => setPrevision(value)}/>
                             </div>
                         </div>
@@ -415,7 +515,7 @@ export default function Paciente(){
                         </div>
 
 
-                        <div className="sm:col-span-2">
+                        <div className="sm:col-span-2 xl:col-span-3">
                             <div className="mt-1">
                                 <ShadcnDatePicker
                                     label="Fecha de nacimiento"
@@ -424,17 +524,85 @@ export default function Paciente(){
                                 />
                             </div>
                         </div>
+                            </div>
+                        </section>
 
-                        <div className="sm:col-span-2 flex justify-center sm:justify-end pt-2">
+                        <section className="grid grid-cols-1 gap-6 xl:grid-cols-[0.9fr_1.1fr]">
+                            <div className="rounded-3xl border border-slate-200 bg-slate-50/70 p-5">
+                                <div className="mb-4">
+                                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Referencia</p>
+                                    <h3 className="text-base font-semibold text-slate-900">Apoderado</h3>
+                                </div>
+                                <div className="grid grid-cols-1 gap-4">
+
+                                    <div>
+                                        <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Apoderado</label>
+                                        <div className="mt-1">
+                                            <ShadcnInput
+                                                value={apoderado}
+                                                placeholder={"Nombre completo del apoderado"}
+                                                onChange={(e) => setApoderado(e.target.value)} className="bg-white border-slate-200 focus:border-sky-400 focus:ring-sky-200" />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide">RUT Apoderado</label>
+                                        <div className="mt-1">
+                                            <ShadcnInput
+                                                value={apoderadoRut}
+                                                placeholder={"11222333K"}
+                                                onChange={(e) => setApoderadoRut(e.target.value)} className="bg-white border-slate-200 focus:border-sky-400 focus:ring-sky-200" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="rounded-3xl border border-sky-100 bg-gradient-to-br from-sky-50 via-white to-cyan-50/60 p-5">
+                                <div className="mb-4">
+                                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-600">Resumen clínico</p>
+                                    <h3 className="text-base font-semibold text-slate-900">Observaciones y antecedentes</h3>
+                                </div>
+                                <div className="grid grid-cols-1 gap-4">
+                                    <div>
+                                        <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Observación 1</label>
+                                        <div className="mt-1">
+                                            <Textarea value={observacion1} onChange={(e) => setObservacion1(e.target.value)} className="min-h-[110px] resize-y bg-white/90 border-slate-200 focus:border-sky-400 focus:ring-sky-200" />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Medicamentos Usados</label>
+                                        <div className="mt-1">
+                                            <Textarea value={medicamentosUsados} onChange={(e) => setMedicamentosUsados(e.target.value)} className="min-h-[110px] resize-y bg-white/90 border-slate-200 focus:border-sky-400 focus:ring-sky-200" />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Hábitos</label>
+                                        <div className="mt-1">
+                                            <Textarea value={habitos} onChange={(e) => setHabitos(e.target.value)} className="min-h-[110px] resize-y bg-white/90 border-slate-200 focus:border-sky-400 focus:ring-sky-200" />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="text-xs font-semibold text-slate-700 uppercase tracking-wide">Comentarios Adicionales</label>
+                                        <div className="mt-1">
+                                            <Textarea value={comentariosAdicionales} onChange={(e) => setComentariosAdicionales(e.target.value)} className="min-h-[130px] resize-y bg-white/90 border-slate-200 focus:border-sky-400 focus:ring-sky-200" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <div className="flex justify-center pt-2 sm:justify-end">
 
                             <button
                                 className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-sky-700 to-blue-600 text-white font-semibold shadow-md hover:from-sky-800 hover:to-blue-700 transition focus:outline-none focus:ring-2 focus:ring-sky-300 focus:ring-offset-2"
                                 type={"button"}
-                                onClick={()=> actualizarDatosPacientes(nombre,apellido,rut,nacimiento,sexo, prevision,telefono,correo,direccion,pais,id_paciente )}
+                                onClick={()=> actualizarDatosPacientes(nombre,apellido,rut,nacimiento,sexo, prevision,telefono,correo,direccion,pais,observacion1,apoderado,apoderadoRut,medicamentosUsados,habitos,comentariosAdicionales,id_paciente )}
                             >Actualizar</button>
 
                         </div>
-
                     </div>
                 </div>
             ) : null}

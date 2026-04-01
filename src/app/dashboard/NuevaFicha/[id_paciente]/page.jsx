@@ -204,7 +204,35 @@ export default function NuevaFicha() {
                                 </div>
                                 <div className="flex flex-col gap-1">
                                     <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">RUT</span>
-                                    <span className="text-sm font-medium text-slate-800">{paciente.rut}</span>
+                                    <span className="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap">{paciente.rut}</span>
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Teléfono</span>
+                                    <span className="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap">{paciente.telefono || "-"}</span>
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Correo</span>
+                                    <span className="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap">{paciente.correo || "-"}</span>
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Apoderado</span>
+                                    <span className="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap">{paciente.apoderado || "-"}</span>
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">RUT Apoderado</span>
+                                    <span className="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap">{paciente.apoderado_rut || "-"}</span>
+                                </div>
+                                <div className="sm:col-span-2 lg:col-span-4 flex flex-col gap-1">
+                                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Medicamentos Usados</span>
+                                    <span className="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap">{paciente.medicamentosUsados || "-"}</span>
+                                </div>
+                                <div className="sm:col-span-2 lg:col-span-2 flex flex-col gap-1">
+                                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Hábitos</span>
+                                    <span className="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap">{paciente.habitos || "-"}</span>
+                                </div>
+                                <div className="sm:col-span-2 lg:col-span-2 flex flex-col gap-1">
+                                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Comentarios Adicionales</span>
+                                    <span className="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap">{paciente.comentariosAdicionales || "-"}</span>
                                 </div>
                             </div>
                         </div>

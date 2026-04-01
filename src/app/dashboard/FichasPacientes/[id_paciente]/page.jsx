@@ -254,7 +254,7 @@ export default function Paciente() {
 
     function previsionDeterminacion(id_prevision) {
         if (id_prevision === 1) return "NO APLICA";
-        if (id_prevision === 2) return "NO APLICA";
+        if (id_prevision === 2) return "ISAPRE";
         return "SIN DEFINIR";
     }
 
@@ -312,10 +312,10 @@ export default function Paciente() {
                                 </span>
                             </div>
 
-                            <div className="p-5 md:p-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                            <div className="p-5 md:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
                                 <div className="bg-slate-50 rounded-lg px-4 py-3">
                                     <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Nacimiento</p>
-                                    <p className="text-sm font-medium text-slate-700 mt-1">{formatearFecha(paciente.nacimiento)}</p>
+                                    <p className="text-sm font-medium text-slate-700 mt-1 break-words whitespace-pre-wrap">{formatearFecha(paciente.nacimiento)}</p>
                                 </div>
                                 <div className="bg-sky-50 rounded-lg px-4 py-3 border border-sky-100">
                                     <p className="text-[11px] font-medium text-sky-400 uppercase tracking-wider">Edad</p>
@@ -323,19 +323,47 @@ export default function Paciente() {
                                 </div>
                                 <div className="bg-slate-50 rounded-lg px-4 py-3">
                                     <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Sexo</p>
-                                    <p className="text-sm font-medium text-slate-700 mt-1">{paciente.sexo}</p>
+                                    <p className="text-sm font-medium text-slate-700 mt-1 break-words whitespace-pre-wrap">{paciente.sexo}</p>
                                 </div>
                                 <div className="bg-slate-50 rounded-lg px-4 py-3">
                                     <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Teléfono</p>
-                                    <p className="text-sm font-medium text-slate-700 mt-1">{paciente.telefono || '-'}</p>
+                                    <p className="text-sm font-medium text-slate-700 mt-1 break-words whitespace-pre-wrap">{paciente.telefono || '-'}</p>
                                 </div>
                                 <div className="bg-slate-50 rounded-lg px-4 py-3">
                                     <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Correo</p>
-                                    <p className="text-sm font-medium text-slate-700 mt-1 truncate">{paciente.correo || '-'}</p>
+                                    <p className="text-sm font-medium text-slate-700 mt-1 break-words whitespace-pre-wrap">{paciente.correo || '-'}</p>
                                 </div>
                                 <div className="bg-slate-50 rounded-lg px-4 py-3 col-span-2 sm:col-span-1">
                                     <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Dirección</p>
-                                    <p className="text-sm font-medium text-slate-700 mt-1">{paciente.direccion || '-'}</p>
+                                    <p className="text-sm font-medium text-slate-700 mt-1 break-words whitespace-pre-wrap">{paciente.direccion || '-'}</p>
+                                </div>
+                                <div className="bg-slate-50 rounded-lg px-4 py-3">
+                                    <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">País</p>
+                                    <p className="text-sm font-medium text-slate-700 mt-1 break-words whitespace-pre-wrap">{paciente.pais || '-'}</p>
+                                </div>
+                                <div className="bg-slate-50 rounded-lg px-4 py-3">
+                                    <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Apoderado</p>
+                                    <p className="text-sm font-medium text-slate-700 mt-1 break-words whitespace-pre-wrap">{paciente.apoderado || '-'}</p>
+                                </div>
+                                <div className="bg-slate-50 rounded-lg px-4 py-3">
+                                    <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">RUT Apoderado</p>
+                                    <p className="text-sm font-medium text-slate-700 mt-1 break-words whitespace-pre-wrap">{paciente.apoderado_rut || '-'}</p>
+                                </div>
+                                <div className="bg-slate-50 rounded-lg px-4 py-3 xl:col-span-3">
+                                    <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Medicamentos Usados</p>
+                                    <p className="text-sm font-medium text-slate-700 mt-1 break-words whitespace-pre-wrap">{paciente.medicamentosUsados || '-'}</p>
+                                </div>
+                                <div className="bg-slate-50 rounded-lg px-4 py-3 xl:col-span-3">
+                                    <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Hábitos</p>
+                                    <p className="text-sm font-medium text-slate-700 mt-1 break-words whitespace-pre-wrap">{paciente.habitos || '-'}</p>
+                                </div>
+                                <div className="bg-slate-50 rounded-lg px-4 py-3 xl:col-span-6">
+                                    <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Observación</p>
+                                    <p className="text-sm font-medium text-slate-700 mt-1 break-words whitespace-pre-wrap">{paciente.observacion1 || '-'}</p>
+                                </div>
+                                <div className="bg-slate-50 rounded-lg px-4 py-3 xl:col-span-6">
+                                    <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Comentarios Adicionales</p>
+                                    <p className="text-sm font-medium text-slate-700 mt-1 break-words whitespace-pre-wrap">{paciente.comentariosAdicionales || '-'}</p>
                                 </div>
                             </div>
                         </div>
