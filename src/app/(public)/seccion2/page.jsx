@@ -187,11 +187,11 @@ export default function Seccion2() {
                       aria-label={`Agendar para ${service.name}`}
                       className="group flex h-full flex-col overflow-hidden rounded-3xl border border-[#bfeee3] bg-white shadow-[0_14px_34px_-24px_rgba(15,90,82,0.24)] transition duration-300 ease-out hover:-translate-y-1"
                     >
-                      <div className="relative aspect-[16/10] overflow-hidden">
+                      <div className="relative h-[340px] overflow-hidden bg-[#f2fffb] sm:h-[390px] lg:h-[430px]">
                         <img
                           src={imageErrors[service.id] ? "/logo_transparent.png" : service.image}
                           alt={service.name}
-                          className="h-full w-full object-cover transition duration-500 ease-out group-hover:scale-105"
+                          className="h-full w-full object-contain transition duration-500 ease-out group-hover:scale-[1.02]"
                           onError={() =>
                             setImageErrors((current) => ({
                               ...current,
@@ -199,7 +199,6 @@ export default function Seccion2() {
                             }))
                           }
                         />
-                        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,35,31,0)_0%,rgba(7,35,31,0.2)_100%)]" />
                       </div>
                       <div className="p-5">
                         <h3 className="text-xl font-semibold tracking-[0.01em] text-[#0f5a52]">
@@ -214,8 +213,8 @@ export default function Seccion2() {
                 ))}
               </CarouselContent>
 
-              <CarouselPrevious className="left-2 top-[44%] z-20 -translate-y-1/2 border-[#bfeee3] bg-white text-[#1f8f7d] hover:bg-[#ecfbf7] disabled:pointer-events-auto disabled:cursor-not-allowed disabled:opacity-35" />
-              <CarouselNext className="right-2 top-[44%] z-20 -translate-y-1/2 border-[#bfeee3] bg-white text-[#1f8f7d] hover:bg-[#ecfbf7] disabled:pointer-events-auto disabled:cursor-not-allowed disabled:opacity-35" />
+              <CarouselPrevious className="left-2 top-1/2 z-20 -translate-y-1/2 border-[#bfeee3] bg-white text-[#1f8f7d] hover:bg-[#ecfbf7] disabled:pointer-events-auto disabled:cursor-not-allowed disabled:opacity-35" />
+              <CarouselNext className="right-2 top-1/2 z-20 -translate-y-1/2 border-[#bfeee3] bg-white text-[#1f8f7d] hover:bg-[#ecfbf7] disabled:pointer-events-auto disabled:cursor-not-allowed disabled:opacity-35" />
             </Carousel>
 
             {content.length > 1 && (
