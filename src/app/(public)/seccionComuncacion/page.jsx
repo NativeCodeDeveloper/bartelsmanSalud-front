@@ -65,7 +65,7 @@ export default function SeccionComuncacion() {
                     <div className="-mt-8 flex justify-center pb-4 sm:pb-6">
                         <Link
                             href="/catalogo"
-                            className="rounded-full border border-[#f8dcc5]/45 bg-[linear-gradient(135deg,#f7dfcc_0%,#e7b27c_100%)] px-8 py-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#2f1a12] transition hover:brightness-105"
+                            className="rounded-full border border-[#bfeee3]/45 bg-[linear-gradient(135deg,#d8f6ef_0%,#34cdb4_100%)] px-8 py-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#0f5a52] transition hover:brightness-105"
                         >
                             Ver soluciones
                         </Link>

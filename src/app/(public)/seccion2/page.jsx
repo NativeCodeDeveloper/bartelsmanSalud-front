@@ -13,8 +13,9 @@ import {
 } from "@/components/ui/carousel";
 
 export default function Seccion2() {
-  const API = process.env.NEXT_PUBLIC_API_URL;
+  const API = process.env.NEXT_PUBLIC_API_URL || "https://bartelsmansalud.nativecode.cl";
   const [infoData, setInfoData] = useState([]);
+  const [imageErrors, setImageErrors] = useState({});
   const [carouselApi, setCarouselApi] = useState();
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -39,38 +40,67 @@ export default function Seccion2() {
     },
   ];
 
-  const services = infoData.map((item, index) => {
-    const title = (item.publicacionesTitulo || "").trim();
-    const description = (item.publicacionesDescripcion || "").trim();
-
-    return {
-      id: item.id_publicacionesTituloDescripcion,
-      name: title || `Publicacion ${index + 1}`,
-      description: description || "Atencion personalizada con acompanamiento profesional y seguimiento continuo para resultados sostenibles.",
-      image: item.publicacionesTituloDescripcionImagen
-        ? `https://imagedelivery.net/aCBUhLfqUcxA2yhIBn1fNQ/${item.publicacionesTituloDescripcionImagen}/card`
-        : "/logo_transparent.png",
-    };
-  });
-
   async function loadServices() {
     try {
-      const res = await fetch(`${API}/publicacionesTituloDetalle/seleccionarPublicacionesTituloDetalle`, {
+      const mapTituloDetalle = (items) =>
+        items.map((item, index) => ({
+          id: `titulo-${item.id_publicacionesTituloDescripcion ?? index}`,
+          name: (item.publicacionesTitulo || "").trim() || `Publicacion ${index + 1}`,
+          description:
+            (item.publicacionesDescripcion || "").trim() ||
+            "Atencion personalizada con acompanamiento profesional y seguimiento continuo para resultados sostenibles.",
+          image: item.publicacionesTituloDescripcionImagen
+            ? `https://imagedelivery.net/aCBUhLfqUcxA2yhIBn1fNQ/${item.publicacionesTituloDescripcionImagen}/card`
+            : "/logo_transparent.png",
+        }));
+
+      const mapPublicaciones = (items) =>
+        items.map((item, index) => ({
+          id: `publicacion-${item.id_publicaciones ?? index}`,
+          name: (item.descripcionPublicaciones || "").trim() || `Publicacion ${index + 1}`,
+          description:
+            "Atencion personalizada con acompanamiento profesional y seguimiento continuo para resultados sostenibles.",
+          image: item.imagenPublicaciones_primera
+            ? `https://imagedelivery.net/aCBUhLfqUcxA2yhIBn1fNQ/${item.imagenPublicaciones_primera}/full`
+            : "/logo_transparent.png",
+        }));
+
+      const resTitulo = await fetch(`${API}/publicacionesTituloDetalle/seleccionarPublicacionesTituloDetalle`, {
         method: "GET",
         headers: { Accept: "application/json" },
         mode: "cors",
       });
 
-      if (!res.ok) {
+      if (resTitulo.ok) {
+        const dataTitulo = await resTitulo.json();
+        const activeTitulo = Array.isArray(dataTitulo)
+          ? dataTitulo.filter((item) => Number(item.publicacionesTituloDescripcion_estado ?? 1) === 1)
+          : [];
+
+        if (activeTitulo.length > 0) {
+          setInfoData(mapTituloDetalle(activeTitulo));
+          return;
+        }
+      }
+
+      const resPublicaciones = await fetch(`${API}/publicaciones/seleccionarPublicaciones`, {
+        method: "GET",
+        headers: { Accept: "application/json" },
+        mode: "cors",
+      });
+
+      if (!resPublicaciones.ok) {
+        setInfoData([]);
         return toast.error(`No ha sido posible cargar las imagenes del sistema contacte a soporte de NativeCode`);
       }
 
-      const data = await res.json();
-      const activeData = Array.isArray(data)
-        ? data.filter((item) => Number(item.publicacionesTituloDescripcion_estado ?? 1) === 1)
+      const dataPublicaciones = await resPublicaciones.json();
+      const activePublicaciones = Array.isArray(dataPublicaciones)
+        ? dataPublicaciones.filter((item) => Number(item.estadoPublicacion ?? 1) === 1)
         : [];
-      setInfoData(activeData);
+      setInfoData(mapPublicaciones(activePublicaciones));
     } catch {
+      setInfoData([]);
       return toast.error(`No ha sido posible cargar las imagenes del sistema contacte a soporte de NativeCode`);
     }
   }
@@ -79,7 +109,7 @@ export default function Seccion2() {
     loadServices();
   }, []);
 
-  const content = services.length > 0 ? services : fallbackServices;
+  const content = infoData.length > 0 ? infoData : fallbackServices;
 
   useEffect(() => {
     if (!carouselApi) return;
@@ -109,7 +139,7 @@ export default function Seccion2() {
   }, [carouselApi, content.length]);
 
   return (
-    <section id="servicios" className="relative scroll-mt-24 bg-transparent py-22 text-[#5d462d] sm:py-28">
+    <section id="servicios" className="relative scroll-mt-24 bg-transparent py-22 text-[#0f5a52] sm:py-28">
       <div
         className="pointer-events-none absolute inset-0"
         style={{
@@ -125,14 +155,14 @@ export default function Seccion2() {
         <RevealOnScroll>
           <div className="grid items-end gap-6 lg:grid-cols-[1fr_auto]">
             <div>
-              <p className="text-xs uppercase tracking-[0.24em] text-[#158a78]/80">Servicios coordinados</p>
-              <h2 className="mt-4 max-w-4xl text-balance text-4xl font-semibold leading-[1.04] text-[#0f3f3a] sm:text-5xl">
+              <p className="text-xs uppercase tracking-[0.24em] text-[#1f8f7d]/80">Servicios coordinados</p>
+              <h2 className="mt-4 max-w-4xl text-balance text-4xl font-semibold leading-[1.04] text-[#0f5a52] sm:text-5xl">
                 Atencion interdisciplinaria a domicilio para recuperar y mantener funcionalidad.
               </h2>
             </div>
             <Link
               href="/servicios"
-              className="inline-flex justify-center rounded-full border border-[#23c7ad] bg-[#23c7ad] px-6 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-white transition hover:bg-[#1cae97]"
+              className="inline-flex justify-center rounded-full border border-[#34cdb4] bg-[#34cdb4] px-6 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-white transition hover:bg-[#2ab9a2]"
             >
               Ver detalle completo
             </Link>
@@ -143,7 +173,7 @@ export default function Seccion2() {
           <div className="relative">
             <Carousel
               setApi={setCarouselApi}
-              opts={{ align: "start", loop: content.length > 1 }}
+              opts={{ align: "start", loop: true }}
               className="w-full"
             >
               <CarouselContent className="-ml-4">
@@ -155,21 +185,27 @@ export default function Seccion2() {
                     <Link
                       href="/reserva-hora"
                       aria-label={`Agendar para ${service.name}`}
-                      className="group flex h-full flex-col overflow-hidden rounded-3xl border border-[#bcefe2] bg-white shadow-[0_14px_34px_-24px_rgba(15,63,58,0.28)] transition duration-300 ease-out hover:-translate-y-1"
+                      className="group flex h-full flex-col overflow-hidden rounded-3xl border border-[#bfeee3] bg-white shadow-[0_14px_34px_-24px_rgba(15,90,82,0.24)] transition duration-300 ease-out hover:-translate-y-1"
                     >
                       <div className="relative aspect-[16/10] overflow-hidden">
                         <img
-                          src={service.image}
+                          src={imageErrors[service.id] ? "/logo_transparent.png" : service.image}
                           alt={service.name}
                           className="h-full w-full object-cover transition duration-500 ease-out group-hover:scale-105"
+                          onError={() =>
+                            setImageErrors((current) => ({
+                              ...current,
+                              [service.id]: true,
+                            }))
+                          }
                         />
-                        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,35,31,0)_0%,rgba(7,35,31,0.34)_100%)]" />
+                        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,35,31,0)_0%,rgba(7,35,31,0.2)_100%)]" />
                       </div>
                       <div className="p-5">
-                        <h3 className="text-xl font-semibold tracking-[0.01em] text-[#0f3f3a]">
+                        <h3 className="text-xl font-semibold tracking-[0.01em] text-[#0f5a52]">
                           {service.name}
                         </h3>
-                        <p className="mt-2 text-sm leading-7 tracking-[0.01em] text-[#2a6d66]">
+                        <p className="mt-2 text-sm leading-7 tracking-[0.01em] text-[#2b7268]">
                           {service.description || "Atencion personalizada con acompanamiento profesional y seguimiento continuo para resultados sostenibles."}
                         </p>
                       </div>
@@ -178,8 +214,8 @@ export default function Seccion2() {
                 ))}
               </CarouselContent>
 
-              <CarouselPrevious className="left-2 top-[44%] -translate-y-1/2 border-[#bcefe2] bg-white text-[#158a78] hover:bg-[#effcf8] disabled:opacity-35" />
-              <CarouselNext className="right-2 top-[44%] -translate-y-1/2 border-[#bcefe2] bg-white text-[#158a78] hover:bg-[#effcf8] disabled:opacity-35" />
+              <CarouselPrevious className="left-2 top-[44%] z-20 -translate-y-1/2 border-[#bfeee3] bg-white text-[#1f8f7d] hover:bg-[#ecfbf7] disabled:pointer-events-auto disabled:cursor-not-allowed disabled:opacity-35" />
+              <CarouselNext className="right-2 top-[44%] z-20 -translate-y-1/2 border-[#bfeee3] bg-white text-[#1f8f7d] hover:bg-[#ecfbf7] disabled:pointer-events-auto disabled:cursor-not-allowed disabled:opacity-35" />
             </Carousel>
 
             {content.length > 1 && (
@@ -192,7 +228,7 @@ export default function Seccion2() {
                     onClick={() => carouselApi?.scrollTo(index)}
                     className={[
                       "h-2 rounded-full transition-all duration-300",
-                      currentIndex === index ? "w-7 bg-[#23c7ad]" : "w-2 bg-[#9fded2] hover:bg-[#7fd2c3]",
+                      currentIndex === index ? "w-7 bg-[#34cdb4]" : "w-2 bg-[#8fdfcf] hover:bg-[#73d6c4]",
                     ].join(" ")}
                   />
                 ))}
@@ -200,6 +236,16 @@ export default function Seccion2() {
             )}
           </div>
         </RevealOnScroll>
+      </div>
+
+      <div className="hero-wave" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none">
+          <path
+            fill="#00cba9"
+            fillOpacity="1"
+            d="M0,320L24,314.7C48,309,96,299,144,293.3C192,288,240,288,288,293.3C336,299,384,309,432,277.3C480,245,528,171,576,154.7C624,139,672,181,720,202.7C768,224,816,224,864,218.7C912,213,960,203,1008,208C1056,213,1104,235,1152,218.7C1200,203,1248,149,1296,160C1344,171,1392,245,1416,282.7L1440,320L1440,320L1416,320C1392,320,1344,320,1296,320C1248,320,1200,320,1152,320C1104,320,1056,320,1008,320C960,320,912,320,864,320C816,320,768,320,720,320C672,320,624,320,576,320C528,320,480,320,432,320C384,320,336,320,288,320C240,320,192,320,144,320C96,320,48,320,24,320L0,320Z"
+          ></path>
+        </svg>
       </div>
     </section>
   );

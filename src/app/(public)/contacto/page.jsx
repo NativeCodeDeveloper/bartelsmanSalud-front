@@ -32,22 +32,22 @@ const contactCards = [
 
 export default function ContactoPage() {
   return (
-    <main className="bg-transparent text-[#fff4ee]">
+    <main className="bg-transparent text-[#0f5a52]">
       <section className="relative overflow-hidden py-24 md:py-28">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_10%,rgba(247,205,212,0.2),transparent_34%),radial-gradient(circle_at_88%_2%,rgba(226,182,120,0.16),transparent_42%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_10%,rgba(0,203,169,0.2),transparent_34%),radial-gradient(circle_at_88%_2%,rgba(0,203,169,0.16),transparent_42%)]" />
 
         <div className="relative mx-auto grid w-full max-w-7xl gap-10 px-6 md:px-10 lg:grid-cols-[1fr_1.05fr] xl:px-12 xl:gap-14">
-          <aside className="rounded-[2rem] border border-[#f4d7c8]/16 bg-[linear-gradient(160deg,rgba(67,40,34,0.55)_0%,rgba(28,17,14,0.85)_100%)] p-7 shadow-[0_24px_70px_-45px_rgba(0,0,0,0.55)] backdrop-blur md:p-9">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#f0d7cb]/72">
+          <aside className="rounded-[2rem] border border-[#00b89a] bg-[linear-gradient(160deg,#00cba9_0%,#00b89a_100%)] p-7 shadow-[0_20px_54px_-34px_rgba(0,122,103,0.38)] backdrop-blur md:p-9">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/84">
               Contacto
             </p>
-            <h1 className="mt-4 text-4xl leading-[1.02] text-[#fff1e9] sm:text-5xl">
+            <h1 className="mt-4 text-4xl leading-[1.02] text-white sm:text-5xl">
               Salud integral a domicilio en la Region Metropolitana.
             </h1>
-            <p className="mt-6 max-w-xl text-sm leading-relaxed text-[#f7e0d5]/82 sm:text-base">
+            <p className="mt-6 max-w-xl text-sm leading-relaxed text-white/92 sm:text-base">
               Coordinamos kinesiologia, terapia ocupacional, fonoaudiologia, enfermeria, medicina y mas servicios en tu hogar.
             </p>
-            <p className="mt-3 max-w-xl text-xs leading-relaxed text-[#f0d5ca]/68 sm:text-sm">
+            <p className="mt-3 max-w-xl text-xs leading-relaxed text-white/86 sm:text-sm">
               Nuestro enfoque interdisciplinario prioriza continuidad clinica, cercania y decisiones compartidas con cada familia.
             </p>
 
@@ -56,15 +56,15 @@ export default function ContactoPage() {
                 const Icon = item.icon;
                 const content = (
                   <>
-                    <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#f8dcc8]/18 text-[#fde9dd]">
+                    <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/20 text-white">
                       <Icon className="h-5 w-5" />
                     </div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#f3d9cc]/68">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/82">
                       {item.title}
                     </p>
                     <p
                       className={[
-                        "mt-2 min-w-0 text-sm font-medium leading-relaxed text-[#ffefe5]",
+                        "mt-2 min-w-0 text-sm font-medium leading-relaxed text-white",
                         item.title === "Email" ? "break-all" : "break-words",
                       ].join(" ")}
                     >
@@ -80,7 +80,7 @@ export default function ContactoPage() {
                       href={item.href}
                       target={item.href.startsWith("http") ? "_blank" : undefined}
                       rel={item.href.startsWith("http") ? "noreferrer" : undefined}
-                      className="rounded-2xl border border-[#f3d7ca]/16 bg-[#f9ddca]/8 p-5 transition hover:-translate-y-0.5 hover:border-[#f5dece]/28"
+                      className="rounded-2xl border border-white/28 bg-white/12 p-5 transition hover:-translate-y-0.5 hover:bg-white/16"
                     >
                       {content}
                     </a>
@@ -90,7 +90,7 @@ export default function ContactoPage() {
                 return (
                   <article
                     key={item.title}
-                    className="rounded-2xl border border-[#f3d7ca]/16 bg-[#f9ddca]/8 p-5"
+                    className="rounded-2xl border border-white/28 bg-white/12 p-5"
                   >
                     {content}
                   </article>
@@ -98,12 +98,12 @@ export default function ContactoPage() {
               })}
             </div>
 
-            <div className="mt-8 rounded-2xl border border-[#f3d7ca]/16 bg-[#f9ddca]/8 p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#f1d8cb]/70">
+            <div className="mt-8 rounded-2xl border border-white/28 bg-white/12 p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/84">
                 Horario de atencion
               </p>
-              <div className="mt-3 flex items-start gap-3 text-sm text-[#f7e0d5]/82">
-                <Clock3 className="mt-0.5 h-4 w-4 text-[#f0d7ca]/74" />
+              <div className="mt-3 flex items-start gap-3 text-sm text-white/92">
+                <Clock3 className="mt-0.5 h-4 w-4 text-white/86" />
                 <div className="space-y-1.5">
                   <p>Lunes a Viernes: 08:00 a 21:30</p>
                   <p>Sabado: 09:00 a 13:00 (ocasional)</p>
@@ -113,14 +113,14 @@ export default function ContactoPage() {
             </div>
           </aside>
 
-          <div className="rounded-[2rem] border border-[#f4d7c8]/16 bg-[linear-gradient(160deg,rgba(64,38,33,0.6)_0%,rgba(25,15,13,0.9)_100%)] p-7 shadow-[0_24px_70px_-45px_rgba(0,0,0,0.55)] md:p-9">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#f0d7cb]/72">
+          <div className="rounded-[2rem] border border-[#00b89a] bg-[linear-gradient(160deg,#00cba9_0%,#00b89a_100%)] p-7 shadow-[0_20px_54px_-34px_rgba(0,122,103,0.38)] md:p-9">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/84">
               Canales de contacto
             </p>
-            <h2 className="mt-4 text-3xl leading-tight text-[#fff1e9] sm:text-4xl">
+            <h2 className="mt-4 text-3xl leading-tight text-white sm:text-4xl">
               Este sitio no utiliza formulario de contacto.
             </h2>
-            <p className="mt-4 text-sm leading-relaxed text-[#f6dfd3]/82">
+            <p className="mt-4 text-sm leading-relaxed text-white/92">
               Para coordinar una evaluacion o resolver dudas, escribenos directamente por WhatsApp, correo o Instagram.
             </p>
 
@@ -129,14 +129,14 @@ export default function ContactoPage() {
                 href="https://wa.me/56985278325"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center justify-center rounded-full border border-[#23c7ad] bg-[#23c7ad] px-7 py-3 text-sm font-semibold text-white transition hover:bg-[#1cae97]"
+                className="inline-flex items-center justify-center rounded-full border border-white/34 bg-white px-7 py-3 text-sm font-semibold text-[#0f5a52] transition hover:bg-white/90"
               >
                 Escribir por WhatsApp
               </a>
 
               <a
                 href="mailto:Contacto@saludb.cl"
-                className="inline-flex items-center justify-center rounded-full border border-[#8fe4d4] bg-transparent px-7 py-3 text-sm font-semibold text-[#d6fff6] transition hover:bg-[#1f574e]/35"
+                className="inline-flex items-center justify-center rounded-full border border-white/34 bg-white/12 px-7 py-3 text-sm font-semibold text-white transition hover:bg-white/18"
               >
                 Enviar correo
               </a>
@@ -145,14 +145,14 @@ export default function ContactoPage() {
                 href="https://www.instagram.com/saludb.cl"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center justify-center rounded-full border border-[#8fe4d4] bg-transparent px-7 py-3 text-sm font-semibold text-[#d6fff6] transition hover:bg-[#1f574e]/35"
+                className="inline-flex items-center justify-center rounded-full border border-white/34 bg-white/12 px-7 py-3 text-sm font-semibold text-white transition hover:bg-white/18"
               >
                 Ir a Instagram
               </a>
             </div>
 
-            <div className="mt-8 rounded-2xl border border-[#f3d7ca]/16 bg-[#f9ddca]/8 p-5 text-sm text-[#f6dfd3]/82">
-              <p className="font-semibold uppercase tracking-[0.12em] text-[#f1d8cb]/70">Atencion por coordinacion</p>
+            <div className="mt-8 rounded-2xl border border-white/28 bg-white/12 p-5 text-sm text-white/92">
+              <p className="font-semibold uppercase tracking-[0.12em] text-white/84">Atencion por coordinacion</p>
               <p className="mt-2">
                 Agendamos segun disponibilidad profesional y prioridad clinica del caso.
               </p>
@@ -161,7 +161,7 @@ export default function ContactoPage() {
             <div className="mt-8">
               <Link
                 href="/agendaProfesionales"
-                className="inline-flex rounded-full border border-[#23c7ad] bg-[#23c7ad] px-7 py-3 text-sm font-semibold text-white transition hover:bg-[#1cae97]"
+                className="inline-flex rounded-full border border-white/34 bg-white px-7 py-3 text-sm font-semibold text-[#0f5a52] transition hover:bg-white/90"
               >
                 Agendar primera evaluacion
               </Link>

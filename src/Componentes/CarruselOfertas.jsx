@@ -68,7 +68,7 @@ export function CarruselOfertas({
                                     key={`${img.src}-${index}`}
                                     className={`${itemClassName} pl-0 sm:pl-6`}
                                 >
-                                    <div className="relative w-full overflow-hidden rounded-2xl border border-[#c8efe5] bg-white">
+                                    <div className="relative w-full overflow-hidden rounded-2xl border border-[#c7ebe3] bg-white">
                                         <div className="relative h-56 w-full sm:h-64 md:h-72 lg:h-80">
                                             <img
                                                 src={img.src}

@@ -49,9 +49,9 @@ export const metadata = {
     canonical: metadataBase.href,
   },
   icons: {
-    icon: "/logo1.png",
-    shortcut: "/logo1.png",
-    apple: "/logo1.png",
+    icon: "/logo_transparent.png",
+    shortcut: "/logo_transparent.png",
+    apple: "/logo_transparent.png",
   },
   openGraph: {
     title: "SaludB | Salud Integral a Domicilio",

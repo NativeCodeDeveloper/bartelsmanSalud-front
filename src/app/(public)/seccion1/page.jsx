@@ -26,15 +26,15 @@ const pillars = [
 
 export default function Seccion1() {
   return (
-    <section id="porque-elegirnos" className="scroll-mt-24 bg-transparent py-22 text-[#5d462d] sm:py-28">
+    <section id="porque-elegirnos" className="scroll-mt-24 bg-transparent py-22 text-[#0f5a52] sm:py-28">
       <div className="mx-auto grid w-full max-w-7xl gap-8 px-5 md:px-8 lg:grid-cols-12 lg:gap-10 lg:px-10">
         <RevealOnScroll className="lg:col-span-4">
-          <div className="sticky top-28 rounded-[2rem] bg-[linear-gradient(165deg,rgba(15,63,58,0.78)_0%,rgba(8,30,27,0.94)_100%)] p-7 shadow-[0_30px_80px_-56px_rgba(20,109,96,0.4)]">
-            <p className="text-xs uppercase tracking-[0.24em] text-[#bdeee4]">Por que elegir SaludB</p>
-            <h2 className="mt-4 text-balance text-4xl font-semibold leading-[1.02] text-[#f4fffc] sm:text-5xl">
+          <div className="sticky top-28 rounded-[2rem] bg-[linear-gradient(165deg,#00cba9_0%,#00b89a_100%)] p-7 shadow-[0_30px_80px_-56px_rgba(0,160,134,0.42)]">
+            <p className="text-xs uppercase tracking-[0.24em] text-[#e9fff9]">Por que elegir SaludB</p>
+            <h2 className="mt-4 text-balance text-4xl font-semibold leading-[1.02] text-white sm:text-5xl">
               Salud a domicilio con enfoque humano y coordinado.
             </h2>
-            <p className="mt-5 text-sm leading-7 text-[#d8f8ef] sm:text-base">
+            <p className="mt-5 text-sm leading-7 text-[#f2fffb] sm:text-base">
               No entregamos prestaciones aisladas. Articulamos un plan personalizado para mejorar
               la funcionalidad y calidad de vida del paciente en su entorno real.
             </p>
@@ -49,11 +49,11 @@ export default function Seccion1() {
               <RevealOnScroll key={item.title} className="h-full">
                 <article
                   className={[
-                    "h-full rounded-3xl border border-[#bcefe2] bg-white p-6 text-[#0f3f3a] shadow-[0_16px_36px_-24px_rgba(15,63,58,0.26)] transition duration-300 ease-out hover:-translate-y-1",
+                    "h-full rounded-3xl border border-[#bfeee3] bg-white p-6 text-[#0f5a52] shadow-[0_16px_36px_-24px_rgba(15,90,82,0.26)] transition duration-300 ease-out hover:-translate-y-1",
                     shifted,
                   ].join(" ")}
                 >
-                  <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[#effcf8]">
+                  <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-[#ecfbf7]">
                     {item.logoSrc ? (
                       <Image
                         src={item.logoSrc}
@@ -64,8 +64,8 @@ export default function Seccion1() {
                       />
                     ) : null}
                   </div>
-                  <h3 className="mt-5 text-2xl font-semibold tracking-[0.01em] text-[#0f3f3a]">{item.title}</h3>
-                  <p className="mt-3 text-sm leading-7 tracking-[0.01em] text-[#2a6d66]">{item.text}</p>
+                  <h3 className="mt-5 text-2xl font-semibold tracking-[0.01em] text-[#0f5a52]">{item.title}</h3>
+                  <p className="mt-3 text-sm leading-7 tracking-[0.01em] text-[#2b7268]">{item.text}</p>
                 </article>
               </RevealOnScroll>
             );
