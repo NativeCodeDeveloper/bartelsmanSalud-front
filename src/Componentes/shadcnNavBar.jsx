@@ -6,8 +6,8 @@ import { Menu, X } from "lucide-react";
 
 const navItems = [
   { title: "Inicio", href: "/#inicio" },
-  { title: "Especialidades", href: "/#servicios" },
-  { title: "Casos clínicos", href: "/#casos-clinicos" },
+  { title: "Servicios", href: "/#servicios" },
+  { title: "Cobertura", href: "/#casos-clinicos" },
   { title: "Agenda", href: "/reserva-hora" },
   { title: "Contacto", href: "/contacto" },
 ];
@@ -26,10 +26,10 @@ export function ShadcnNavBar() {
           </div>
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold uppercase tracking-[0.22em] text-white/95">
-              Centro Integral ESSENZA
+              SaludB
             </p>
             <p className="truncate text-[11px] uppercase tracking-[0.18em] text-white/65">
-              Salud y bienestar integral
+              Salud integral a domicilio
             </p>
           </div>
         </Link>

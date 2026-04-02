@@ -8,7 +8,7 @@ export default function PortadaCelulares() {
           PORTADA
         </h1>
         <p className="mt-5 text-base text-gray-300 max-w-md mx-auto leading-relaxed">
-          Transformamos tu piel con tecnología de última generación. Descubre una experiencia única diseñada para ti.
+          Salud integral a domicilio con atencion coordinada para pacientes y familias en la Region Metropolitana.
         </p>
       </div>
     </div>

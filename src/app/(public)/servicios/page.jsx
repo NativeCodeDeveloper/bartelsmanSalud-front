@@ -3,18 +3,16 @@
 import Link from "next/link";
 
 const servicios = [
-  "Atencion medica general",
-  "Medicina familiar",
-  "Atencion psicologica para ninos y adultos",
-  "Atencion nutricional completa",
-  "Fonoaudiologia y apoyo en problemas del habla infantil",
-  "Lavado de oidos y otoscopia",
-  "Cosmetologia y limpiezas faciales",
-  "Tratamientos faciales antiedad, acne e hiperpigmentacion",
-  "Tratamientos esteticos corporales reductivos y reafirmantes",
-  "Masajes relajacion, descontracturante, terapeutico y drenaje linfatico",
-  "Auriculoterapia",
-  "Terapias holisticas",
+  "Kinesiologia a domicilio",
+  "Terapia ocupacional",
+  "Fonoaudiologia",
+  "Medicina general",
+  "Geriatria",
+  "Enfermeria",
+  "Tecnico en enfermeria (TENS)",
+  "Cuidadores",
+  "Podologia",
+  "Arriendo de productos de salud",
 ];
 
 export default function ServicioPage() {
@@ -25,10 +23,10 @@ export default function ServicioPage() {
           Servicios
         </p>
         <h1 className="mt-5 max-w-4xl text-4xl leading-tight text-[#4f361d] sm:text-5xl">
-          Especialidades integrales para tu salud, bienestar y equilibrio.
+          Servicios integrales a domicilio para funcionalidad y bienestar.
         </h1>
         <p className="mt-7 max-w-3xl text-base leading-relaxed text-[#6b5233]/86">
-          En Centro Integral ESSENZA integramos psicologia, medicina y estetica para ofrecer atencion personalizada con resultados visibles y sostenibles.
+          En SaludB coordinamos distintas areas clinicas para que pacientes y familias reciban una atencion continua, humana y personalizada.
         </p>
       </section>
 
@@ -43,7 +41,7 @@ export default function ServicioPage() {
             </p>
             <h2 className="mt-4 text-xl leading-snug text-[#553b20]">{servicio}</h2>
             <p className="mt-5 text-sm leading-relaxed text-[#6b5233]/84">
-              Atencion profesional con enfoque humano, planificacion individual y acompanamiento continuo.
+              Intervencion coordinada con el equipo tratante para asegurar continuidad, seguridad y avances sostenidos.
             </p>
           </article>
         ))}
@@ -56,7 +54,7 @@ export default function ServicioPage() {
               Siguiente paso
             </p>
             <h3 className="mt-4 text-3xl leading-tight text-[#4f361d]">
-              Agenda una evaluacion y recibe orientacion personalizada.
+              Agenda una primera evaluacion y coordinemos tu plan.
             </h3>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -67,7 +65,7 @@ export default function ServicioPage() {
               Solicitar cita
             </Link>
             <a
-              href="https://wa.me/56987728500"
+              href="https://wa.me/56985278325"
               target="_blank"
               rel="noreferrer"
               className="rounded-full border border-[#d8bc9d]/42 bg-[#f6e9d8]/72 px-7 py-3 text-sm font-medium text-[#5b4228] transition hover:border-[#cfa780]/56"

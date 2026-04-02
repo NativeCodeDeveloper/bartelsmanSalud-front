@@ -1,81 +1,36 @@
 "use client";
 
-import { useState } from "react";
-import { toast } from "react-hot-toast";
-import { Clock3, Instagram, Mail, MapPin, MessageCircle, Send } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import Link from "next/link";
+import { Clock3, Instagram, Mail, MapPin, MessageCircle } from "lucide-react";
 
 const contactCards = [
   {
-    title: "Ubicación",
-    value: "12 de Febrero 926, Pitrufquen, Novena region",
+    title: "Cobertura",
+    value: "Region Metropolitana",
     href: null,
     icon: MapPin,
   },
   {
     title: "WhatsApp",
-    value: "+56 9 8772 8500",
-    href: "https://wa.me/56987728500",
+    value: "+56 9 8527 8325",
+    href: "https://wa.me/56985278325",
     icon: MessageCircle,
   },
   {
     title: "Email",
-    value: "Centrointegral.essenza@gmail.com",
-    href: "mailto:Centrointegral.essenza@gmail.com",
+    value: "Contacto@saludb.cl",
+    href: "mailto:Contacto@saludb.cl",
     icon: Mail,
   },
   {
     title: "Instagram",
-    value: "@essenza.centrointegral",
-    href: "https://www.instagram.com/essenza.centrointegral?igsh=czR0NXFnMHl1bzR5",
+    value: "@saludb.cl",
+    href: "https://www.instagram.com/saludb.cl",
     icon: Instagram,
   },
 ];
 
 export default function ContactoPage() {
-  const [nombre, setNombre] = useState("");
-  const [email, setEmail] = useState("");
-  const [mensaje, setMensaje] = useState("");
-  const API = process.env.NEXT_PUBLIC_API_URL;
-
-  async function enviarCorreo() {
-    try {
-      if (!nombre || !email || !mensaje) {
-        return toast.error("Completa todos los campos para enviar tu mensaje.");
-      }
-
-      const res = await fetch(`${API}/correo/contacto`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ nombre, email, mensaje }),
-        mode: "cors",
-        cache: "no-cache",
-      });
-
-      if (!res.ok) {
-        return toast.error("No se pudo enviar tu solicitud. Intenta nuevamente.");
-      }
-
-      const respuestaBackend = await res.json();
-
-      if (respuestaBackend.message === true) {
-        setNombre("");
-        setEmail("");
-        setMensaje("");
-        return toast.success("Tu consulta fue enviada correctamente.");
-      }
-
-      return toast.error("Correo no válido. Verifica e intenta otra vez.");
-    } catch (error) {
-      console.error(error);
-      return toast.error("Ocurrió un error inesperado. Intenta nuevamente.");
-    }
-  }
-
   return (
     <main className="bg-transparent text-[#fff4ee]">
       <section className="relative overflow-hidden py-24 md:py-28">
@@ -87,13 +42,13 @@ export default function ContactoPage() {
               Contacto
             </p>
             <h1 className="mt-4 text-4xl leading-[1.02] text-[#fff1e9] sm:text-5xl">
-              Agenda tu atencion en Centro Integral ESSENZA.
+              Salud integral a domicilio en la Region Metropolitana.
             </h1>
             <p className="mt-6 max-w-xl text-sm leading-relaxed text-[#f7e0d5]/82 sm:text-base">
-              Te orientamos sobre medicina, psicologia, nutricion, fonoaudiologia, cosmetologia y terapias complementarias.
+              Coordinamos kinesiologia, terapia ocupacional, fonoaudiologia, enfermeria, medicina y mas servicios en tu hogar.
             </p>
             <p className="mt-3 max-w-xl text-xs leading-relaxed text-[#f0d5ca]/68 sm:text-sm">
-              Nuestro equipo te acompana en cada etapa con atencion cercana y seguimiento profesional.
+              Nuestro enfoque interdisciplinario prioriza continuidad clinica, cercania y decisiones compartidas con cada familia.
             </p>
 
             <div className="mt-9 grid gap-4 sm:grid-cols-2">
@@ -145,14 +100,14 @@ export default function ContactoPage() {
 
             <div className="mt-8 rounded-2xl border border-[#f3d7ca]/16 bg-[#f9ddca]/8 p-5">
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#f1d8cb]/70">
-                Horario de atención
+                Horario de atencion
               </p>
               <div className="mt-3 flex items-start gap-3 text-sm text-[#f7e0d5]/82">
                 <Clock3 className="mt-0.5 h-4 w-4 text-[#f0d7ca]/74" />
                 <div className="space-y-1.5">
-                  <p>Lunes a Viernes: 9:00 a 19:00</p>
-                  <p>Sábado: 10:00 a 14:00</p>
-                  <p>Domingo: Cerrado</p>
+                  <p>Lunes a Viernes: 08:00 a 21:30</p>
+                  <p>Sabado: 09:00 a 13:00 (ocasional)</p>
+                  <p>Disponibilidad sujeta a agenda profesional</p>
                 </div>
               </div>
             </div>
@@ -160,70 +115,57 @@ export default function ContactoPage() {
 
           <div className="rounded-[2rem] border border-[#f4d7c8]/16 bg-[linear-gradient(160deg,rgba(64,38,33,0.6)_0%,rgba(25,15,13,0.9)_100%)] p-7 shadow-[0_24px_70px_-45px_rgba(0,0,0,0.55)] md:p-9">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#f0d7cb]/72">
-              Formulario de contacto
+              Canales de contacto
             </p>
             <h2 className="mt-4 text-3xl leading-tight text-[#fff1e9] sm:text-4xl">
-              Cuentanos tu caso y te responderemos a la brevedad.
+              Este sitio no utiliza formulario de contacto.
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-[#f6dfd3]/82">
-              Indicanos si prefieres respuesta por WhatsApp, correo o llamada telefonica.
+              Para coordinar una evaluacion o resolver dudas, escribenos directamente por WhatsApp, correo o Instagram.
             </p>
 
-            <form
-              className="mt-8 space-y-6"
-              onSubmit={(e) => {
-                e.preventDefault();
-                enviarCorreo();
-              }}
-            >
-              <div className="space-y-2">
-                <label htmlFor="nombre" className="text-sm font-medium text-[#f7e0d5]/86">
-                  Nombre
-                </label>
-                <Input
-                  id="nombre"
-                  value={nombre}
-                  onChange={(e) => setNombre(e.target.value)}
-                  placeholder="Ej: Camila Perez"
-                  className="h-11 rounded-xl border-[#f0d2c3]/30 bg-[#f7dcc8]/10 text-[#fff1e8] placeholder:text-[#f2d6c8]/55"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label htmlFor="email" className="text-sm font-medium text-[#f7e0d5]/86">
-                  Email
-                </label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Ej: correo@ejemplo.com"
-                  className="h-11 rounded-xl border-[#f0d2c3]/30 bg-[#f7dcc8]/10 text-[#fff1e8] placeholder:text-[#f2d6c8]/55"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label htmlFor="mensaje" className="text-sm font-medium text-[#f7e0d5]/86">
-                  Mensaje
-                </label>
-                <Textarea
-                  id="mensaje"
-                  value={mensaje}
-                  onChange={(e) => setMensaje(e.target.value)}
-                  placeholder="Escribe tu consulta..."
-                  className="min-h-[150px] rounded-xl border-[#f0d2c3]/30 bg-[#f7dcc8]/10 text-[#fff1e8] placeholder:text-[#f2d6c8]/55"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="inline-flex items-center gap-2 rounded-full border border-[#f8dcc5]/45 bg-[linear-gradient(135deg,#f7dfcc_0%,#e7b27c_100%)] px-7 py-3 text-sm font-semibold text-[#2f1a12] transition hover:brightness-105"
+            <div className="mt-8 grid gap-4">
+              <a
+                href="https://wa.me/56985278325"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center rounded-full border border-[#23c7ad] bg-[#23c7ad] px-7 py-3 text-sm font-semibold text-white transition hover:bg-[#1cae97]"
               >
-                Enviar mensaje
-                <Send className="h-4 w-4" />
-              </button>
-            </form>
+                Escribir por WhatsApp
+              </a>
+
+              <a
+                href="mailto:Contacto@saludb.cl"
+                className="inline-flex items-center justify-center rounded-full border border-[#8fe4d4] bg-transparent px-7 py-3 text-sm font-semibold text-[#d6fff6] transition hover:bg-[#1f574e]/35"
+              >
+                Enviar correo
+              </a>
+
+              <a
+                href="https://www.instagram.com/saludb.cl"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center rounded-full border border-[#8fe4d4] bg-transparent px-7 py-3 text-sm font-semibold text-[#d6fff6] transition hover:bg-[#1f574e]/35"
+              >
+                Ir a Instagram
+              </a>
+            </div>
+
+            <div className="mt-8 rounded-2xl border border-[#f3d7ca]/16 bg-[#f9ddca]/8 p-5 text-sm text-[#f6dfd3]/82">
+              <p className="font-semibold uppercase tracking-[0.12em] text-[#f1d8cb]/70">Atencion por coordinacion</p>
+              <p className="mt-2">
+                Agendamos segun disponibilidad profesional y prioridad clinica del caso.
+              </p>
+            </div>
+
+            <div className="mt-8">
+              <Link
+                href="/agendaProfesionales"
+                className="inline-flex rounded-full border border-[#23c7ad] bg-[#23c7ad] px-7 py-3 text-sm font-semibold text-white transition hover:bg-[#1cae97]"
+              >
+                Agendar primera evaluacion
+              </Link>
+            </div>
           </div>
         </div>
       </section>

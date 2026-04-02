@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import RevealOnScroll from "@/Componentes/RevealOnScroll";
 
-const FALLBACK_CASE_IMAGE = "/ac3.png";
+const FALLBACK_CASE_IMAGE = "/Pub2.png";
 
 export default function Seccion3() {
   const scrollerRef = useRef(null);
@@ -43,7 +43,7 @@ export default function Seccion3() {
 
   const clinicalCases = listaPublicaciones.map((publicaciones) => ({
     title: publicaciones.descripcionPublicaciones,
-    image: `https://imagedelivery.net/aCBUhLfqUcxA2yhIBn1fNQ/${publicaciones.imagenPublicaciones_primera}/card`,
+    image: `https://imagedelivery.net/aCBUhLfqUcxA2yhIBn1fNQ/${publicaciones.imagenPublicaciones_primera}/full`,
   }));
 
   const scrollByAmount = (direction) => {
@@ -67,15 +67,15 @@ export default function Seccion3() {
           <RevealOnScroll>
             <div className="grid gap-6 lg:grid-cols-[1fr_22rem] lg:items-end">
               <div>
-                <p className="text-xs uppercase tracking-[0.24em] text-[#9a7750]/72">Experiencias y resultados</p>
+                <p className="text-xs uppercase tracking-[0.24em] text-[#9a7750]/72">Modelo SaludB</p>
                 <h2 className="mt-4 max-w-4xl text-balance text-4xl leading-[1] text-[#4f361d] sm:text-5xl">
-                  Historias reales de personas que eligieron un enfoque integral.
+                  Coordinamos cada caso para evitar atenciones fragmentadas.
                 </h2>
               </div>
               <div className="rounded-3xl border border-[#d9bea0]/35 bg-[linear-gradient(180deg,rgba(252,245,234,0.95)_0%,rgba(243,230,211,0.9)_100%)] p-5 shadow-[0_16px_36px_-22px_rgba(122,91,55,0.28)]">
-                <p className="text-[11px] uppercase tracking-[0.22em] text-[#8e6e47]/76">Acompanamiento</p>
+                <p className="text-[11px] uppercase tracking-[0.22em] text-[#8e6e47]/76">Atencion en red</p>
                 <p className="mt-2 text-sm leading-7 text-[#6a5032]/86">
-                  Trabajamos con objetivos claros, seguimiento profesional y una mirada humana en cada etapa.
+                  Integramos profesionales, objetivos clinicos y comunicacion con la familia en una sola ruta de cuidado.
                 </p>
               </div>
             </div>
@@ -104,16 +104,16 @@ export default function Seccion3() {
             {clinicalCases.map((item, index) => (
               <RevealOnScroll
                 key={item.title}
-                className="w-[86%] shrink-0 snap-start sm:w-[66%] lg:w-[41%]"
+                className="w-[74%] shrink-0 snap-start sm:w-[52%] lg:w-[32%]"
                 delayClass={index === 0 ? "delay-100" : "delay-150"}
               >
-                <article className="flex h-full flex-col overflow-hidden rounded-3xl border border-[#d8bc9d]/35 bg-[linear-gradient(180deg,rgba(252,245,234,0.95)_0%,rgba(243,230,211,0.9)_100%)] shadow-[0_16px_36px_-22px_rgba(122,91,55,0.28)]">
-                  <div className="relative aspect-[4/3] overflow-hidden">
+                <article className="flex h-full flex-col overflow-hidden rounded-3xl border border-[#bcefe2] bg-white shadow-[0_16px_36px_-22px_rgba(15,63,58,0.22)]">
+                  <div className="relative aspect-[2/3] overflow-hidden bg-[#f8fffd]">
                     <img
                       src={imageErrors[item.image] ? FALLBACK_CASE_IMAGE : item.image}
                       alt={item.title}
                       loading="lazy"
-                      className="h-full w-full object-cover object-center"
+                      className="h-full w-full object-contain object-center"
                       onError={() =>
                         setImageErrors((current) => ({
                           ...current,
@@ -121,10 +121,9 @@ export default function Seccion3() {
                         }))
                       }
                     />
-                    <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(42,28,20,0.03)_0%,rgba(42,28,20,0.34)_100%)]" />
                   </div>
                   <div className="flex justify-center p-6">
-                    <h3 className="text-center text-2xl font-medium leading-7 tracking-[0.02em] text-[#573e24]">
+                    <h3 className="text-center text-xl font-semibold leading-7 tracking-[0.01em] text-[#0f3f3a]">
                       {item.title}
                     </h3>
                   </div>
@@ -139,19 +138,19 @@ export default function Seccion3() {
         <div className="mx-auto w-full max-w-7xl px-5 md:px-8 lg:px-10">
           <RevealOnScroll>
             <div className="rounded-[2rem] border border-[#d8bc9d]/35 bg-[linear-gradient(160deg,rgba(252,245,234,0.95)_0%,rgba(243,230,211,0.9)_100%)] px-6 py-14 text-center shadow-[0_18px_40px_-24px_rgba(122,91,55,0.3)] sm:px-10">
-              <p className="text-xs uppercase tracking-[0.24em] text-[#9a7750]/72">Agenda ESSENZA</p>
+              <p className="text-xs uppercase tracking-[0.24em] text-[#9a7750]/72">Agenda SaludB</p>
               <h2 className="mx-auto mt-4 max-w-3xl text-balance text-4xl leading-[1] text-[#4f361d] sm:text-5xl">
-                Reserva tu evaluacion y recibe un plan integral personalizado.
+                Agenda una primera evaluacion para coordinar tu plan domiciliario.
               </h2>
               <p className="mx-auto mt-5 max-w-2xl text-sm leading-8 tracking-[0.02em] text-[#6a5032]/86 sm:text-base">
-                Te guiamos con un enfoque completo para que avances con claridad, confianza y acompanamiento profesional constante.
+                Revisamos tu caso, definimos prioridades y te orientamos con un equipo interdisciplinario segun tus necesidades.
               </p>
               <Link
                 href="/reserva-hora"
                 aria-label="Reservar hora"
                 className="mt-8 inline-flex w-full max-w-xs justify-center rounded-full border border-[#f6dcc7]/45 bg-[linear-gradient(135deg,#f7dfcc_0%,#e7b27c_100%)] px-8 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#2f1a12] transition duration-300 ease-out hover:brightness-105"
               >
-                Reservar evaluacion
+                Agendar primera evaluacion
               </Link>
             </div>
           </RevealOnScroll>

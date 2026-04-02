@@ -9,26 +9,27 @@ import toast from "react-hot-toast";
 const fallbackSlides = [
   {
     id: "fallback-1",
-    image: "/fondo1.png",
-    alt: "Centro Integral ESSENZA",
-    badge: "Centro Integral ESSENZA",
-    title: "Bienestar completo con atencion profesional y cercana.",
-    text: "Integramos medicina, psicologia, estetica y terapias complementarias para ayudarte a construir equilibrio entre cuerpo, mente y belleza.",
+    image: "/fondoverde.png",
+    alt: "SaludB atencion domiciliaria",
+    badge: "SaludB",
+    title: "Atencion integral a domicilio con coordinacion clinica real.",
+    text: "Acompanamos a pacientes y familias con un equipo interdisciplinario que trabaja de forma coordinada y personalizada.",
   },
   {
     id: "fallback-2",
-    image: "/fondo2.png",
-    alt: "Atencion personalizada en ESSENZA",
-    badge: "Enfoque integral",
-    title: "Experiencias de transformacion con seguimiento real.",
-    text: "Cada plan es personalizado segun tus necesidades, con acompanamiento continuo y asesoria especializada para resultados sostenibles.",
+    image: "/logo_transparent.png",
+    alt: "Atencion domiciliaria SaludB",
+    badge: "Region Metropolitana",
+    title: "Reducimos barreras de acceso para mejorar calidad de vida.",
+    text: "Llevamos atencion de salud al hogar para evitar traslados innecesarios y favorecer la continuidad del cuidado.",
   },
 ];
 
-const ENABLE_LOGO_HERO = true;
+const ENABLE_LOGO_HERO = false;
 
 export default function Portada() {
   const [dataPortada, setDataPortada] = useState([]);
+  const [imageErrors, setImageErrors] = useState({});
   const [logoVisible, setLogoVisible] = useState(false);
   const API = process.env.NEXT_PUBLIC_API_URL;
 
@@ -61,14 +62,16 @@ export default function Portada() {
     return () => window.clearTimeout(id);
   }, []);
 
-  const defaultHeroSlides = dataPortada.map((portada) => ({
-    id: portada.tituloPortadaCarrusel,
-    image: `https://imagedelivery.net/aCBUhLfqUcxA2yhIBn1fNQ/${portada.imagenPortada}/portada`,
-    alt: portada.tituloPortadaCarrusel,
-    badge: "Centro Integral ESSENZA",
-    title: portada.tituloPortadaCarrusel,
-    text: portada.descripcionPublicacionesPortada,
-  }));
+  const defaultHeroSlides = dataPortada
+    .filter((portada) => Number(portada.estadoPublicacionPortada ?? 1) === 1)
+    .map((portada) => ({
+      id: portada.id_publicacionesPortada ?? portada.tituloPortadaCarrusel,
+      image: `https://imagedelivery.net/aCBUhLfqUcxA2yhIBn1fNQ/${portada.imagenPortada}/portada`,
+      alt: portada.tituloPortadaCarrusel,
+      badge: "SaludB",
+      title: portada.tituloPortadaCarrusel,
+      text: portada.descripcionPublicacionesPortada,
+    }));
 
   const safeSlides = useMemo(
     () => (defaultHeroSlides.length > 0 ? defaultHeroSlides : fallbackSlides),
@@ -117,8 +120,8 @@ export default function Portada() {
   };
 
   const renderLegacyCarouselHero = () => (
-    <section id="inicio" className="relative -mt-24 min-h-screen scroll-mt-24 overflow-hidden text-[#fff4ee] md:-mt-28">
-      <div className="relative min-h-screen" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+    <section id="inicio" className="relative -mt-24 min-h-[100svh] scroll-mt-24 overflow-hidden md:-mt-28">
+      <div className="relative min-h-[100svh]" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
         {safeSlides.map((slide, index) => {
           const isActive = index === activeIndex;
 
@@ -130,35 +133,47 @@ export default function Portada() {
                 isActive ? "opacity-100" : "pointer-events-none opacity-0",
               ].join(" ")}
             >
-              <img src={slide.image} alt={slide.alt} className="absolute inset-0 h-full w-full object-cover object-center" />
+              <img
+                src={imageErrors[slide.id] ? "/fondoverde.png" : slide.image}
+                alt={slide.alt}
+                className="absolute inset-0 h-full w-full object-cover object-center"
+                onError={() =>
+                  setImageErrors((current) => ({
+                    ...current,
+                    [slide.id]: true,
+                  }))
+                }
+              />
 
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_14%_12%,rgba(249,213,217,0.22),transparent_32%),linear-gradient(180deg,rgba(14,9,8,0.48)_0%,rgba(15,9,8,0.74)_58%,rgba(10,7,6,0.9)_100%)]" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_10%,rgba(35,199,173,0.16),transparent_34%),linear-gradient(180deg,rgba(4,17,15,0.52)_0%,rgba(6,22,20,0.72)_52%,rgba(6,22,20,0.84)_100%)]" />
 
               <div className="absolute inset-0 flex items-center justify-center px-6 pt-24 pb-24 text-center md:px-12 md:pt-28">
-                <div className="mx-auto max-w-4xl">
-                  <p className="text-[11px] uppercase tracking-[0.32em] text-[#f8ddd2]/84">{slide.badge}</p>
-                  <h1 className="mt-5 text-balance text-4xl leading-[0.96] tracking-[0.03em] text-[#fff4ee] sm:text-6xl lg:text-7xl">
-                    Salud integral para cuerpo, mente y belleza.
+                <div className="mx-auto max-w-5xl rounded-3xl border border-white/20 bg-black/20 px-5 py-8 backdrop-blur-[2px] sm:px-8 sm:py-10">
+                  <p className="text-[11px] uppercase tracking-[0.3em] text-white/88" style={{ textShadow: "0 1px 8px rgba(0,0,0,0.35)" }}>
+                    {slide.badge}
+                  </p>
+                  <h1 className="mt-5 text-balance text-4xl leading-[1.02] tracking-[0.02em] sm:text-5xl lg:text-6xl" style={{ color: "#ffffff", textShadow: "0 8px 30px rgba(0,0,0,0.45)" }}>
+                    Salud integral a domicilio para cada etapa del cuidado.
                   </h1>
-                  <h2 className="mx-auto mt-5 max-w-3xl text-balance text-2xl font-medium leading-tight tracking-[0.02em] text-[#ffe9de]/96 sm:text-3xl lg:text-4xl">
+                  <h2 className="mx-auto mt-4 max-w-3xl text-balance text-xl font-medium leading-tight tracking-[0.01em] sm:text-2xl lg:text-3xl" style={{ color: "#ebfffa", textShadow: "0 6px 24px rgba(0,0,0,0.42)" }}>
                     {slide.title}
                   </h2>
-                  <p className="mx-auto mt-6 max-w-3xl text-base leading-8 tracking-[0.02em] text-[#f5dfd4]/90 sm:text-lg">
+                  <p className="mx-auto mt-5 max-w-3xl text-sm leading-7 tracking-[0.01em] sm:text-base" style={{ color: "#e8fff8", textShadow: "0 5px 18px rgba(0,0,0,0.38)" }}>
                     {slide.text}
                   </p>
 
-                  <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                  <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
                     <Link
                       href="/agendaProfesionales"
-                      aria-label="Agendar hora"
-                      className="inline-flex w-full justify-center rounded-full border border-[#f6dcc8]/45 bg-[linear-gradient(135deg,#f7dfcc_0%,#e7b27c_100%)] px-8 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] text-[#2f1a12] transition duration-300 ease-out hover:brightness-105 sm:w-auto"
+                      aria-label="Agendar evaluacion"
+                      className="inline-flex w-full justify-center rounded-full border border-[#23c7ad] bg-[#23c7ad] px-8 py-3.5 text-xs font-semibold uppercase tracking-[0.14em] text-white transition duration-300 ease-out hover:bg-[#1cae97] sm:w-auto"
                     >
-                      Reservar atencion
+                      Agendar evaluacion
                     </Link>
                     <Link
                       href="/servicios"
                       aria-label="Ver servicios integrales"
-                      className="inline-flex w-full justify-center rounded-full border border-[#f7ddd0]/40 bg-[#2f1e18]/56 px-8 py-3.5 text-xs font-semibold uppercase tracking-[0.16em] text-[#ffece2] transition duration-300 ease-out hover:bg-[#3b251e]/70 sm:w-auto"
+                      className="inline-flex w-full justify-center rounded-full border border-white/45 bg-white/18 px-8 py-3.5 text-xs font-semibold uppercase tracking-[0.14em] text-white transition duration-300 ease-out hover:bg-white/26 sm:w-auto"
                     >
                       Ver especialidades
                     </Link>
@@ -179,7 +194,7 @@ export default function Portada() {
                 onClick={() => setActiveIndex(index)}
                 className={[
                   "h-2.5 rounded-full transition-all duration-300",
-                  activeIndex === index ? "w-8 bg-[#ffe8de]" : "w-2.5 bg-[#f3dad0]/50 hover:bg-[#fde7dd]/80",
+                  activeIndex === index ? "w-8 bg-[#23c7ad]" : "w-2.5 bg-white/55 hover:bg-white/85",
                 ].join(" ")}
               />
             ))}
@@ -190,7 +205,7 @@ export default function Portada() {
               type="button"
               aria-label="Slide anterior"
               onClick={goPrev}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#f5dbc9]/34 bg-[#1f1310]/60 text-[#ffe9df] transition duration-300 hover:bg-[#2d1c17]"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/35 bg-black/35 text-white transition duration-300 hover:bg-black/50"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
@@ -198,7 +213,7 @@ export default function Portada() {
               type="button"
               aria-label="Siguiente slide"
               onClick={goNext}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#f5dbc9]/34 bg-[#1f1310]/60 text-[#ffe9df] transition duration-300 hover:bg-[#2d1c17]"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/35 bg-black/35 text-white transition duration-300 hover:bg-black/50"
             >
               <ChevronRight className="h-4 w-4" />
             </button>
@@ -215,33 +230,49 @@ export default function Portada() {
   // Legacy hero preserved for rollback:
   // return renderLegacyCarouselHero();
   return (
-    <section id="inicio" className="relative -mt-24 h-screen scroll-mt-24 overflow-hidden md:-mt-28">
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,#dddddb_0%,#e7e3da_40%,#ece6db_76%,#dfd9cf_100%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_22%_16%,rgba(255,255,255,0.74),transparent_38%),radial-gradient(circle_at_88%_14%,rgba(234,220,194,0.55),transparent_40%)]" />
+    <section id="inicio" className="relative -mt-24 min-h-[100svh] scroll-mt-24 overflow-hidden md:-mt-28">
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: "url('/fondoverde.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center center",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(circle at 22% 16%, rgba(255,255,255,0.28), transparent 40%), radial-gradient(circle at 88% 14%, rgba(255,255,255,0.2), transparent 42%)",
+        }}
+      />
 
-      <div className="relative flex h-screen items-center justify-center px-5 pt-24 pb-10 md:pt-28">
+      <div className="relative flex min-h-[100svh] items-center justify-center px-0 pt-24 pb-10 md:pt-28">
         <div
           className={[
-            "flex w-full max-w-[min(1040px,92vw)] flex-col items-center transition-all duration-[1400ms] ease-[cubic-bezier(0.2,0.75,0.16,1)]",
+            "flex w-full flex-col items-center transition-all duration-[1400ms] ease-[cubic-bezier(0.2,0.75,0.16,1)]",
             logoVisible ? "translate-y-0 scale-100 opacity-100 blur-0" : "translate-y-10 scale-[0.9] opacity-0 blur-[3px]",
           ].join(" ")}
         >
-          <Image
-            src="/logofull.png"
-            alt="Centro Integral ESSENZA"
-            width={1600}
-            height={900}
-            priority
-            className="h-auto max-h-[62vh] w-full object-contain drop-shadow-[0_16px_40px_rgba(0,0,0,0.18)]"
-          />
+          <div className="w-full px-2 sm:px-6 lg:px-10">
+            <Image
+              src="/logofull.png"
+              alt="SaludB"
+              width={2200}
+              height={1100}
+              priority
+              className="mx-auto h-auto max-h-[66svh] w-full max-w-[1800px] object-contain drop-shadow-[0_16px_40px_rgba(0,0,0,0.18)]"
+            />
+          </div>
 
-          <div className="mt-6 flex w-full flex-col items-center justify-center gap-3 sm:flex-row">
+          <div className="mt-6 flex w-full flex-col items-center justify-center gap-3 px-4 sm:flex-row sm:px-6 lg:px-10">
             <Link
               href="/agendaProfesionales"
-              aria-label="Agendar hora"
+              aria-label="Agendar evaluacion"
               className="inline-flex w-full justify-center rounded-full border border-[#d2b27f]/55 bg-[linear-gradient(135deg,#e6cfaa_0%,#d9b07b_100%)] px-8 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#2f1a12] transition duration-300 ease-out hover:brightness-105 sm:w-auto"
             >
-              Reservar atencion
+              Agendar evaluacion
             </Link>
             <Link
               href="/servicios"

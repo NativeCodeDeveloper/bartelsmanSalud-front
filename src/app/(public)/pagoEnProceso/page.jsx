@@ -13,13 +13,12 @@ const CTA1 = () => (
                 </div>
                 <div className="flex flex-col gap-2">
                     <h3 className="text-3xl md:text-5xl tracking-tighter max-w-xl font-regular">
-                        Su pago se encuentra en proceso.
+                        Tu pago se encuentra en proceso
                     </h3>
                     <p className="text-lg leading-relaxed tracking-tight text-amber-800 text-muted-foreground max-w-xl">
-                        Tu pago se encuentra en proceso de validación
-                        La plataforma de pagos está verificando la transacción. Este proceso puede tardar algunos minutos dependiendo del método de pago o del banco emisor.
+                        La plataforma de pagos esta verificando la transaccion. Este proceso puede tardar algunos minutos dependiendo del metodo de pago o del banco emisor.
 
-                        Te notificaremos automáticamente cuando el pago sea aprobado o rechazado.
+                        Te notificaremos cuando el pago sea aprobado o rechazado.
                         Si necesitas asistencia mientras tanto, puedes escribirnos a: <br/>
 
                         {CORREO}

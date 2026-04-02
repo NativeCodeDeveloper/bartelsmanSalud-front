@@ -46,7 +46,7 @@ function ReservaHoraContent() {
               <p className="mt-2 text-slate-700">
                 Su hora con{" "}
                 <span className="font-semibold text-slate-900">
-                  el equipo profesional de Centro Integral ESSENZA
+                  el equipo profesional de SaludB
                 </span>{" "}
                 ha sido reservada con éxito.
               </p>
@@ -68,7 +68,7 @@ function ReservaHoraContent() {
                   </div>
                   <div className="flex-1">
                     <p className="text-sm font-semibold text-slate-900">Servicio</p>
-                    <p className="text-sm text-slate-600">Agendar primera sesión, Pagaré el día de mi cita</p>
+                    <p className="text-sm text-slate-600">Primera evaluacion domiciliaria</p>
                   </div>
                 </div>
 
@@ -112,7 +112,7 @@ function ReservaHoraContent() {
                   </div>
                   <div className="flex-1">
                     <p className="text-sm font-semibold text-slate-900">Ubicación</p>
-                    <p className="text-sm text-slate-600">Centro Integral ESSENZA, 12 de Febrero 926, Pitrufquen</p>
+                    <p className="text-sm text-slate-600">Atencion a domicilio en Region Metropolitana</p>
                   </div>
                 </div>
               </div>

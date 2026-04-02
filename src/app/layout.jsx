@@ -1,51 +1,43 @@
 import "./globals.css";
 import { AnimatedLayout } from "@/Componentes/AnimatedLayout";
 import AgendaProvider from "@/ContextosGlobales/AgendaContext";
-import { Cormorant_Garamond, Manrope, Michroma } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 
-const manrope = Manrope({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-manrope",
+  variable: "--font-inter",
   weight: ["400", "500", "600", "700", "800"],
 });
 
-const cormorant = Cormorant_Garamond({
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  variable: "--font-cormorant",
-  weight: ["400", "500", "600", "700"],
+  variable: "--font-plus-jakarta",
+  weight: ["500", "600", "700", "800"],
 });
 
-const michroma = Michroma({
-  subsets: ["latin"],
-  variable: "--font-michroma",
-  weight: ["400"],
-});
-
-export const metadataBase = new URL(
-  process.env.NEXT_PUBLIC_SITE_URL || "https://www.centrointegralessenza.cl"
-);
+export const metadataBase = new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.saludb.cl");
 
 export const metadata = {
   title: {
-    default: "Centro Integral ESSENZA | Salud, Bienestar y Estética",
-    template: "%s | Centro Integral ESSENZA",
+    default: "SaludB | Salud Integral a Domicilio",
+    template: "%s | SaludB",
   },
   description:
-    "Centro Integral ESSENZA en Pitrufquén. Salud integral con medicina, psicología, nutrición, fonoaudiología, estética y terapias complementarias.",
+    "SaludB entrega atencion integral a domicilio en la Region Metropolitana con equipo interdisciplinario y coordinacion clinica continua.",
   keywords: [
-    "Centro Integral ESSENZA",
-    "salud integral",
-    "bienestar",
-    "psicologia",
-    "medicina general",
-    "nutricion",
+    "SaludB",
+    "salud a domicilio",
+    "atencion domiciliaria",
+    "kinesiologia",
+    "terapia ocupacional",
     "fonoaudiologia",
-    "cosmetologia",
-    "masoterapia",
-    "Pitrufquen",
+    "medicina general",
+    "geriatria",
+    "enfermeria",
+    "Region Metropolitana",
   ],
-  authors: [{ name: "Centro Integral ESSENZA", url: metadataBase.href }],
-  publisher: "Centro Integral ESSENZA",
+  authors: [{ name: "SaludB", url: metadataBase.href }],
+  publisher: "SaludB",
   robots: {
     index: true,
     follow: true,
@@ -62,25 +54,24 @@ export const metadata = {
     apple: "/logo1.png",
   },
   openGraph: {
-    title: "Centro Integral ESSENZA | Salud, Bienestar y Estética",
+    title: "SaludB | Salud Integral a Domicilio",
     description:
-      "Un espacio diseñado para el bienestar completo, con atención profesional, cercana y personalizada.",
+      "Atencion personalizada y coordinada a domicilio para mejorar la funcionalidad y calidad de vida de cada paciente.",
     url: metadataBase.href,
-    siteName: "Centro Integral ESSENZA",
+    siteName: "SaludB",
     locale: "es_CL",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Centro Integral ESSENZA",
-    description:
-      "Psicología, medicina, estética y bienestar integral en Pitrufquén.",
+    title: "SaludB",
+    description: "Red de atencion domiciliaria integral en la Region Metropolitana.",
   },
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="es" className={`${manrope.variable} ${cormorant.variable} ${michroma.variable}`}>
+    <html lang="es" className={`${inter.variable} ${plusJakarta.variable}`}>
       <body className="min-h-screen bg-white">
         <AnimatedLayout>
           <AgendaProvider>{children}</AgendaProvider>

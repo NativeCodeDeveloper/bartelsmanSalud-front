@@ -42,13 +42,13 @@ export default function AgendaProfesionales() {
       <div className="mx-auto max-w-5xl">
         <div className="animate-reveal-up text-center">
           <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#9a7750]/74">
-            Agenda Online
+            Agenda SaludB
           </p>
           <h1 className="mt-4 text-4xl font-bold tracking-tight text-[#4f361d] sm:text-5xl lg:text-6xl">
-            Nuestros Profesionales
+            Equipo Profesional
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-[#6b5233]/84">
-            Selecciona un profesional para ver su disponibilidad y agendar tu cita con acompanamiento cercano.
+            Selecciona un profesional para revisar disponibilidad y coordinar una primera evaluacion domiciliaria.
           </p>
           <div className="mx-auto mt-6 flex items-center justify-center gap-2">
             <div className="h-px w-12 bg-gradient-to-r from-transparent to-[#d2aa7f]/54" />

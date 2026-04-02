@@ -13,12 +13,12 @@ const CTA1 = () => (
                 </div>
                 <div className="flex flex-col gap-2">
                     <h3 className="text-3xl md:text-5xl tracking-tighter max-w-xl font-regular">
-                        Su pago ha sido Rechazado.
+                        Tu pago ha sido rechazado
                     </h3>
                     <p className="text-lg leading-relaxed tracking-tight text-red-800 text-muted-foreground max-w-xl">
-                        Lamentablemente la transacción fue rechazada por la plataforma de pagos. Esto puede deberse a fondos insuficientes, verificación fallida o restricciones del banco emisor.
+                        Lamentablemente la transaccion fue rechazada por la plataforma de pagos. Esto puede deberse a fondos insuficientes, verificacion fallida o restricciones del banco emisor.
 
-                        Por favor, intenta nuevamente con otro medio de pago o comunícate con tu banco para más información.
+                        Por favor, intenta nuevamente con otro medio de pago o comunicate con tu banco para mas informacion.
                         Si necesitas ayuda adicional, no dudes en escribirnos a: <br/>
                         {CORREO}
                     </p>

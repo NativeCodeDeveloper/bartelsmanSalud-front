@@ -356,15 +356,15 @@ function CatalogoSuspense(){
             <div className="bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 flex items-center justify-center">
                 <div className="w-full max-w-5xl px-4 py-10 sm:py-14 md:py-16">
                     <h1 className="mx-auto max-w-3xl text-center text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight tracking-tight text-white">
-                        Catálogo de Servicios
+                        Catalogo de Servicios
                     </h1>
 
                     <p className="hidden md:block mx-auto mt-4 max-w-4xl text-center text-sm leading-relaxed tracking-wide text-white/95">
-                        Diseñado para pacientes que buscan atención odontológica moderna, segura y efectiva. Nuestra planificación clínica combina tecnología y protocolos personalizados para mejorar tu salud oral y tu confianza desde la primera sesión.
+                        Prestaciones domiciliarias para pacientes que requieren acompanamiento continuo, con coordinacion clinica y enfoque integral.
                     </p>
 
                     <p className="md:hidden mx-auto mt-4 max-w-3xl text-center text-sm leading-relaxed tracking-wide text-white/95">
-                        Diseñado para pacientes que buscan atención odontológica de excelencia.
+                        Servicios domiciliarios con atencion personalizada.
                     </p>
                 </div>
             </div>
@@ -378,10 +378,10 @@ function CatalogoSuspense(){
 
              <div className="relative mt-4">
                  <p className="mx-auto max-w-2xl text-center text-base sm:text-xl font-extrabold tracking-tight text-slate-800">
-                     Selecciona tu categoría y descubre el plan ideal para tu salud oral
+                     Selecciona una categoria para revisar servicios disponibles
                  </p>
                  <p className="mx-auto mt-1 max-w-2xl text-center text-xs sm:text-sm text-slate-500">
-                     Elige una categoría para ver servicios y valores referenciales.
+                     Elige una categoria para ver servicios y valores referenciales.
                  </p>
 
                  <div className="mt-5 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
@@ -407,7 +407,7 @@ function CatalogoSuspense(){
                          <div className="mt-4 text-center">
                              <span className={`inline-flex items-center justify-center rounded-full px-3 py-1 text-[11px] font-extrabold tracking-[0.24em] ${hombres ? 'bg-amber-100 text-amber-900 ring-1 ring-amber-200' : 'bg-slate-100 text-slate-700 ring-1 ring-slate-200'} transition-all duration-300`}
                              >
-                                 HOMBRE
+                                 LINEA 1
                              </span>
 
                          </div>
@@ -435,7 +435,7 @@ function CatalogoSuspense(){
                          <div className="mt-4 text-center">
                              <span className={`inline-flex items-center justify-center rounded-full px-3 py-1 text-[11px] font-extrabold tracking-[0.24em] ${mujeres ? 'bg-amber-100 text-amber-900 ring-1 ring-amber-200' : 'bg-slate-100 text-slate-700 ring-1 ring-slate-200'} transition-all duration-300`}
                              >
-                                 MUJER
+                                 LINEA 2
                              </span>
 
                          </div>
@@ -480,7 +480,7 @@ function CatalogoSuspense(){
 
             {mujeres && (
                 <div className='w-full flex justify-center items-center gap-6 mt-20 px-4'>
-                    <h1 className='bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 text-4xl md:text-5xl font-bold text-transparent bg-clip-text'>MUJERES</h1>
+                    <h1 className='bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 text-4xl md:text-5xl font-bold text-transparent bg-clip-text'>LINEA 2</h1>
                 </div>
 
             )}
@@ -490,7 +490,7 @@ function CatalogoSuspense(){
 
             {hombres && (
                 <div className='w-full flex justify-center items-center gap-6 mt-20 px-4'>
-                    <h1 className='bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 text-4xl md:text-5xl font-bold text-transparent bg-clip-text'>HOMBRES</h1>
+                    <h1 className='bg-gradient-to-r from-purple-500 via-indigo-500 to-cyan-400 text-4xl md:text-5xl font-bold text-transparent bg-clip-text'>LINEA 1</h1>
                 </div>
 
             )}
@@ -523,7 +523,7 @@ function CatalogoSuspense(){
                                 {/* Badge */}
                                 <div className="absolute left-4 top-4">
                                     <span className="inline-flex items-center rounded-full bg-white/90 px-3 py-1 text-[11px] font-extrabold tracking-[0.22em] text-slate-800 ring-1 ring-slate-200 backdrop-blur">
-                                        CLÍNICA
+                                        SALUDB
                                     </span>
                                 </div>
                             </div>
@@ -534,7 +534,7 @@ function CatalogoSuspense(){
                                     {subsubcategoria.descripcionSubSubCategoria}
                                 </h1>
                                 <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600">
-                                    Atención odontológica segura y planificada, con resultados progresivos según diagnóstico clínico.
+                                    Atencion domiciliaria planificada con enfoque funcional y coordinacion del equipo tratante.
                                 </p>
                                 <div className="mt-5 h-px w-full bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
                                 {/* Botón único */}

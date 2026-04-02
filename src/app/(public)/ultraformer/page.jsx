@@ -4,12 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 
 const beneficios = [
-  "Evaluacion mas precisa en menos tiempo",
-  "Planificacion personalizada de tratamientos",
-  "Registro visual de avances",
-  "Mayor seguridad en cada procedimiento",
-  "Mejor comunicacion entre profesional y paciente",
-  "Seguimiento continuo y objetivo",
+  "Atencion en domicilio sin traslados innecesarios",
+  "Planificacion personalizada por caso",
+  "Coordinacion activa entre profesionales",
+  "Mayor continuidad en tratamientos",
+  "Apoyo claro para paciente y familia",
+  "Seguimiento funcional sostenido",
 ];
 
 export default function UltraformerPage() {
@@ -18,17 +18,17 @@ export default function UltraformerPage() {
       <section className="mx-auto grid w-full max-w-7xl gap-12 px-6 pb-20 pt-24 md:px-10 md:pb-24 md:pt-28 lg:grid-cols-[1.15fr_1fr] lg:items-center xl:px-12 xl:gap-16">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-300">
-            Tecnología clínica
+            Coordinacion clinica
           </p>
-          <h1 className="mt-5 text-4xl leading-tight sm:text-5xl">Evaluacion integral asistida por tecnologia</h1>
+          <h1 className="mt-5 text-4xl leading-tight sm:text-5xl">Evaluacion domiciliaria con enfoque integral</h1>
           <p className="mt-7 text-sm leading-relaxed text-slate-300 sm:text-base">
-            En Centro Integral ESSENZA incorporamos herramientas digitales para mejorar la precision diagnostica y optimizar cada etapa de atencion.
+            En SaludB utilizamos evaluacion clinica estructurada para definir prioridades y coordinar acciones entre distintas disciplinas.
           </p>
           <p className="mt-5 text-sm leading-relaxed text-slate-300 sm:text-base">
-            Utilizamos apoyo de imagen y analisis profesional para decisiones mas seguras, tiempos mas eficientes y una mejor experiencia para cada persona.
+            Nuestro modelo busca reducir barreras de acceso, evitar traslados innecesarios y sostener un seguimiento continuo en el hogar.
           </p>
           <p className="mt-5 text-sm leading-relaxed text-slate-300 sm:text-base">
-            Cada evaluacion se adapta al caso individual para definir objetivos realistas y una ruta de bienestar totalmente personalizada.
+            Cada evaluacion se adapta al caso individual para definir objetivos realistas y un plan de atencion personalizado.
           </p>
 
           <Link

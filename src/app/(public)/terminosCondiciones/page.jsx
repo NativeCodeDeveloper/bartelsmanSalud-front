@@ -2,65 +2,65 @@ const sections = [
   {
     title: "1. Identificacion del prestador",
     body: [
-      "Centro Integral ESSENZA presta servicios de salud y bienestar en la direccion 12 de Febrero 926, Pitrufquen, Novena Region de Chile.",
-      "Canales oficiales de contacto: Centrointegral.essenza@gmail.com, WhatsApp +56 9 8772 8500 e Instagram @essenza.centrointegral.",
+      "SaludB presta servicios de salud integral a domicilio en la Region Metropolitana de Chile.",
+      "Canales oficiales de contacto: Contacto@saludb.cl, WhatsApp +56 9 8527 8325, Instagram @saludb.cl y sitio web www.saludb.cl.",
     ],
   },
   {
     title: "2. Alcance de los servicios",
     body: [
-      "Nuestros servicios incluyen medicina general, medicina familiar, psicologia, nutricion, fonoaudiologia, cosmetologia, masoterapia y terapias complementarias.",
-      "Cada atencion se adapta a la condicion de salud, antecedentes y objetivos de cada paciente.",
+      "Nuestros servicios incluyen kinesiologia, terapia ocupacional, fonoaudiologia, medicina general, geriatria, enfermeria, TENS, cuidadores, podologia y arriendo de productos de salud.",
+      "Cada plan de atencion se adapta al estado clinico, funcional y contexto familiar de cada paciente.",
     ],
   },
   {
     title: "3. Reserva, cambios y asistencia",
     body: [
-      "Las reservas pueden gestionarse por los canales oficiales publicados en este sitio.",
-      "Para reagendar o cancelar una hora solicitamos aviso con al menos 24 horas de anticipacion.",
-      "La inasistencia sin aviso puede afectar la disponibilidad de nuevas reservas.",
+      "Las reservas y coordinaciones se gestionan por canales oficiales y segun disponibilidad profesional.",
+      "Para reagendar o cancelar una visita solicitamos aviso con al menos 24 horas de anticipacion.",
+      "La continuidad del servicio depende de la correcta coordinacion entre paciente, familia y equipo tratante.",
     ],
   },
   {
-    title: "4. Evaluacion previa y plan personalizado",
+    title: "4. Modelo de atencion coordinada",
     body: [
-      "Antes de iniciar procedimientos, el equipo realiza una evaluacion para determinar pertinencia clinica y recomendaciones.",
-      "Los resultados pueden variar segun condiciones individuales, adherencia y controles indicados.",
+      "SaludB trabaja con enfoque interdisciplinario, integrando distintas areas clinicas dentro de un plan comun.",
+      "El objetivo es evitar intervenciones aisladas y asegurar coherencia en el proceso terapeutico.",
     ],
   },
   {
-    title: "5. Consentimiento informado",
+    title: "5. Evaluacion y plan personalizado",
     body: [
-      "Todo procedimiento que lo requiera se realiza con consentimiento informado y explicacion de beneficios, cuidados y posibles riesgos.",
-      "El paciente debe informar antecedentes medicos, medicamentos y condiciones relevantes para su seguridad.",
+      "Antes de iniciar prestaciones, se realiza una evaluacion para definir pertinencia clinica, objetivos y frecuencia de intervencion.",
+      "Los resultados pueden variar segun condiciones individuales, adherencia y contexto del paciente.",
     ],
   },
   {
     title: "6. Pagos y comprobantes",
     body: [
-      "Los valores, medios de pago disponibles y condiciones comerciales vigentes se informan al momento de la reserva o atencion.",
-      "Los comprobantes correspondientes se emiten segun la normativa tributaria chilena aplicable.",
+      "Los valores y modalidades de pago vigentes se informan al momento de coordinar cada servicio.",
+      "Los comprobantes correspondientes se emiten conforme a la normativa tributaria chilena aplicable.",
     ],
   },
   {
     title: "7. Privacidad y datos personales",
     body: [
-      "Los datos entregados por pacientes y usuarios se utilizan exclusivamente para gestion de atenciones, contacto, seguimiento y cumplimiento legal.",
-      "ESSENZA adopta medidas razonables de resguardo y confidencialidad conforme a la normativa chilena vigente.",
-      "Puedes solicitar actualizacion o eliminacion de datos en Centrointegral.essenza@gmail.com.",
+      "Los datos de pacientes y familias se utilizan exclusivamente para coordinacion asistencial, seguimiento clinico y cumplimiento legal.",
+      "SaludB adopta medidas razonables de confidencialidad y resguardo conforme a la normativa vigente.",
+      "Puedes solicitar actualizacion o eliminacion de datos en Contacto@saludb.cl.",
     ],
   },
   {
     title: "8. Propiedad intelectual",
     body: [
-      "Los contenidos del sitio, incluyendo textos, imagenes, identidad visual y materiales informativos, son de uso exclusivo de Centro Integral ESSENZA o sus titulares.",
+      "Los contenidos del sitio, incluyendo textos, imagenes e identidad visual, son de uso exclusivo de SaludB o sus titulares.",
       "No esta permitido copiar, reproducir o distribuir contenido sin autorizacion previa y por escrito.",
     ],
   },
   {
     title: "9. Modificaciones y vigencia",
     body: [
-      "Centro Integral ESSENZA puede actualizar estos terminos para reflejar cambios operativos, legales o de servicio.",
+      "SaludB puede actualizar estos terminos para reflejar cambios operativos, legales o de servicio.",
       "La version publicada en esta pagina es la vigente y reemplaza versiones anteriores.",
     ],
   },
@@ -81,14 +81,14 @@ export default function TerminosYCondiciones() {
 
         <div className="relative mx-auto w-full max-w-5xl px-6 md:px-10 xl:px-12">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#f1d8cb]/74">
-            Centro Integral ESSENZA
+            SaludB
           </p>
           <h1 className="mt-4 text-4xl leading-tight text-[#fff1e8] sm:text-5xl">
             Terminos y Condiciones
           </h1>
           <p className="mt-6 max-w-3xl text-sm leading-relaxed text-[#f6dfd4]/82 sm:text-base">
-            Documento informativo sobre el uso del sitio, reservas y condiciones generales de atencion.
-            Ultima actualizacion: marzo de 2026.
+            Documento informativo sobre el uso del sitio, coordinacion de servicios domiciliarios y condiciones generales de atencion.
+            Ultima actualizacion: abril de 2026.
           </p>
 
           <div className="mt-10 space-y-5">

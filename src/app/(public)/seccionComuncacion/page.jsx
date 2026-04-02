@@ -44,13 +44,13 @@ export default function SeccionComuncacion() {
         <main className="bg-transparent text-[#fff4ee]">
             <section className="mx-auto w-full max-w-7xl px-6 pb-16 pt-24 md:px-10 md:pt-28">
                 <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#f1d8cb]/72">
-                    Comunidad ESSENZA
+                    Comunidad SaludB
                 </p>
                 <h1 className="mt-5 max-w-4xl text-4xl leading-tight text-[#fff1e9] sm:text-5xl">
-                    Novedades, contenidos y recomendaciones para tu bienestar integral.
+                    Contenidos y orientacion para el cuidado domiciliario integral.
                 </h1>
                 <p className="mt-6 max-w-3xl text-sm leading-relaxed text-[#f5dfd4]/82 sm:text-base">
-                    Compartimos orientacion profesional en salud, mente y estetica para acompanarte tambien fuera de la consulta.
+                    Compartimos recomendaciones practicas para pacientes, familias y cuidadores en procesos de rehabilitacion y acompanamiento.
                 </p>
             </section>
 
@@ -67,7 +67,7 @@ export default function SeccionComuncacion() {
                             href="/catalogo"
                             className="rounded-full border border-[#f8dcc5]/45 bg-[linear-gradient(135deg,#f7dfcc_0%,#e7b27c_100%)] px-8 py-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#2f1a12] transition hover:brightness-105"
                         >
-                            Ver servicios
+                            Ver soluciones
                         </Link>
                     </div>
                 </div>

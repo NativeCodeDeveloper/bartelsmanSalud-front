@@ -14,12 +14,12 @@ const CTA1 = () => (
                 </div>
                 <div className="flex flex-col gap-2">
                     <h3 className="text-3xl md:text-5xl tracking-tighter max-w-xl font-regular">
-                        Tu pago ha sido aprobado!
+                        Tu pago ha sido aprobado
                     </h3>
                     <p className="text-lg leading-relaxed tracking-tight text-sky-800 text-muted-foreground max-w-xl">
-                        Tu pedido esta pendiente de confirmación.
+                        Tu solicitud esta pendiente de confirmacion.
 
-                        En cuanto comencemos a prepararlo te notificaremos inmediatamente a los datos de contacto que nos entregaste. Podrás seguir cada etapa del trayecto y conocer en qué parte del proceso se encuentra tu compra. Si tienes dudas o necesitas asistencia, escríbenos a: <br/>
+                        En cuanto validemos la informacion te contactaremos por los datos que registraste. Si tienes dudas o necesitas asistencia, escribenos a: <br/>
 
                         {CORREO}
                     </p>

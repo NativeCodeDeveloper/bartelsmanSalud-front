@@ -52,12 +52,14 @@ export function CarruselOfertas({
     }, [api, current, intervalMs, items.length]);
 
     return (
-        <section className="w-full py-20 lg:py-32">
+        <section className="w-full py-8 lg:py-12">
             <div className="container mx-auto">
                 <div className="flex flex-col gap-10">
-                    <h2 className="text-xl md:text-3xl lg:text-5xl tracking-tight font-regular text-left max-w-2xl">
-                        {title}
-                    </h2>
+                    {title ? (
+                        <h2 className="max-w-2xl text-left text-lg font-medium tracking-tight md:text-2xl">
+                            {title}
+                        </h2>
+                    ) : null}
 
                     <Carousel setApi={setApi} className="w-full">
                     <CarouselContent className="-ml-0 sm:-ml-6">
@@ -66,8 +68,8 @@ export function CarruselOfertas({
                                     key={`${img.src}-${index}`}
                                     className={`${itemClassName} pl-0 sm:pl-6`}
                                 >
-                                    <div className="relative w-full overflow-hidden rounded-2xl bg-white/5">
-                                        <div className="relative w-full h-[60vh] sm:h-72 md:h-80 lg:h-[22rem]">
+                                    <div className="relative w-full overflow-hidden rounded-2xl border border-[#c8efe5] bg-white">
+                                        <div className="relative h-56 w-full sm:h-64 md:h-72 lg:h-80">
                                             <img
                                                 src={img.src}
                                                 alt={img.alt}
@@ -76,7 +78,7 @@ export function CarruselOfertas({
                                                     w-full h-full
                                                     ${imageClassName}
                                                     object-cover object-center
-                                                    sm:transition-transform sm:duration-700 sm:hover:scale-110
+                                                    sm:transition-transform sm:duration-700 sm:hover:scale-105
                                                 `}
                                             />
 
