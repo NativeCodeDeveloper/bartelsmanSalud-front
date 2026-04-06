@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/table"
 import ToasterClient from "@/Componentes/ToasterClient";
 import {toast} from "react-hot-toast";
-import {ButtonDinamic} from "@/Componentes/ButtonDinamic";
 
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -31,7 +30,6 @@ export default function PresupuestoTratamiento() {
     const [nombreProfesional, setNombreProfesional] = useState("");
     const [nombrePaciente, setNombrePaciente] = useState("");
     const [rutaPaciente, setRutaPaciente] = useState("");
-    const [valorFinalDescuento, setValorFinalDescuento] = useState("");
 
     const formatoCLP = new Intl.NumberFormat("es-CL", {
         style: "currency",
@@ -120,7 +118,7 @@ export default function PresupuestoTratamiento() {
         // Subtítulo
         doc.setFontSize(7);
         doc.setTextColor(148, 163, 184); // slate-400
-        doc.text("Odontologia y Medicina Estetica", margin, 24);
+        doc.text("Salud Integral a Domicilio", margin, 24);
 
         // Fecha alineada a la derecha en el header
         doc.setFont("helvetica", "normal");
@@ -217,44 +215,19 @@ export default function PresupuestoTratamiento() {
         doc.text("Subtotal:", rightX - 50, finalY);
         doc.text(formatoCLP.format(totalPresupuesto), rightX, finalY, {align: "right"});
 
-        if (valorFinalDescuento) {
-            // Descuento
-            finalY += 7;
-            const descuento = totalPresupuesto - Number(valorFinalDescuento);
-            const porcentaje = totalPresupuesto > 0 ? Math.round((descuento / totalPresupuesto) * 100) : 0;
-            doc.setFontSize(9);
-            doc.setTextColor(22, 163, 74); // green-600
-            doc.text(`Descuento (${porcentaje}%):`, rightX - 50, finalY);
-            doc.text(`-${formatoCLP.format(descuento)}`, rightX, finalY, {align: "right"});
+        // Línea separadora
+        finalY += 4;
+        doc.setDrawColor(212, 175, 55);
+        doc.setLineWidth(0.4);
+        doc.line(rightX - 55, finalY, rightX, finalY);
 
-            // Línea separadora
-            finalY += 4;
-            doc.setDrawColor(212, 175, 55);
-            doc.setLineWidth(0.4);
-            doc.line(rightX - 55, finalY, rightX, finalY);
-
-            // Total final
-            finalY += 8;
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(13);
-            doc.setTextColor(15, 23, 42);
-            doc.text("Total:", rightX - 50, finalY);
-            doc.text(formatoCLP.format(Number(valorFinalDescuento)), rightX, finalY, {align: "right"});
-        } else {
-            // Línea separadora
-            finalY += 4;
-            doc.setDrawColor(212, 175, 55);
-            doc.setLineWidth(0.4);
-            doc.line(rightX - 55, finalY, rightX, finalY);
-
-            // Total
-            finalY += 8;
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(13);
-            doc.setTextColor(15, 23, 42);
-            doc.text("Total:", rightX - 50, finalY);
-            doc.text(formatoCLP.format(totalPresupuesto), rightX, finalY, {align: "right"});
-        }
+        // Total
+        finalY += 8;
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(13);
+        doc.setTextColor(15, 23, 42);
+        doc.text("Total:", rightX - 50, finalY);
+        doc.text(formatoCLP.format(totalPresupuesto), rightX, finalY, {align: "right"});
 
         // ── Footer ──
         const footerY = doc.internal.pageSize.getHeight() - 15;
@@ -443,24 +416,6 @@ export default function PresupuestoTratamiento() {
                                     </div>
                                 </div>
 
-                                <div>
-                                    <label className="block text-sm font-medium text-slate-700 mb-1.5">Valor final con descuento <span className="text-xs text-slate-400 font-normal">(opcional)</span></label>
-                                    <div className="relative">
-                                        <span className=" absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-400 font-medium"></span>
-                                        <input
-                                            type="number"
-                                            value={valorFinalDescuento}
-                                            onChange={(e) => setValorFinalDescuento(e.target.value)}
-                                            placeholder="Ingrese el monto final si aplica descuento"
-                                            className="w-full p-2 rounded-lg border border-slate-200 bg-white pl-7 pr-3.5 py-2.5 text-sm text-slate-800 shadow-sm outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 placeholder:text-slate-400 transition"
-                                        />
-                                    </div>
-                                    {valorFinalDescuento && totalPresupuesto > 0 && (
-                                        <p className="mt-1.5 text-xs text-emerald-600 font-medium">
-                                            Descuento aplicado: {formatoCLP.format(totalPresupuesto - Number(valorFinalDescuento))} ({Math.round(((totalPresupuesto - Number(valorFinalDescuento)) / totalPresupuesto) * 100)}%)
-                                        </p>
-                                    )}
-                                </div>
                             </div>
                         </div>
 
@@ -479,7 +434,7 @@ export default function PresupuestoTratamiento() {
                             </div>
 
                             <div className="overflow-x-auto">
-                                
+
                                 <Table>
                                     <TableCaption className="font-medium text-slate-400 text-xs py-4">Selecciona un servicio para agregarlo al presupuesto</TableCaption>
                                     <TableHeader>
