@@ -181,7 +181,7 @@ export default function Seccion3() {
                   aria-label="Reservar hora"
                   className="mt-8 inline-flex w-full max-w-xs justify-center rounded-full border border-white/35 bg-white px-8 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#0f5a52] transition duration-300 ease-out hover:bg-white/90"
                 >
-                  Agendar primera evaluacion
+                  Agendar reunión
                 </Link>
               </div>
             </div>

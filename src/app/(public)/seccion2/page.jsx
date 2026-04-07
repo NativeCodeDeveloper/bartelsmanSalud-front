@@ -147,7 +147,7 @@ export default function Seccion2() {
           backgroundSize: "contain",
           backgroundPosition: "center top",
           backgroundRepeat: "repeat",
-          opacity: 0.45,
+          opacity: 0.10,
         }}
       />
 

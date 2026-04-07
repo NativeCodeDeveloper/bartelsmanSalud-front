@@ -111,7 +111,7 @@ export default function Navbar() {
             aria-label="Agendar evaluacion"
             className="hidden rounded-full border border-[#34cdb4] bg-[#34cdb4] px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-white transition duration-300 ease-out hover:bg-[#2ab9a2] sm:inline-flex sm:px-5 sm:py-2.5 sm:text-xs"
           >
-            Agendar evaluacion
+            Agendar reunión
           </Link>
 
           <button
@@ -155,7 +155,7 @@ export default function Navbar() {
             aria-label="Agendar evaluacion desde menu movil"
             className="mt-2 rounded-lg border border-[#34cdb4] bg-[#34cdb4] px-4 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.16em] text-white transition duration-300 hover:bg-[#2ab9a2] sm:text-xs"
           >
-            Agendar evaluacion
+            Agendar reunión
           </Link>
         </div>
       </div>

@@ -71,7 +71,7 @@ export default function FooterPremiumMedico() {
                 href="/agendaProfesionales"
                 className="inline-flex items-center gap-2 rounded-full border border-white/55 bg-white px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-[#0f5a52] transition hover:bg-white/90"
               >
-                Agendar evaluacion
+                Agendar reunión
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link

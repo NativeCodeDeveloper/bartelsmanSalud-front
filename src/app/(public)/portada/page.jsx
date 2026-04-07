@@ -114,7 +114,7 @@ export default function Portada() {
   };
 
   return (
-    <section id="inicio" className="relative -mt-20 min-h-[100svh] scroll-mt-24 overflow-hidden md:-mt-24">
+    <section id="inicio" className="relative -mt-24 min-h-[100svh] scroll-mt-24 overflow-hidden md:-mt-24">
       <div
         className="absolute inset-0"
         style={{
@@ -178,7 +178,7 @@ export default function Portada() {
                           aria-label="Agendar evaluacion"
                           className="inline-flex w-full justify-center rounded-full border border-white/22 bg-white px-7 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#0f5a52] transition duration-300 ease-out hover:bg-white/90 sm:w-auto"
                         >
-                          Agendar evaluacion
+                          Agendar reunión
                         </Link>
                         <Link
                           href="/#servicios"
