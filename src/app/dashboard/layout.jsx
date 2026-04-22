@@ -204,7 +204,7 @@ export default function DashboardLayout({ children }) {
                             {/* — Cobro por Consulta — */}
                             <details className="group">
                                 <summary className="flex items-center justify-between px-2 py-1 text-[11px] font-medium text-white/30 hover:text-white/45 transition-colors duration-200 cursor-pointer list-none select-none tracking-normal">
-                                    <span>Cobro por consulta</span>
+                                    <span>Configuraciones</span>
                                     <svg className="h-3 w-3 text-white/15 transition-transform duration-200 group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor">
                                         <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clipRule="evenodd" />
                                     </svg>
@@ -215,7 +215,7 @@ export default function DashboardLayout({ children }) {
                                         className="group/link flex items-center gap-2.5 rounded-md px-2 py-[6px] text-[12.5px] font-light text-white/50 hover:text-white/90 hover:bg-white/[0.05] transition-all duration-200"
                                     >
                                         <span className="h-[3px] w-[3px] rounded-full bg-white/15 group-hover/link:bg-violet-400 group-hover/link:shadow-[0_0_6px_rgba(139,92,246,0.6)] transition-all duration-200" />
-                                        Registro de Profesionales
+                                        Registro de Agendas
                                     </Link>
                                     <Link
                                         href="/dashboard/serviciosAgendamiento"
@@ -231,6 +231,18 @@ export default function DashboardLayout({ children }) {
                                         <span className="h-[3px] w-[3px] rounded-full bg-white/15 group-hover/link:bg-violet-400 group-hover/link:shadow-[0_0_6px_rgba(139,92,246,0.6)] transition-all duration-200" />
                                         Cobro por Consulta
                                     </Link>
+
+
+                                    <Link
+                                        href="/dashboard/fichasClinicasPlantillas"
+                                        className="group/link flex items-center gap-2.5 rounded-md px-2 py-[6px] text-[12.5px] font-light text-white/50 hover:text-white/90 hover:bg-white/[0.05] transition-all duration-200"
+                                    >
+                                        <span className="h-[3px] w-[3px] rounded-full bg-white/15 group-hover/link:bg-violet-400 group-hover/link:shadow-[0_0_6px_rgba(139,92,246,0.6)] transition-all duration-200" />
+                                        Fichas Clinicas
+                                    </Link>
+
+
+
                                 </div>
                             </details>
 
