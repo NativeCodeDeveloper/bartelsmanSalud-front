@@ -1,5 +1,5 @@
 "use client"
-import {useParams} from "next/navigation";
+import {useParams, useSearchParams} from "next/navigation";
 import {useState, useEffect} from "react";
 import {toast} from "react-hot-toast";
 import ToasterClient from "@/Componentes/ToasterClient";
@@ -19,10 +19,16 @@ import {Textarea} from "@/components/ui/textarea";
 export default function Paciente(){
 
     const {id_paciente} = useParams();
+    const searchParams = useSearchParams();
+    const vieneDeFichas = searchParams.get("desde") === "fichas";
     const [detallePaciente, setDetallePaciente] = useState([])
     const API = process.env.NEXT_PUBLIC_API_URL;
     const router = useRouter();
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
+
+    function volverAFichas() {
+        router.push(`/dashboard/FichasPacientes/${id_paciente}`);
+    }
 
 
 
@@ -262,6 +268,16 @@ export default function Paciente(){
                         <div className="flex flex-wrap items-center gap-2">
                             <span className="text-xs text-slate-500">Registros:</span>
                             <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-sky-100 text-sky-900 font-semibold text-xs">{detallePaciente.length}</span>
+                            {vieneDeFichas && (
+                                <button
+                                    onClick={volverAFichas}
+                                    className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-sky-600 to-cyan-500 rounded-lg hover:from-sky-700 hover:to-cyan-600 transition-all duration-150 shadow-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                                    </svg>
+                                    Volver a Fichas
+                                </button>
+                            )}
                             <ShadcnButton nombre={"Volver a Ingreso"} funcion={()=> volverAingreso()}/>
                         </div>
                     </div>

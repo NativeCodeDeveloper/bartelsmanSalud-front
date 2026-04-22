@@ -133,6 +133,24 @@ export default function NuevaFicha() {
                 return toast.error(`Debe completar los campos obligatorios: ${camposFaltantes.join(", ")}`)
             }
 
+            // Construir datosDinamicos enriquecido con nombres de campo/categoría
+            const datosEnriquecidos = {
+                _plantillaNombre: plantillaCompleta.nombre
+            }
+            plantillaCompleta.categorias.forEach(cat => {
+                cat.campos.forEach(campo => {
+                    if (datosDinamicos[campo.id_campo]) {
+                        datosEnriquecidos[campo.id_campo] = {
+                            valor: datosDinamicos[campo.id_campo],
+                            nombreCampo: campo.nombre,
+                            nombreCategoria: cat.nombre,
+                            categoriaOrden: cat.orden,
+                            campoOrden: campo.orden
+                        }
+                    }
+                })
+            })
+
             const res = await fetch(`${API}/ficha/insertarFichaClinica`, {
                 method: "POST",
                 headers: {
@@ -153,7 +171,7 @@ export default function NuevaFicha() {
                     fechaConsulta,
                     consentimientoFirmado: "",
                     id_plantilla: idPlantilla,
-                    datosDinamicos
+                    datosDinamicos: datosEnriquecidos
                 }),
                 mode: "cors"
             })

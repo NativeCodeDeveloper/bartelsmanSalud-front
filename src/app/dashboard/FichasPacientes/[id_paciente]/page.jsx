@@ -16,42 +16,45 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import {InfoButton} from "@/Componentes/InfoButton";
 
 
-function transformarPlantilla(filas) {
-    if (!filas || filas.length === 0) return null
-    const primera = filas[0]
+function parsearDatosDinamicos(datos) {
+    if (!datos) return null
+    let parsed = datos
+    if (typeof datos === "string") {
+        try { parsed = JSON.parse(datos) } catch { return null }
+    }
+    if (!parsed || typeof parsed !== "object") return null
+    return parsed
+}
+
+function agruparPorCategoria(datos) {
     const categoriasMap = {}
 
-    filas.forEach(fila => {
-        if (!fila.id_categoria) return
-        if (!categoriasMap[fila.id_categoria]) {
-            categoriasMap[fila.id_categoria] = {
-                id_categoria: fila.id_categoria,
-                nombre: fila.categoria_nombre,
-                orden: fila.categoria_orden,
+    Object.keys(datos).forEach(key => {
+        if (key === "_plantillaNombre") return
+        const entry = datos[key]
+        if (!entry || typeof entry !== "object" || !entry.nombreCategoria) return
+
+        const catNombre = entry.nombreCategoria
+        if (!categoriasMap[catNombre]) {
+            categoriasMap[catNombre] = {
+                nombre: catNombre,
+                orden: entry.categoriaOrden || 0,
                 campos: []
             }
         }
-        if (fila.id_campo) {
-            categoriasMap[fila.id_categoria].campos.push({
-                id_campo: fila.id_campo,
-                nombre: fila.campo_nombre,
-                requerido: fila.requerido,
-                orden: fila.campo_orden
-            })
-        }
+        categoriasMap[catNombre].campos.push({
+            nombre: entry.nombreCampo,
+            valor: entry.valor,
+            orden: entry.campoOrden || 0
+        })
     })
 
-    return {
-        id_plantilla: primera.id_plantilla,
-        nombre: primera.plantilla_nombre,
-        categorias: Object.values(categoriasMap).sort((a, b) => a.orden - b.orden)
-    }
-}
-
-function parsearDatosDinamicos(datos) {
-    if (!datos) return {}
-    if (typeof datos === "object") return datos
-    try { return JSON.parse(datos) } catch { return {} }
+    return Object.values(categoriasMap)
+        .sort((a, b) => a.orden - b.orden)
+        .map(cat => ({
+            ...cat,
+            campos: cat.campos.sort((a, b) => a.orden - b.orden)
+        }))
 }
 
 export default function Paciente() {
@@ -60,11 +63,14 @@ export default function Paciente() {
     const [detallePaciente, setDetallePaciente] = useState([])
     const API = process.env.NEXT_PUBLIC_API_URL;
     const router = useRouter();
-    const [plantillasMap, setPlantillasMap] = useState({})
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
 
     function nuevaFichaClinica() {
         router.push(`/dashboard/NuevaFicha/${id_paciente}`);
+    }
+
+    function editarPaciente() {
+        router.push(`/dashboard/paciente/${id_paciente}?desde=fichas`);
     }
 
 
@@ -116,6 +122,7 @@ export default function Paciente() {
     const [consentimientoFirmado, setConsentimientoFirmado] = useState("");
 
     const [listaFichas, setListaFichas] = useState([]);
+    const [filtroProfesional, setFiltroProfesional] = useState("");
 
     async function eliminarFicha(id_ficha) {
         try {
@@ -178,41 +185,44 @@ export default function Paciente() {
         }
     }
 
-    async function cargarPlantillasDeFichas(fichas) {
-        const idsUnicos = [...new Set(fichas.filter(f => f.id_plantilla).map(f => f.id_plantilla))]
-        const nuevoMapa = {}
-
-        for (const idP of idsUnicos) {
-            if (plantillasMap[idP]) {
-                nuevoMapa[idP] = plantillasMap[idP]
-                continue
-            }
-            try {
-                const res = await fetch(`${API}/fichaPlantilla/obtenerPlantillaCompleta`, {
-                    method: "POST",
-                    headers: { Accept: "application/json", "Content-Type": "application/json" },
-                    body: JSON.stringify({ id_plantilla: idP })
-                })
-                if (res.ok) {
-                    const filas = await res.json()
-                    const estructura = transformarPlantilla(filas)
-                    if (estructura) nuevoMapa[idP] = estructura
-                }
-            } catch (e) {
-                console.log(e)
-            }
+    async function buscarPorProfesional() {
+        if (!filtroProfesional.trim()) {
+            return toast.error("Ingrese el nombre del profesional para buscar")
         }
+        try {
+            const res = await fetch(`${API}/ficha/seleccionar_similitud_nombre_profesional`, {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({observaciones: filtroProfesional.trim()}),
+                mode: "cors"
+            })
 
-        if (Object.keys(nuevoMapa).length > 0) {
-            setPlantillasMap(prev => ({ ...prev, ...nuevoMapa }))
+            if (!res.ok) {
+                setListaFichas([])
+                return toast.error("No se encontraron fichas con ese profesional")
+            }
+
+            const data = await res.json()
+            if (Array.isArray(data) && data.length > 0) {
+                setListaFichas(data)
+                toast.success(`Se encontraron ${data.length} fichas`)
+            } else {
+                setListaFichas([])
+                toast.error("No se encontraron fichas con ese profesional")
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error("Error al buscar fichas por profesional")
         }
     }
 
-    useEffect(() => {
-        if (listaFichas.length > 0) {
-            cargarPlantillasDeFichas(listaFichas)
-        }
-    }, [listaFichas])
+    function limpiarFiltro() {
+        setFiltroProfesional("")
+        setListaFichas([])
+    }
 
     function volverAFichas() {
         router.push("/dashboard/FichaClinica");
@@ -455,6 +465,14 @@ export default function Paciente() {
                     </div>
                     <div className="flex items-center gap-2 flex-wrap">
                         <button
+                            onClick={editarPaciente}
+                            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-amber-500 to-orange-500 rounded-lg hover:from-amber-600 hover:to-orange-600 transition-all duration-150 shadow-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                            Editar Paciente
+                        </button>
+                        <button
                             onClick={agendarPaciente}
                             className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-purple-500 rounded-lg hover:from-violet-700 hover:to-purple-600 transition-all duration-150 shadow-sm">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -484,6 +502,36 @@ export default function Paciente() {
                             </svg>
                             Nueva Ficha
                         </button>
+                    </div>
+                </div>
+
+                {/* Filtro por profesional */}
+                <div className="mb-6 bg-white border border-slate-200 rounded-xl px-5 py-3.5 shadow-sm">
+                    <label className="block text-sm font-medium text-slate-700 mb-2">Filtrar por Profesional</label>
+                    <div className="flex items-center gap-2">
+                        <input
+                            type="text"
+                            value={filtroProfesional}
+                            onChange={(e) => setFiltroProfesional(e.target.value)}
+                            onKeyDown={(e) => e.key === "Enter" && buscarPorProfesional()}
+                            placeholder="Ej: Dra. Andrea, Dr. Perez..."
+                            className="flex-1 h-10 px-3.5 text-sm border border-slate-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-400 transition-all text-slate-700"
+                        />
+                        <button
+                            onClick={buscarPorProfesional}
+                            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-sky-600 to-cyan-500 rounded-lg hover:from-sky-700 hover:to-cyan-600 transition-all duration-150 shadow-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                            Buscar
+                        </button>
+                        {filtroProfesional && (
+                            <button
+                                onClick={limpiarFiltro}
+                                className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-slate-600 bg-slate-50 border border-slate-200 rounded-lg hover:bg-slate-100 transition-all duration-150">
+                                Limpiar
+                            </button>
+                        )}
                     </div>
                 </div>
 
@@ -540,17 +588,21 @@ export default function Paciente() {
                                         </button>
                                         </div>
                                     </div>
-                                    {/* Chips: Plantilla/Motivo + Profesional */}
+                                    {/* Chips: Plantilla + Profesional */}
                                     <div className="flex flex-wrap items-center gap-2 ml-11 sm:ml-0">
-                                        {ficha.id_plantilla && plantillasMap[ficha.id_plantilla] ? (
-                                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-50 border border-emerald-100 text-xs font-medium text-emerald-700">
-                                                <span className="text-emerald-400">Plantilla:</span> {plantillasMap[ficha.id_plantilla].nombre}
-                                            </span>
-                                        ) : (
-                                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-sky-50 border border-sky-100 text-xs font-medium text-sky-700">
-                                                <span className="text-sky-400">Motivo Consulta:</span> {ficha.tipoAtencion || '-'}
-                                            </span>
-                                        )}
+                                        {(() => {
+                                            const datos = parsearDatosDinamicos(ficha.datosDinamicos)
+                                            const plantillaNombre = datos?._plantillaNombre
+                                            return plantillaNombre ? (
+                                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-50 border border-emerald-100 text-xs font-medium text-emerald-700">
+                                                    <span className="text-emerald-400">Plantilla:</span> {plantillaNombre}
+                                                </span>
+                                            ) : (
+                                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-sky-50 border border-sky-100 text-xs font-medium text-sky-700">
+                                                    <span className="text-sky-400">Motivo Consulta:</span> {ficha.tipoAtencion || '-'}
+                                                </span>
+                                            )
+                                        })()}
                                         <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-cyan-50 border border-cyan-100 text-xs font-medium text-cyan-700">
                                             <span className="text-cyan-400">Profesional:</span> {ficha.observaciones || '-'}
                                         </span>
@@ -559,55 +611,36 @@ export default function Paciente() {
 
                                 {/* Cuerpo ficha */}
                                 <div className="px-5 md:px-6 py-4">
-                                    {ficha.id_plantilla && plantillasMap[ficha.id_plantilla] ? (
-                                        /* === Ficha con plantilla dinámica === */
-                                        (() => {
-                                            const plantilla = plantillasMap[ficha.id_plantilla]
-                                            const datos = parsearDatosDinamicos(ficha.datosDinamicos)
+                                    {(() => {
+                                        const datos = parsearDatosDinamicos(ficha.datosDinamicos)
+                                        if (datos && datos._plantillaNombre) {
+                                            const categorias = agruparPorCategoria(datos)
                                             return (
                                                 <div className="space-y-4">
-                                                    {plantilla.categorias.map(categoria => {
-                                                        const camposConValor = categoria.campos.filter(c => datos[c.id_campo])
-                                                        if (camposConValor.length === 0) return null
-                                                        return (
-                                                            <div key={categoria.id_categoria}>
-                                                                <p className="text-[11px] font-semibold text-emerald-600 uppercase tracking-wider mb-2">{categoria.nombre}</p>
-                                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                                                    {camposConValor.map(campo => (
-                                                                        <div key={campo.id_campo} className="flex flex-col gap-0.5 px-3 py-2.5 bg-slate-50 rounded-lg border border-slate-100">
-                                                                            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">{campo.nombre}</span>
-                                                                            <span className="text-sm font-medium text-slate-700 whitespace-pre-line">{datos[campo.id_campo]}</span>
-                                                                        </div>
-                                                                    ))}
-                                                                </div>
+                                                    {categorias.map(categoria => (
+                                                        <div key={categoria.nombre}>
+                                                            <p className="text-[11px] font-semibold text-emerald-600 uppercase tracking-wider mb-2">{categoria.nombre}</p>
+                                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                                {categoria.campos.map((campo, idx) => (
+                                                                    <div key={idx} className="flex flex-col gap-0.5 px-3 py-2.5 bg-slate-50 rounded-lg border border-slate-100">
+                                                                        <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">{campo.nombre}</span>
+                                                                        <span className="text-sm font-medium text-slate-700 whitespace-pre-line">{campo.valor}</span>
+                                                                    </div>
+                                                                ))}
                                                             </div>
-                                                        )
-                                                    })}
+                                                        </div>
+                                                    ))}
+                                                    {categorias.length === 0 && (
+                                                        <p className="text-sm text-slate-400">Sin datos registrados.</p>
+                                                    )}
                                                 </div>
                                             )
-                                        })()
-                                    ) : (
-                                        /* === Ficha legacy (sin plantilla) === */
-                                        <>
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-                                                <div className="flex flex-col gap-0.5 px-3 py-2.5 bg-slate-50 rounded-lg border border-slate-100">
-                                                    <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Diagn&oacute;stico</span>
-                                                    <span className="text-sm font-medium text-slate-700">{ficha.diagnostico || '-'}</span>
-                                                </div>
-                                                <div className="flex flex-col gap-0.5 px-3 py-2.5 bg-slate-50 rounded-lg border border-slate-100">
-                                                    <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Indicaciones</span>
-                                                    <span className="text-sm font-medium text-slate-700">{ficha.indicaciones || '-'}</span>
-                                                </div>
-                                            </div>
-
-                                            <div className="border-t border-slate-100 pt-4">
-                                                <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider mb-2">Anotaci&oacute;n Cl&iacute;nica</p>
-                                                <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line bg-slate-50/50 rounded-lg px-4 py-3 border border-slate-100">
-                                                    {ficha.anotacionConsulta || 'Sin anotaciones registradas.'}
-                                                </p>
-                                            </div>
-                                        </>
-                                    )}
+                                        }
+                                        // Fichas antiguas sin datosDinamicos enriquecido
+                                        return (
+                                            <p className="text-sm text-slate-400">Ficha sin plantilla asociada.</p>
+                                        )
+                                    })()}
                                 </div>
                             </div>
                         ))

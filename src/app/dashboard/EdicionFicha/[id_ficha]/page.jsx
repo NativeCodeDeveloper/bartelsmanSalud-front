@@ -9,6 +9,31 @@ import {ShadcnInput} from "@/Componentes/shadcnInput2";
 import {useRouter} from "next/navigation";
 import ShadcnDatePicker from "@/Componentes/shadcnDatePicker";
 
+function parsearDatosDinamicos(datos) {
+    if (!datos) return null
+    if (typeof datos === "string") {
+        try { return JSON.parse(datos) } catch { return null }
+    }
+    return typeof datos === "object" ? datos : null
+}
+
+function agruparPorCategoria(datos) {
+    const categoriasMap = {}
+    Object.keys(datos).forEach(key => {
+        if (key === "_plantillaNombre") return
+        const entry = datos[key]
+        if (!entry || typeof entry !== "object" || !entry.nombreCategoria) return
+        const catNombre = entry.nombreCategoria
+        if (!categoriasMap[catNombre]) {
+            categoriasMap[catNombre] = { nombre: catNombre, orden: entry.categoriaOrden || 0, campos: [] }
+        }
+        categoriasMap[catNombre].campos.push({ nombre: entry.nombreCampo, valor: entry.valor, orden: entry.campoOrden || 0 })
+    })
+    return Object.values(categoriasMap)
+        .sort((a, b) => a.orden - b.orden)
+        .map(cat => ({ ...cat, campos: cat.campos.sort((a, b) => a.orden - b.orden) }))
+}
+
 function transformarPlantilla(filas) {
     if (!filas || filas.length === 0) return null
     const primera = filas[0]
@@ -54,6 +79,7 @@ export default function EdicionFichaClinica() {
     const [fechaConsulta, setFechaConsulta] = useState("");
 
     // Plantilla dinámica
+    const [plantillas, setPlantillas] = useState([])
     const [idPlantilla, setIdPlantilla] = useState(null)
     const [plantillaCompleta, setPlantillaCompleta] = useState(null)
     const [datosDinamicos, setDatosDinamicos] = useState({})
@@ -74,6 +100,17 @@ export default function EdicionFichaClinica() {
             const month = String(date.getMonth() + 1);
             const day = String(date.getDate());
             return `${day}-${month}-${year}`;
+        }
+    }
+
+    async function listarPlantillas() {
+        try {
+            const res = await fetch(`${API}/fichaPlantilla/listarPlantillas`)
+            if (!res.ok) return
+            const data = await res.json()
+            if (Array.isArray(data)) setPlantillas(data)
+        } catch (error) {
+            console.log(error)
         }
     }
 
@@ -98,14 +135,30 @@ export default function EdicionFichaClinica() {
         }
     }
 
+    async function seleccionarPlantilla(id_plantilla) {
+        setIdPlantilla(id_plantilla || null)
+        setDatosDinamicos({})
+        setPlantillaCompleta(null)
+        if (!id_plantilla) return
+        await cargarPlantillaCompleta(id_plantilla)
+    }
+
     async function actualizarFicha() {
         try {
             if (!id_ficha) {
                 return toast.error('Falta el identificador de la ficha');
             }
 
-            // Si tiene plantilla dinámica, validar campos requeridos
-            if (idPlantilla && plantillaCompleta) {
+            if (!idPlantilla) {
+                return toast.error('Debe seleccionar una plantilla');
+            }
+
+            if (!plantillaCompleta) {
+                return toast.error('Espere a que se cargue la plantilla');
+            }
+
+            // Validar campos requeridos
+            {
                 const camposFaltantes = []
                 plantillaCompleta.categorias.forEach(cat => {
                     cat.campos.forEach(campo => {
@@ -118,6 +171,24 @@ export default function EdicionFichaClinica() {
                 if (camposFaltantes.length > 0) {
                     return toast.error(`Debe completar los campos obligatorios: ${camposFaltantes.join(", ")}`)
                 }
+
+                // Construir datosDinamicos enriquecido
+                const datosEnriquecidos = {
+                    _plantillaNombre: plantillaCompleta.nombre
+                }
+                plantillaCompleta.categorias.forEach(cat => {
+                    cat.campos.forEach(campo => {
+                        if (datosDinamicos[campo.id_campo]) {
+                            datosEnriquecidos[campo.id_campo] = {
+                                valor: datosDinamicos[campo.id_campo],
+                                nombreCampo: campo.nombre,
+                                nombreCategoria: cat.nombre,
+                                categoriaOrden: cat.orden,
+                                campoOrden: campo.orden
+                            }
+                        }
+                    })
+                })
 
                 const res = await fetch(`${API}/ficha/editarFichaPaciente`, {
                     method: "POST",
@@ -138,7 +209,7 @@ export default function EdicionFichaClinica() {
                         fechaConsulta,
                         consentimientoFirmado: "",
                         id_plantilla: idPlantilla,
-                        datosDinamicos,
+                        datosDinamicos: datosEnriquecidos,
                         id_ficha
                     }),
                     mode: "cors",
@@ -151,36 +222,6 @@ export default function EdicionFichaClinica() {
 
                 const respuestaBackend = await res.json();
                 if (respuestaBackend.message === true) {
-                    await seleccionarFichaEspecifica(id_ficha)
-                    return toast.success("Ficha Clinica Actualizada!");
-                } else {
-                    return toast.error('No ha sido posible actualizar la ficha clinica!')
-                }
-            } else {
-                // Ficha legacy (sin plantilla)
-                if (!tipoAtencion || !anotacionConsulta) {
-                    return toast.error('Debe llenar todos los campos para actualizar la ficha');
-                }
-
-                const res = await fetch(`${API}/ficha/editarFichaPaciente`, {
-                    method: "POST",
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({tipoAtencion, observaciones, anotacionConsulta, diagnostico, indicaciones, fechaConsulta, id_ficha}),
-                    mode: "cors",
-                    cache: "no-cache"
-                });
-
-                if (!res.ok) {
-                    return toast.error("Ha ocurrido un error en la respuesta del servidor, Contacte a soporte");
-                }
-
-                const respuestaBackend = await res.json();
-                if (respuestaBackend.message === true) {
-                    setanotacionConsulta("");
-                    settipoAtencion("");
                     await seleccionarFichaEspecifica(id_ficha)
                     return toast.success("Ficha Clinica Actualizada!");
                 } else {
@@ -218,15 +259,22 @@ export default function EdicionFichaClinica() {
                         if (f.id_plantilla) {
                             // Ficha con plantilla dinámica
                             setIdPlantilla(f.id_plantilla)
-                            let datos = {}
+                            let datosRaw = {}
                             if (f.datosDinamicos) {
                                 try {
-                                    datos = typeof f.datosDinamicos === "string" ? JSON.parse(f.datosDinamicos) : f.datosDinamicos
+                                    datosRaw = typeof f.datosDinamicos === "string" ? JSON.parse(f.datosDinamicos) : f.datosDinamicos
                                 } catch (e) {
-                                    datos = {}
+                                    datosRaw = {}
                                 }
                             }
-                            setDatosDinamicos(datos)
+                            // Extraer solo los valores para el formulario
+                            const datosSimples = {}
+                            Object.keys(datosRaw).forEach(key => {
+                                if (key === "_plantillaNombre") return
+                                const entry = datosRaw[key]
+                                datosSimples[key] = typeof entry === "object" && entry !== null ? entry.valor || "" : entry || ""
+                            })
+                            setDatosDinamicos(datosSimples)
                             await cargarPlantillaCompleta(f.id_plantilla)
                         } else {
                             // Ficha legacy
@@ -247,6 +295,7 @@ export default function EdicionFichaClinica() {
 
     useEffect(() => {
         seleccionarFichaEspecifica(id_ficha)
+        listarPlantillas()
     }, [])
 
     return (
@@ -301,42 +350,48 @@ export default function EdicionFichaClinica() {
                         </div>
 
                         <div className="p-5 md:p-6">
-                            <div className="flex flex-wrap items-center gap-2 mb-5">
-                                {plantillaCompleta ? (
-                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 border border-emerald-100 text-xs font-medium text-emerald-700">
-                                        <span className="text-emerald-400">Plantilla:</span> {plantillaCompleta.nombre}
-                                    </span>
-                                ) : (
-                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-sky-50 border border-sky-100 text-xs font-medium text-sky-700">
-                                        <span className="text-sky-400">Motivo Consulta:</span> {ficha.tipoAtencion || '-'}
-                                    </span>
-                                )}
-                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-cyan-50 border border-cyan-100 text-xs font-medium text-cyan-700">
-                                    <span className="text-cyan-400">Profesional:</span> {ficha.observaciones || '-'}
-                                </span>
-                            </div>
-
-                            {!idPlantilla && (
-                                <>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-                                        <div className="flex flex-col gap-0.5 px-3 py-2.5 bg-slate-50 rounded-lg border border-slate-100">
-                                            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Diagn&oacute;stico</span>
-                                            <span className="text-sm font-medium text-slate-700">{ficha.diagnostico || '-'}</span>
+                            {(() => {
+                                const datos = parsearDatosDinamicos(ficha.datosDinamicos)
+                                const plantillaNombre = datos?._plantillaNombre
+                                return (
+                                    <>
+                                        <div className="flex flex-wrap items-center gap-2 mb-5">
+                                            {plantillaNombre ? (
+                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 border border-emerald-100 text-xs font-medium text-emerald-700">
+                                                    <span className="text-emerald-400">Plantilla:</span> {plantillaNombre}
+                                                </span>
+                                            ) : (
+                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-sky-50 border border-sky-100 text-xs font-medium text-sky-700">
+                                                    <span className="text-sky-400">Motivo Consulta:</span> {ficha.tipoAtencion || '-'}
+                                                </span>
+                                            )}
+                                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-cyan-50 border border-cyan-100 text-xs font-medium text-cyan-700">
+                                                <span className="text-cyan-400">Profesional:</span> {ficha.observaciones || '-'}
+                                            </span>
                                         </div>
-                                        <div className="flex flex-col gap-0.5 px-3 py-2.5 bg-slate-50 rounded-lg border border-slate-100">
-                                            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Indicaciones</span>
-                                            <span className="text-sm font-medium text-slate-700">{ficha.indicaciones || '-'}</span>
-                                        </div>
-                                    </div>
 
-                                    <div className="border-t border-slate-100 pt-4">
-                                        <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider mb-2">Anotaci&oacute;n Cl&iacute;nica</p>
-                                        <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line bg-slate-50/50 rounded-lg px-4 py-3 border border-slate-100">
-                                            {ficha.anotacionConsulta || 'Sin anotaciones registradas.'}
-                                        </p>
-                                    </div>
-                                </>
-                            )}
+                                        {datos && plantillaNombre ? (
+                                            <div className="space-y-4">
+                                                {agruparPorCategoria(datos).map(categoria => (
+                                                    <div key={categoria.nombre}>
+                                                        <p className="text-[11px] font-semibold text-emerald-600 uppercase tracking-wider mb-2">{categoria.nombre}</p>
+                                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                            {categoria.campos.map((campo, idx) => (
+                                                                <div key={idx} className="flex flex-col gap-0.5 px-3 py-2.5 bg-slate-50 rounded-lg border border-slate-100">
+                                                                    <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">{campo.nombre}</span>
+                                                                    <span className="text-sm font-medium text-slate-700 whitespace-pre-line">{campo.valor}</span>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <p className="text-sm text-slate-400">Ficha sin plantilla asociada.</p>
+                                        )}
+                                    </>
+                                )
+                            })()}
                         </div>
                     </div>
                 ))}
@@ -352,17 +407,22 @@ export default function EdicionFichaClinica() {
 
                     <div className="p-5 md:p-6 space-y-5">
 
-                        {/* Plantilla (solo lectura) */}
-                        {plantillaCompleta && (
-                            <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-1.5">
-                                    Plantilla
-                                </label>
-                                <div className="h-10 px-3.5 flex items-center text-sm border border-slate-200 rounded-lg bg-slate-50 text-slate-500">
-                                    {plantillaCompleta.nombre}
-                                </div>
-                            </div>
-                        )}
+                        {/* Selector de Plantilla */}
+                        <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                                Plantilla de Ficha <span className="text-red-500">*</span>
+                            </label>
+                            <select
+                                value={idPlantilla || ""}
+                                onChange={(e) => seleccionarPlantilla(e.target.value)}
+                                className="w-full h-10 px-3.5 text-sm border border-slate-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-400 transition-all text-slate-700"
+                            >
+                                <option value="">Seleccione una plantilla...</option>
+                                {plantillas.map((p) => (
+                                    <option key={p.id_plantilla} value={p.id_plantilla}>{p.nombre}</option>
+                                ))}
+                            </select>
+                        </div>
 
                         {/* Fecha + Profesional */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
