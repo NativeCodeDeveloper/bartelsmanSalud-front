@@ -16,12 +16,51 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import {InfoButton} from "@/Componentes/InfoButton";
 
 
+function transformarPlantilla(filas) {
+    if (!filas || filas.length === 0) return null
+    const primera = filas[0]
+    const categoriasMap = {}
+
+    filas.forEach(fila => {
+        if (!fila.id_categoria) return
+        if (!categoriasMap[fila.id_categoria]) {
+            categoriasMap[fila.id_categoria] = {
+                id_categoria: fila.id_categoria,
+                nombre: fila.categoria_nombre,
+                orden: fila.categoria_orden,
+                campos: []
+            }
+        }
+        if (fila.id_campo) {
+            categoriasMap[fila.id_categoria].campos.push({
+                id_campo: fila.id_campo,
+                nombre: fila.campo_nombre,
+                requerido: fila.requerido,
+                orden: fila.campo_orden
+            })
+        }
+    })
+
+    return {
+        id_plantilla: primera.id_plantilla,
+        nombre: primera.plantilla_nombre,
+        categorias: Object.values(categoriasMap).sort((a, b) => a.orden - b.orden)
+    }
+}
+
+function parsearDatosDinamicos(datos) {
+    if (!datos) return {}
+    if (typeof datos === "object") return datos
+    try { return JSON.parse(datos) } catch { return {} }
+}
+
 export default function Paciente() {
 
     const {id_paciente} = useParams();
     const [detallePaciente, setDetallePaciente] = useState([])
     const API = process.env.NEXT_PUBLIC_API_URL;
     const router = useRouter();
+    const [plantillasMap, setPlantillasMap] = useState({})
     const [mostrarFormulario, setMostrarFormulario] = useState(false);
 
     function nuevaFichaClinica() {
@@ -138,6 +177,42 @@ export default function Paciente() {
             return toast.error("Ha ocurrido un error en el servidor: " + e)
         }
     }
+
+    async function cargarPlantillasDeFichas(fichas) {
+        const idsUnicos = [...new Set(fichas.filter(f => f.id_plantilla).map(f => f.id_plantilla))]
+        const nuevoMapa = {}
+
+        for (const idP of idsUnicos) {
+            if (plantillasMap[idP]) {
+                nuevoMapa[idP] = plantillasMap[idP]
+                continue
+            }
+            try {
+                const res = await fetch(`${API}/fichaPlantilla/obtenerPlantillaCompleta`, {
+                    method: "POST",
+                    headers: { Accept: "application/json", "Content-Type": "application/json" },
+                    body: JSON.stringify({ id_plantilla: idP })
+                })
+                if (res.ok) {
+                    const filas = await res.json()
+                    const estructura = transformarPlantilla(filas)
+                    if (estructura) nuevoMapa[idP] = estructura
+                }
+            } catch (e) {
+                console.log(e)
+            }
+        }
+
+        if (Object.keys(nuevoMapa).length > 0) {
+            setPlantillasMap(prev => ({ ...prev, ...nuevoMapa }))
+        }
+    }
+
+    useEffect(() => {
+        if (listaFichas.length > 0) {
+            cargarPlantillasDeFichas(listaFichas)
+        }
+    }, [listaFichas])
 
     function volverAFichas() {
         router.push("/dashboard/FichaClinica");
@@ -465,11 +540,17 @@ export default function Paciente() {
                                         </button>
                                         </div>
                                     </div>
-                                    {/* Chips: Motivo + Profesional */}
+                                    {/* Chips: Plantilla/Motivo + Profesional */}
                                     <div className="flex flex-wrap items-center gap-2 ml-11 sm:ml-0">
-                                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-sky-50 border border-sky-100 text-xs font-medium text-sky-700">
-                                            <span className="text-sky-400">Motivo Consulta:</span> {ficha.tipoAtencion || '-'}
-                                        </span>
+                                        {ficha.id_plantilla && plantillasMap[ficha.id_plantilla] ? (
+                                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-50 border border-emerald-100 text-xs font-medium text-emerald-700">
+                                                <span className="text-emerald-400">Plantilla:</span> {plantillasMap[ficha.id_plantilla].nombre}
+                                            </span>
+                                        ) : (
+                                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-sky-50 border border-sky-100 text-xs font-medium text-sky-700">
+                                                <span className="text-sky-400">Motivo Consulta:</span> {ficha.tipoAtencion || '-'}
+                                            </span>
+                                        )}
                                         <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-cyan-50 border border-cyan-100 text-xs font-medium text-cyan-700">
                                             <span className="text-cyan-400">Profesional:</span> {ficha.observaciones || '-'}
                                         </span>
@@ -478,26 +559,55 @@ export default function Paciente() {
 
                                 {/* Cuerpo ficha */}
                                 <div className="px-5 md:px-6 py-4">
+                                    {ficha.id_plantilla && plantillasMap[ficha.id_plantilla] ? (
+                                        /* === Ficha con plantilla dinámica === */
+                                        (() => {
+                                            const plantilla = plantillasMap[ficha.id_plantilla]
+                                            const datos = parsearDatosDinamicos(ficha.datosDinamicos)
+                                            return (
+                                                <div className="space-y-4">
+                                                    {plantilla.categorias.map(categoria => {
+                                                        const camposConValor = categoria.campos.filter(c => datos[c.id_campo])
+                                                        if (camposConValor.length === 0) return null
+                                                        return (
+                                                            <div key={categoria.id_categoria}>
+                                                                <p className="text-[11px] font-semibold text-emerald-600 uppercase tracking-wider mb-2">{categoria.nombre}</p>
+                                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                                    {camposConValor.map(campo => (
+                                                                        <div key={campo.id_campo} className="flex flex-col gap-0.5 px-3 py-2.5 bg-slate-50 rounded-lg border border-slate-100">
+                                                                            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">{campo.nombre}</span>
+                                                                            <span className="text-sm font-medium text-slate-700 whitespace-pre-line">{datos[campo.id_campo]}</span>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    })}
+                                                </div>
+                                            )
+                                        })()
+                                    ) : (
+                                        /* === Ficha legacy (sin plantilla) === */
+                                        <>
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                                                <div className="flex flex-col gap-0.5 px-3 py-2.5 bg-slate-50 rounded-lg border border-slate-100">
+                                                    <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Diagn&oacute;stico</span>
+                                                    <span className="text-sm font-medium text-slate-700">{ficha.diagnostico || '-'}</span>
+                                                </div>
+                                                <div className="flex flex-col gap-0.5 px-3 py-2.5 bg-slate-50 rounded-lg border border-slate-100">
+                                                    <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Indicaciones</span>
+                                                    <span className="text-sm font-medium text-slate-700">{ficha.indicaciones || '-'}</span>
+                                                </div>
+                                            </div>
 
-                                    {/* Diagnóstico e Indicaciones */}
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-                                        <div className="flex flex-col gap-0.5 px-3 py-2.5 bg-slate-50 rounded-lg border border-slate-100">
-                                            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Diagnóstico</span>
-                                            <span className="text-sm font-medium text-slate-700">{ficha.diagnostico || '-'}</span>
-                                        </div>
-                                        <div className="flex flex-col gap-0.5 px-3 py-2.5 bg-slate-50 rounded-lg border border-slate-100">
-                                            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Indicaciones</span>
-                                            <span className="text-sm font-medium text-slate-700">{ficha.indicaciones || '-'}</span>
-                                        </div>
-                                    </div>
-
-                                    {/* Anotación clínica */}
-                                    <div className="border-t border-slate-100 pt-4">
-                                        <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider mb-2">Anotación Clínica</p>
-                                        <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line bg-slate-50/50 rounded-lg px-4 py-3 border border-slate-100">
-                                            {ficha.anotacionConsulta || 'Sin anotaciones registradas.'}
-                                        </p>
-                                    </div>
+                                            <div className="border-t border-slate-100 pt-4">
+                                                <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider mb-2">Anotaci&oacute;n Cl&iacute;nica</p>
+                                                <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line bg-slate-50/50 rounded-lg px-4 py-3 border border-slate-100">
+                                                    {ficha.anotacionConsulta || 'Sin anotaciones registradas.'}
+                                                </p>
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         ))
