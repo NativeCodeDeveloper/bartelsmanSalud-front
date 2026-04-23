@@ -1,41 +1,37 @@
 "use client"
 
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import {toast, Toaster} from "react-hot-toast";
 import {InfoButton} from "@/Componentes/InfoButton";
+
+const MAX_UPLOAD_SIZE = 10 * 1024 * 1024;
+const ALLOWED_IMAGE_TYPES = [
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "image/gif",
+    "image/svg+xml"
+];
+const VARIANT_CARD = "card";
+const VARIANT_FULL = "full";
 
 export default function Publicaciones() {
     const [file, setfile] = useState([]);
     const [isUploading, setIsUploading] = useState(false);
-    // Estados para insertar nueva publicación (1 imagen)
     const [newDescripcion, setNewDescripcion] = useState("");
     const [newFile, setNewFile] = useState(null);
     const [newPreview, setNewPreview] = useState(null);
     const [isInserting, setIsInserting] = useState(false);
-
-
     const [descripcionPublicaciones, setDescripcionPublicaciones] = useState("");
     const [listaPublicaciones, setListaPublicaciones] = useState([]);
     const [id_publicaciones, setId_publicaciones] = useState("");
 
-
-
-    // API INTERNA PARA HACER LOS FETH DIRECTO AL BACKEND NO USAR http://localhost:3001 PORQUE COMPLICA EL DESPLIEGUE EN LA NUBE
     const API = process.env.NEXT_PUBLIC_API_URL;
-    // Límite de tamaño de Cloudinary (plan gratuito) ≈ 10 MB
-    const MAX_UPLOAD_SIZE = 10 * 1024 * 1024;
+    const CLOUDFLARE_HASH = process.env.NEXT_PUBLIC_CLOUDFLARE_HASH;
+    const selectedPublication = listaPublicaciones.find((publicacion) => String(publicacion.id_publicaciones) === String(id_publicaciones));
+    const selectedAllowsMultiple = Number(id_publicaciones) === 10;
 
-    /**
-     * Redimensiona/comprime una imagen usando canvas.
-     * - Mantiene proporción.
-     * - Convierte a JPEG para una mejor compresión.
-     * @param {File|Blob} file
-     * @param {number} maxW
-     * @param {number} maxH
-     * @param {number} quality 0..1
-     * @returns {Promise<Blob>}
-     */
-    async function downscaleImage(file, maxW = 1600, maxH = 1600, quality = 0.8) {
+    async function downscaleImage(file, maxW = 1600, maxH = 1600, quality = 0.82) {
         const img = document.createElement("img");
         const objectUrl = URL.createObjectURL(file);
         try {
@@ -44,111 +40,141 @@ export default function Publicaciones() {
                 img.onerror = reject;
                 img.src = objectUrl;
             });
-            const { width, height } = img;
+            const {width, height} = img;
             const scale = Math.min(maxW / width, maxH / height, 1);
             const targetW = Math.max(1, Math.round(width * scale));
             const targetH = Math.max(1, Math.round(height * scale));
-
             const canvas = document.createElement("canvas");
             canvas.width = targetW;
             canvas.height = targetH;
-            const ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0, targetW, targetH);
+            canvas.getContext("2d").drawImage(img, 0, 0, targetW, targetH);
 
             return await new Promise((resolve) =>
-                canvas.toBlob(
-                    (blob) => resolve(blob),
-                    "image/jpeg",
-                    quality
-                )
+                canvas.toBlob((blob) => resolve(blob), "image/jpeg", quality)
             );
         } finally {
             URL.revokeObjectURL(objectUrl);
         }
     }
 
+    function validarImagen(file) {
+        if (!file) return "Debe seleccionar una imagen.";
+        if (!ALLOWED_IMAGE_TYPES.includes(file.type)) return "Solo se permiten imagenes JPG, PNG, WEBP, GIF o SVG.";
+        return "";
+    }
 
+    async function prepararImagen(file) {
+        const error = validarImagen(file);
+        if (error) throw new Error(error);
 
+        let toUpload = file;
+        if (toUpload.size > MAX_UPLOAD_SIZE) {
+            const compressed = await downscaleImage(toUpload);
+            if (compressed && compressed.size < toUpload.size) {
+                toUpload = new File([compressed], `${file.name || "image"}.jpg`, {type: "image/jpeg"});
+            }
+        }
 
+        if (!ALLOWED_IMAGE_TYPES.includes(toUpload.type)) {
+            throw new Error("El archivo comprimido no es un tipo de imagen valido para Cloudflare.");
+        }
 
-    async function actuzalizarPublicaciones(
+        if (toUpload.size > MAX_UPLOAD_SIZE) {
+            throw new Error("La imagen excede 10 MB incluso tras compresion. Sube una imagen de menor resolucion o peso.");
+        }
+
+        return toUpload;
+    }
+
+    async function subirImagen(file) {
+        const toUpload = await prepararImagen(file);
+        const formData = new FormData();
+        formData.append("image", toUpload);
+
+        const res = await fetch(`${API}/cloudflare/subirimagenes`, {
+            method: "POST",
+            body: formData,
+        });
+
+        if (!res.ok) {
+            const errText = await res.text();
+            console.error("Error subiendo imagen a Cloudflare:", res.status, errText);
+            throw new Error("Error subiendo imagen a Cloudflare.");
+        }
+
+        const data = await res.json();
+        if (data?.ok === false || !data?.imageId) {
+            throw new Error("Cloudflare no devolvio un identificador de imagen.");
+        }
+
+        return data.imageId;
+    }
+
+    async function actualizarPublicaciones(
         descripcionPublicaciones,
         imagenPublicaciones_primera,
         imagenPublicaciones_segunda,
         imagenPublicaciones_tercera,
-        id_publicaciones) {
-
-        try {
-            const res = await fetch(`${API}/publicaciones/actualizarPublicacion`, {
-                method: "POST",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json"},
-                body: JSON.stringify({
-                    descripcionPublicaciones,
-                    imagenPublicaciones_primera,
-                    imagenPublicaciones_segunda,
-                    imagenPublicaciones_tercera,
-                    id_publicaciones
-                }),
-                mode: "cors",
-                cache: "no-cache"
-            })
-            const resultado = await res.json();
-            if (!res.ok) {
-                return toast.error(" ❌ No fue posible actulizar la publicacion seleccionada, porfavor contacte a soporte informatico de NativeCode.cl");
-
-            }else{
-                if (resultado.message === "sindato"){
-                    return  toast.error(' ❌ No fue posible actulizar la publicacion / Debe llenar los campos obligartirios');
-                }
-                if (resultado.message === "true"){
-                    return  toast.success(' ✅ Se ha actualizado con la publicacion de manera exitosa');
-                }
-            }
-        }catch (error) {
-            return toast.error(" ❌ No fue posible actulizar la publicacion seleccionada, porfavor contacte a soporte informatico de NativeCode.cl");
+        id_publicaciones
+    ) {
+        if (!descripcionPublicaciones || !id_publicaciones || !imagenPublicaciones_primera) {
+            throw new Error("Debe seleccionar una publicacion, escribir una descripcion y subir al menos una imagen.");
         }
 
+        const res = await fetch(`${API}/publicaciones/actualizarPublicacion`, {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                descripcionPublicaciones,
+                imagenPublicaciones_primera,
+                imagenPublicaciones_segunda,
+                imagenPublicaciones_tercera,
+                id_publicaciones
+            }),
+            mode: "cors",
+            cache: "no-cache"
+        });
+
+        const resultado = await res.json();
+        if (!res.ok) throw new Error("No fue posible actualizar la publicacion seleccionada.");
+        if (resultado.message === "sindato") throw new Error("Debe llenar los campos obligatorios.");
+        if (resultado.message !== "true") throw new Error("El servidor no confirmo la actualizacion.");
     }
-
-
-
-
 
     async function eliminarPublicacion(id_publicaciones) {
         try {
+            if (!id_publicaciones) {
+                return toast.error("Debe seleccionar una publicacion para eliminar.");
+            }
+
             const res = await fetch(`${API}/publicaciones/eliminarPublicacion`, {
                 method: "POST",
-                headers: {Accept: "application/json",
-                    "Content-Type": "application/json"},
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json"
+                },
                 body: JSON.stringify({id_publicaciones}),
                 mode: "cors",
                 cache: "no-cache"
             });
 
             const resultado = await res.json();
+            if (!res.ok) return toast.error("No se ha podido eliminar la publicacion.");
+            if (resultado.message === "sindato") return toast.error("Debe seleccionar la publicacion que desea eliminar.");
 
-            if(!res.ok) {
-                return toast.error(" ❌ No se ha podido eliminar publicacion consulte con soporte de NativeCode ");
-            }else{
-
-                if(resultado.message === "sindato"){
-                    return toast.error(" ❌ No se ha podido eliminar publicacion / Debe seleccionar la publicacion que desea eliminar ");
-                }
-
-                if(resultado.message === true){
-                    await listarPublicaciones();
-                    return  toast.success(' ✅ Se ha eliminado la publicacion de manera exitosa');
-                }
+            if (resultado.message === true) {
+                await listarPublicaciones();
+                return toast.success("Publicacion eliminada correctamente.");
             }
 
-        }catch (error) {
-            return toast.error(" ❌ No se ha podido eliminar publicacion consulte con soporte de NativeCode ");        }
+            return toast.error("No se pudo confirmar la eliminacion.");
+        } catch (error) {
+            return toast.error(error?.message || "No se ha podido eliminar la publicacion.");
+        }
     }
-
-
-
 
     async function listarPublicaciones() {
         try {
@@ -157,162 +183,149 @@ export default function Publicaciones() {
                 headers: {Accept: "application/json"},
                 mode: "cors",
                 cache: "no-cache"
-            })
+            });
 
-            if(!res.ok) {
-                console.error("No se han podido Listar Publicaciones / Falla en el fetch desde el frontEnd");
-                setListaPublicaciones([])
-                return[]
-            }else {
-                const publicaciones = await res.json();
-                setListaPublicaciones(publicaciones);
-                return publicaciones;
+            if (!res.ok) {
+                setListaPublicaciones([]);
+                return [];
             }
-        }catch(err) {
-            console.error("Problema al consultar Backen desde la vista fronend:"+err);
+
+            const publicaciones = await res.json();
+            const lista = Array.isArray(publicaciones) ? publicaciones : [];
+            setListaPublicaciones(lista);
+            return lista;
+        } catch (err) {
+            console.error("Problema al consultar publicaciones:", err);
+            setListaPublicaciones([]);
+            return [];
         }
     }
-
 
     useEffect(() => {
         listarPublicaciones();
     }, []);
 
+    useEffect(() => {
+        return () => {
+            if (newPreview) URL.revokeObjectURL(newPreview);
+        };
+    }, [newPreview]);
 
     async function insertarPublicacion(
         descripcionPublicaciones,
         imagenPublicaciones_primera,
         imagenPublicaciones_segunda,
         imagenPublicaciones_tercera
-    ){
-        if (!descripcionPublicaciones || !imagenPublicaciones_primera){
-            toast.error("Campo descripcion obligatorio / Primera Imagen Obligatoria");
-            return;
+    ) {
+        if (!descripcionPublicaciones || !imagenPublicaciones_primera) {
+            throw new Error("Descripcion e imagen son obligatorias.");
         }
-        try {
-            const res = await fetch(`${API}/publicaciones/insertarPublicacion`, {
-                method: "POST",
-                headers: {Accept: "application/json",
-                    "Content-Type": "application/json"},
-                body: JSON.stringify({
-                    descripcionPublicaciones,
-                    imagenPublicaciones_primera,
-                    imagenPublicaciones_segunda,
-                    imagenPublicaciones_tercera
-                }),
-                mode: "cors",
-                cache: "no-store"
-            })
-            if(!res.ok){
-                toast.error("Ha habido un problema al consultar el servidor. Consulte con el equipo de Soporte de NativeCode.")
-            }else{
-                const data = await res.json();
-                if (data.message === "true" ){
-                    toast.success('Se ha insertado una nueva publicacion con exito!');
-                }
-            }
-        }catch (e) {
-            console.error(e);
+
+        const res = await fetch(`${API}/publicaciones/insertarPublicacion`, {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                descripcionPublicaciones,
+                imagenPublicaciones_primera,
+                imagenPublicaciones_segunda,
+                imagenPublicaciones_tercera
+            }),
+            mode: "cors",
+            cache: "no-store"
+        });
+
+        if (!res.ok) throw new Error("No fue posible guardar la publicacion.");
+
+        const data = await res.json();
+        if (data.message !== "true") throw new Error("El servidor no confirmo el guardado.");
+    }
+
+    function handlePublicationSelect(event) {
+        const value = event.target.value;
+        setId_publicaciones(value);
+        const publication = listaPublicaciones.find((item) => String(item.id_publicaciones) === String(value));
+        setDescripcionPublicaciones(publication?.descripcionPublicaciones || "");
+
+        if (Number(value) !== 10 && file.length > 1) {
+            setfile(file.slice(0, 1));
+            toast("Esta publicacion admite una sola imagen. Se mantuvo la primera seleccionada.");
         }
     }
 
+    function handleFileChange(event) {
+        const files = Array.from(event.target.files || []);
 
-    // Nuevo: manejar selección de archivos dependiendo del id de publicación seleccionado
-    function handleFileChange(e) {
-        const files = Array.from(e.target.files || []);
-        // Si la publicación seleccionada no es la 10 -> solo 1 imagen permitida
         if (id_publicaciones && Number(id_publicaciones) !== 10) {
             if (files.length > 1) {
-                toast('Solo se permite 1 imagen para esta publicación. Se usará la primera seleccionada.', {icon: '⚠️'});
+                toast("Solo se permite 1 imagen para esta publicacion. Se usara la primera seleccionada.");
             }
             setfile(files.slice(0, 1));
             return;
         }
-        // Si no hay id o si id === 10, permitir hasta 3 imágenes
+
         if (files.length > 3) {
-            toast('Has seleccionado más de 3 imágenes. Se usarán las primeras 3.', {icon: '⚠️'});
+            toast("Has seleccionado mas de 3 imagenes. Se usaran las primeras 3.");
         }
         setfile(files.slice(0, 3));
     }
 
-    // Nuevo: controlar el archivo de inserción (solo 1 imagen)
-    function handleNewFileChange(e) {
-        const f = e.target.files && e.target.files[0] ? e.target.files[0] : null;
-        setNewFile(f);
-        if (f) {
-            try{
-                const preview = URL.createObjectURL(f);
-                setNewPreview(preview);
-            }catch(err){
-                setNewPreview(null);
+    function handleNewFileChange(event) {
+        const selectedFile = event.target.files?.[0] || null;
+        setNewFile(selectedFile);
+
+        if (newPreview) URL.revokeObjectURL(newPreview);
+        setNewPreview(selectedFile ? URL.createObjectURL(selectedFile) : null);
+    }
+
+    async function handleUpdateSubmit(event) {
+        event.preventDefault();
+
+        if (!id_publicaciones) return toast.error("Selecciona una publicacion para actualizar.");
+        if (!descripcionPublicaciones.trim()) return toast.error("Escribe una descripcion para la publicacion.");
+        if (!file.length) return toast.error("Selecciona al menos una imagen.");
+
+        try {
+            setIsUploading(true);
+            const filesToUpload = selectedAllowsMultiple ? file.slice(0, 3) : file.slice(0, 1);
+            const uploadedIds = [];
+
+            for (const selectedFile of filesToUpload) {
+                uploadedIds.push(await subirImagen(selectedFile));
             }
-        } else {
-            setNewPreview(null);
+
+            await actualizarPublicaciones(
+                descripcionPublicaciones.trim(),
+                uploadedIds[0] || "",
+                uploadedIds[1] || "",
+                uploadedIds[2] || "",
+                id_publicaciones
+            );
+            await listarPublicaciones();
+            setfile([]);
+            setDescripcionPublicaciones("");
+            setId_publicaciones("");
+            toast.success("Publicacion actualizada correctamente.");
+        } catch (error) {
+            toast.error(error?.message || "No fue posible actualizar la publicacion.");
+        } finally {
+            setIsUploading(false);
         }
     }
 
-    // Tipos MIME permitidos por Cloudflare Images
-    const ALLOWED_IMAGE_TYPES = [
-        "image/jpeg",
-        "image/png",
-        "image/webp",
-        "image/gif",
-        "image/svg+xml"
-    ];
+    async function handleInsertSubmit(event) {
+        event.preventDefault();
 
-    async function handleInsertSubmit(e){
-        e.preventDefault();
-        if (!newDescripcion || !newFile){
-            toast.error('Descripción e imagen son obligatorios para insertar');
-            return;
+        if (!newDescripcion.trim() || !newFile) {
+            return toast.error("Descripcion e imagen son obligatorias para insertar.");
         }
-        // Validar tipo MIME antes de subir
-        if (!ALLOWED_IMAGE_TYPES.includes(newFile.type)) {
-            toast.error('El archivo debe ser una imagen JPG, PNG, WEBP, GIF o SVG');
-            return;
-        }
-        setIsInserting(true);
-        try{
-            let toUpload = newFile;
-            if (toUpload.size > MAX_UPLOAD_SIZE){
-                const compressed = await downscaleImage(toUpload, 1600, 1600, 0.82);
-                if (compressed) toUpload = new File([compressed], (newFile.name || 'image') + '.jpg', {type: 'image/jpeg'});
-            }
-            // Validar tipo MIME tras compresión
-            if (!ALLOWED_IMAGE_TYPES.includes(toUpload.type)) {
-                toast.error('El archivo comprimido no es un tipo de imagen válido para Cloudflare');
-                setIsInserting(false);
-                return;
-            }
-            if (toUpload.size > MAX_UPLOAD_SIZE){
-                toast.error('La imagen excede 10MB incluso tras compresión');
-                setIsInserting(false);
-                return;
-            }
-            const formData = new FormData();
-            formData.append('image', toUpload); // el backend espera 'image'
-            const res = await fetch(`${API}/cloudflare/subirimagenes`, {
-                method: "POST",
-                body: formData,
-            });
-            if (!res.ok){
-                const errText = await res.text();
-                console.error('Error subiendo nueva imagen a Cloudflare:', res.status, errText);
-                toast.error('Error subiendo imagen a Cloudflare');
-                setIsInserting(false);
-                return;
-            }
 
-            const data = await res.json();
-            if (!data.ok || !data.imageId) {
-                toast.error('Error al subir imagen a Cloudflare');
-                setIsInserting(false);
-                return;
-            }
-
-            const imageId = data.imageId;
-            // Llamar a insertarPublicacion (usa la función existente)
-            await insertarPublicacion(newDescripcion, imageId, "", "");
+        try {
+            setIsInserting(true);
+            const imageId = await subirImagen(newFile);
+            await insertarPublicacion(newDescripcion.trim(), imageId, "", "");
             await listarPublicaciones();
             setNewDescripcion("");
             setNewFile(null);
@@ -320,302 +333,275 @@ export default function Publicaciones() {
                 URL.revokeObjectURL(newPreview);
                 setNewPreview(null);
             }
-            toast.success('Publicación insertada correctamente');
-        }catch(err){
-            console.error(err);
-            toast.error('Error al insertar publicación');
-        }finally{
+            toast.success("Publicacion insertada correctamente.");
+        } catch (error) {
+            toast.error(error?.message || "Error al insertar publicacion.");
+        } finally {
             setIsInserting(false);
         }
     }
 
-    // Ajuste: quitar selected del option para evitar warning de React controlado
-    useEffect(() => {
-        listarPublicaciones();
-    }, []);
-
-
-
-
-    //LLAMADA A HASH DE CLOUDFLARE
-    const CLOUDFLARE_HASH = process.env.NEXT_PUBLIC_CLOUDFLARE_HASH;
-    const VARIANT_CARD = 'card';
-    const VARIANT_FULL = 'full';
-    const VARIANT_MINI = 'mini';
-    const VARIANT_PORTADA = 'portada';
-
-    // Utilidad para construir la URL de entrega de Cloudflare
     function cfToSrc(imageId, variant = VARIANT_CARD) {
         if (!imageId) return "";
-        // Si ya es una URL completa (por compatibilidad), la retorna tal cual
         if (imageId.startsWith("http")) return imageId;
+        if (!CLOUDFLARE_HASH) return "";
         return `https://imagedelivery.net/${CLOUDFLARE_HASH}/${imageId}/${variant}`;
     }
 
-
-
     return (
-        <div className="max-w-7xl mx-auto px-4 py-8 space-y-10">
-            {/* Toaster global para esta página */}
+        <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.14),_transparent_32%),radial-gradient(circle_at_right,_rgba(6,182,212,0.12),_transparent_28%),linear-gradient(180deg,_#f1f5f9_0%,_#f8fafc_55%,_#f1f5f9_100%)] px-4 py-8">
             <Toaster position="top-right" reverseOrder={false} />
-            {/* FORMULARIOS COMPACTOS: Actualizar e Insertar, lado a lado en pantallas medianas+ */}
 
-
-<div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-    <div className="space-y-1">
-        <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-gray-900">Publicaciones</h1>
-        <p className="text-sm text-gray-500">
-            Administra las imágenes que se muestran en el carrusel bajo la portada.
-        </p>
-    </div>
-
-    <div className="flex justify-start sm:justify-end">
-        <InfoButton informacion={'Nota informativa:\n' +
-            'Este apartado está diseñado exclusivamente para la carga de imágenes que serán visualizadas en el carrusel ubicado debajo de la portada de la página principal.\n' +
-            'Las imágenes cargadas en esta sección no se mostrarán en ninguna otra área del sitio.\n' +
-            '\n' +
-            'La carga se realiza de una imagen por vez.\n' +
-            'En caso de presentar inconvenientes durante el proceso, se recomienda intentar nuevamente utilizando una imagen de menor tamaño.\n' +
-            'Para un mejor rendimiento y compatibilidad, se sugiere utilizar formatos PNG o JPG.\n'}/>
-    </div>
-</div>
-
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Actualizar publicación */}
-                <section className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm ring-1 ring-black/5">
-                    <h2 className="text-base sm:text-lg font-semibold mb-4">Actualizar publicación</h2>
-
-                    {/* Selector de publicación (antes estaba en "Administrar publicaciones") */}
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Selecciona una publicación</label>
-                        <select
-                            className="w-full h-11 rounded-2xl border border-gray-200 bg-white px-4 text-sm text-gray-900 shadow-sm transition focus:outline-none focus:ring-2 focus:ring-rose-500/40"
-                            value={id_publicaciones}
-                            onChange={(e) => setId_publicaciones(e.target.value)}
-                        >
-                            <option value="" disabled>-- Selecciona una Publicacion --</option>
-                            {listaPublicaciones.map((publicaciones) => (
-                                <option value={publicaciones.id_publicaciones} key={publicaciones.id_publicaciones}>
-                                    {publicaciones.descripcionPublicaciones}
-                                </option>
-                            ))}
-                        </select>
+            <div className="mx-auto max-w-7xl space-y-8">
+                <header className="relative overflow-hidden rounded-[32px] border border-slate-300/80 bg-white/90 p-6 shadow-[0_24px_70px_rgba(15,23,42,0.14)] backdrop-blur-sm md:p-8">
+                    <div className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-teal-400/20 blur-3xl" />
+                    <div className="pointer-events-none absolute -bottom-24 left-1/3 h-64 w-64 rounded-full bg-indigo-500/10 blur-3xl" />
+                    <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                        <div className="max-w-3xl">
+                            <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-indigo-700">Gestion de contenido</p>
+                            <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-950 sm:text-5xl">
+                                Publicaciones del carrusel
+                            </h1>
+                            <p className="mt-3 text-sm leading-6 text-slate-600">
+                                Administra las piezas visuales que aparecen bajo la portada. Carga imagenes optimizadas, actualiza descripciones y conserva una grilla limpia para el sitio publico.
+                            </p>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-3">
+                            <div className="rounded-2xl border border-indigo-200 bg-indigo-50 px-4 py-3">
+                                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-indigo-700">Publicaciones</p>
+                                <p className="mt-1 text-2xl font-black text-slate-950">{listaPublicaciones.length}</p>
+                            </div>
+                            <div className="rounded-2xl border border-teal-200 bg-teal-50 px-4 py-3">
+                                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-teal-700">Formato</p>
+                                <p className="mt-1 text-sm font-bold text-slate-950">Cloudflare Images</p>
+                            </div>
+                            <InfoButton informacion={'Este apartado está diseñado exclusivamente para la carga de imágenes que serán visualizadas en el carrusel ubicado debajo de la portada de la página principal.\n\nLa carga se realiza de una imagen por vez al crear. Al actualizar, la publicación especial ID 10 admite hasta 3 imágenes; el resto admite una imagen.\n\nPara un mejor rendimiento y compatibilidad, se sugiere utilizar formatos PNG, JPG o WEBP con peso menor a 10 MB.'}/>
+                        </div>
                     </div>
+                </header>
 
-                    <form
-                        onSubmit={async (e) => {
-                            e.preventDefault();
-                            setIsUploading(true);
-                            if (!file || file.length === 0) {
-                                setIsUploading(false);
-                                toast.error("Selecciona al menos una imagen");
-                                return;
-                            }
-                            // Validar tipos MIME antes de subir
-                            for (const f of file) {
-                                if (!ALLOWED_IMAGE_TYPES.includes(f.type)) {
-                                    setIsUploading(false);
-                                    toast.error('Solo se permiten imágenes JPG, PNG, WEBP, GIF o SVG');
-                                    return;
-                                }
-                            }
-                            const uploadedIds = [];
-                            for (const f of file) {
-                                let toUpload = f;
-                                if (toUpload.size > MAX_UPLOAD_SIZE) {
-                                    console.warn("Imagen supera 10MB, intentando comprimir...", {
-                                        nombre: toUpload.name,
-                                        sizeMB: (toUpload.size / (1024*1024)).toFixed(2)
-                                    });
-                                    const compressed = await downscaleImage(toUpload, 1600, 1600, 0.82);
-                                    if (compressed && compressed.size < toUpload.size) {
-                                        toUpload = new File([compressed], (f.name || "image") + ".jpg", { type: "image/jpeg" });
-                                    }
-                                }
-                                // Validar tipo MIME tras compresión
-                                if (!ALLOWED_IMAGE_TYPES.includes(toUpload.type)) {
-                                    setIsUploading(false);
-                                    toast.error('El archivo comprimido no es un tipo de imagen válido para Cloudflare');
-                                    return;
-                                }
-                                if (toUpload.size > MAX_UPLOAD_SIZE) {
-                                    setIsUploading(false);
-                                    toast.error("La imagen excede 10 MB incluso tras compresión. Por favor, súbela con menor resolución o peso.");
-                                    return;
-                                }
-                                const formData = new FormData();
-                                formData.append("image", toUpload);
-                                const res = await fetch(`${API}/cloudflare/subirimagenes`, {
-                                    method: "POST",
-                                    body: formData,
-                                });
-                                if (!res.ok) {
-                                    setIsUploading(false);
-                                    const errText = await res.text();
-                                    console.error("Error subiendo una imagen a Cloudflare:", res.status, errText);
-                                    toast.error("Error subiendo una imagen a Cloudflare.");
-                                    return;
-                                }
-                                const data = await res.json();
-                                if (!data.ok || !data.imageId) {
-                                    setIsUploading(false);
-                                    toast.error("Error al subir imagen a Cloudflare");
-                                    return;
-                                }
-                                uploadedIds.push(data.imageId);
-                            }
-                            await actuzalizarPublicaciones(
-                                descripcionPublicaciones,
-                                uploadedIds[0] || "",
-                                uploadedIds[1] || "",
-                                uploadedIds[2] || "",
-                                id_publicaciones
-                            );
-                            await listarPublicaciones();
-                            setfile([]);
-                            setDescripcionPublicaciones("");
-                            setIsUploading(false);
-                        }}
-                        className="space-y-4"
-                    >
-                        <div className="space-y-3">
-                            <input
-                                type="text"
-                                name="descripcionPublicaciones"
-                                value={descripcionPublicaciones || ""}
-                                onChange={(e) => setDescripcionPublicaciones(e.target.value)}
-                                className="w-full h-11 rounded-2xl border border-gray-200 bg-white px-4 text-sm text-gray-900 shadow-sm transition placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
-                                placeholder="Nueva descripción"
-                            />
-                            <input
-                                type="file"
-                                accept="image/*"
-                                multiple
-                                onChange={handleFileChange}
-                                className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-2 text-sm shadow-sm transition file:mr-4 file:rounded-xl file:border-0 file:bg-blue-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600/30"
-                            />
-                            <div className="text-xs text-gray-500">
-                                {id_publicaciones && Number(id_publicaciones) !== 10 ? (
-                                    <span>Esta publicación admite una sola imagen.</span>
-                                ) : (
-                                    <span>Puede subir hasta 3 imágenes.</span>
-                                )}
+                <section className="grid grid-cols-1 gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+                    <article className="overflow-hidden rounded-[28px] border border-slate-300 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.12)]">
+                        <div className="border-b border-slate-100 bg-[linear-gradient(135deg,#0f172a_0%,#312e81_58%,#0f766e_100%)] px-5 py-5">
+                            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-teal-100">Actualizar existente</p>
+                            <h2 className="mt-1 text-xl font-black text-white">Reemplazar imagen y descripcion</h2>
+                        </div>
+
+                        <form onSubmit={handleUpdateSubmit} className="space-y-5 p-5 md:p-6">
+                            <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_auto]">
+                                <div>
+                                    <label className="mb-2 block text-sm font-semibold text-slate-700">Publicacion</label>
+                                    <select
+                                        className="h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-900 shadow-sm outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+                                        value={id_publicaciones}
+                                        onChange={handlePublicationSelect}
+                                        disabled={isUploading}
+                                    >
+                                        <option value="" disabled>Selecciona una publicacion</option>
+                                        {listaPublicaciones.map((publicacion) => (
+                                            <option value={publicacion.id_publicaciones} key={publicacion.id_publicaciones}>
+                                                #{publicacion.id_publicaciones} - {publicacion.descripcionPublicaciones}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+                                    <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">Limite</p>
+                                    <p className="mt-1 text-sm font-bold text-slate-900">{selectedAllowsMultiple ? "Hasta 3 imagenes" : "1 imagen"}</p>
+                                </div>
+                            </div>
+
+                            {selectedPublication && (
+                                <div className="rounded-2xl border border-indigo-200 bg-indigo-50/70 p-4">
+                                    <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-indigo-700">Seleccion actual</p>
+                                    <p className="mt-1 text-sm font-semibold text-slate-900">{selectedPublication.descripcionPublicaciones}</p>
+                                </div>
+                            )}
+
+                            <div>
+                                <label className="mb-2 block text-sm font-semibold text-slate-700">Nueva descripcion</label>
+                                <input
+                                    type="text"
+                                    name="descripcionPublicaciones"
+                                    value={descripcionPublicaciones}
+                                    onChange={(e) => setDescripcionPublicaciones(e.target.value)}
+                                    className="h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+                                    placeholder="Ej: Resultados, experiencia del centro, tecnologia..."
+                                    disabled={isUploading}
+                                />
+                            </div>
+
+                            <div>
+                                <label className="mb-2 block text-sm font-semibold text-slate-700">Imagenes de reemplazo</label>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    multiple={selectedAllowsMultiple}
+                                    onChange={handleFileChange}
+                                    className="w-full rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-sm shadow-sm transition file:mr-4 file:rounded-xl file:border-0 file:bg-gradient-to-r file:from-indigo-700 file:to-teal-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:border-indigo-300 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+                                    disabled={isUploading}
+                                />
+                                <div className="mt-2 flex flex-wrap gap-2 text-xs text-slate-500">
+                                    {file.length > 0 ? file.map((selectedFile) => (
+                                        <span key={`${selectedFile.name}-${selectedFile.size}`} className="rounded-full border border-slate-200 bg-white px-3 py-1 font-medium text-slate-600">
+                                            {selectedFile.name}
+                                        </span>
+                                    )) : (
+                                        <span>JPG, PNG, WEBP, GIF o SVG. Maximo 10 MB antes de compresion.</span>
+                                    )}
+                                </div>
                             </div>
 
                             {isUploading && (
-                                <div className="mt-1 flex items-center gap-2 text-blue-600 text-sm">
-                                    <span className="inline-block h-4 w-4 border-2 border-blue-300 border-t-transparent rounded-full animate-spin" />
-                                    <span>Subiendo imagen a la nube...</span>
+                                <div className="flex items-center gap-2 rounded-2xl border border-indigo-200 bg-indigo-50 px-4 py-3 text-sm font-semibold text-indigo-700">
+                                    <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-indigo-300 border-t-transparent" />
+                                    Subiendo imagen a la nube...
                                 </div>
                             )}
-                        </div>
 
-                        <div className="pt-2">
                             <button
-                                className={`inline-flex items-center justify-center h-11 px-6 rounded-2xl font-semibold shadow-sm transition active:scale-[0.99] ${isUploading ? "bg-blue-50 text-blue-500 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700"}`}
+                                className="inline-flex h-12 items-center justify-center rounded-2xl bg-gradient-to-r from-indigo-700 to-teal-600 px-6 text-sm font-bold text-white shadow-lg shadow-indigo-500/20 transition hover:from-indigo-800 hover:to-teal-700 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-55"
                                 type="submit"
                                 disabled={isUploading}
                             >
-                                Actualizar publicación
+                                {isUploading ? "Actualizando..." : "Actualizar publicacion"}
                             </button>
-                        </div>
-                    </form>
-                </section>
+                        </form>
+                    </article>
 
-                {/* Insertar nueva publicación */}
-                <section className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm ring-1 ring-black/5">
-                    <h2 className="text-base sm:text-lg font-semibold mb-4">Insertar nueva publicación (1 imagen)</h2>
-                    <form onSubmit={handleInsertSubmit} className="space-y-4">
-                        <input
-                            type="text"
-                            className="w-full h-11 rounded-2xl border border-gray-200 bg-white px-4 text-sm text-gray-900 shadow-sm transition placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
-                            placeholder="Descripción"
-                            value={newDescripcion}
-                            onChange={(e) => setNewDescripcion(e.target.value)}
-                        />
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleNewFileChange}
-                            className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-2 text-sm shadow-sm transition file:mr-4 file:rounded-xl file:border-0 file:bg-blue-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600/30"
-                        />
-                        {newPreview && (
-                            <div className="w-full max-w-[220px] aspect-square overflow-hidden rounded-2xl border border-gray-200 bg-gray-50 shadow-sm">
-                                <img src={newPreview} alt="preview" className="w-full h-full object-cover" />
+                    <article className="overflow-hidden rounded-[28px] border border-slate-300 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.12)]">
+                        <div className="border-b border-slate-100 bg-[linear-gradient(180deg,rgba(248,250,252,0.98)_0%,rgba(241,245,249,0.8)_100%)] px-5 py-5">
+                            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-indigo-700">Nueva pieza</p>
+                            <h2 className="mt-1 text-xl font-black text-slate-950">Insertar publicacion</h2>
+                        </div>
+
+                        <form onSubmit={handleInsertSubmit} className="space-y-5 p-5 md:p-6">
+                            <div>
+                                <label className="mb-2 block text-sm font-semibold text-slate-700">Descripcion</label>
+                                <input
+                                    type="text"
+                                    className="h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm text-slate-900 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+                                    placeholder="Descripcion visible de la publicacion"
+                                    value={newDescripcion}
+                                    onChange={(e) => setNewDescripcion(e.target.value)}
+                                    disabled={isInserting}
+                                />
                             </div>
-                        )}
-                        <div>
+
+                            <div>
+                                <label className="mb-2 block text-sm font-semibold text-slate-700">Imagen principal</label>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleNewFileChange}
+                                    className="w-full rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-sm shadow-sm transition file:mr-4 file:rounded-xl file:border-0 file:bg-gradient-to-r file:from-indigo-700 file:to-teal-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:border-indigo-300 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
+                                    disabled={isInserting}
+                                />
+                            </div>
+
+                            <div className="overflow-hidden rounded-3xl border border-slate-200 bg-slate-50">
+                                {newPreview ? (
+                                    <img src={newPreview} alt="Vista previa de nueva publicacion" className="h-64 w-full object-cover" />
+                                ) : (
+                                    <div className="flex h-64 items-center justify-center px-6 text-center text-sm font-medium text-slate-400">
+                                        La vista previa aparecera aqui al seleccionar una imagen.
+                                    </div>
+                                )}
+                            </div>
+
                             <button
                                 type="submit"
                                 disabled={isInserting}
-                                className={`inline-flex items-center justify-center h-11 px-6 rounded-2xl font-semibold shadow-sm transition active:scale-[0.99] ${isInserting ? "bg-blue-50 text-blue-500 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700"}`}
+                                className="inline-flex h-12 items-center justify-center rounded-2xl bg-gradient-to-r from-indigo-700 to-teal-600 px-6 text-sm font-bold text-white shadow-lg shadow-indigo-500/20 transition hover:from-indigo-800 hover:to-teal-700 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-55"
                             >
-                                {isInserting ? "Insertando..." : "Insertar publicación"}
+                                {isInserting ? "Insertando..." : "Insertar publicacion"}
                             </button>
+                        </form>
+                    </article>
+                </section>
+
+                <section aria-labelledby="publications-title" className="space-y-4">
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                        <div>
+                            <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-indigo-700">Inventario visual</p>
+                            <h2 id="publications-title" className="text-2xl font-black tracking-tight text-slate-950">Publicaciones cargadas</h2>
                         </div>
-                    </form>
+                        <p className="text-sm text-slate-500">Revisa imagen, descripcion y estado de eliminacion.</p>
+                    </div>
+
+                    {listaPublicaciones.length === 0 ? (
+                        <div className="rounded-[28px] border border-dashed border-slate-300 bg-white/90 p-12 text-center text-sm text-slate-500 shadow-sm">
+                            Aun no hay publicaciones registradas.
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                            {listaPublicaciones.map((publicacion) => {
+                                const isProtected = Number(publicacion.id_publicaciones) === 10;
+                                const imageSrc = cfToSrc(publicacion.imagenPublicaciones_primera, VARIANT_FULL);
+
+                                return (
+                                    <article key={publicacion.id_publicaciones} className="group overflow-hidden rounded-[28px] border border-slate-300 bg-white shadow-[0_14px_40px_rgba(15,23,42,0.10)] transition hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-[0_22px_55px_rgba(15,23,42,0.14)]">
+                                        <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
+                                            {imageSrc ? (
+                                                <img
+                                                    src={imageSrc}
+                                                    alt={publicacion.descripcionPublicaciones || "Publicacion"}
+                                                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                                                />
+                                            ) : (
+                                                <div className="flex h-full w-full items-center justify-center text-sm font-semibold text-slate-300">
+                                                    Sin imagen
+                                                </div>
+                                            )}
+                                            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/55 via-slate-950/5 to-transparent" />
+                                            <span className="absolute left-4 top-4 rounded-full border border-white/20 bg-slate-950/55 px-3 py-1 text-xs font-bold text-white backdrop-blur">
+                                                #{publicacion.id_publicaciones}
+                                            </span>
+                                            {isProtected && (
+                                                <span className="absolute right-4 top-4 rounded-full border border-teal-200/30 bg-teal-500/20 px-3 py-1 text-xs font-bold text-teal-50 backdrop-blur">
+                                                    Protegida
+                                                </span>
+                                            )}
+                                        </div>
+
+                                        <div className="space-y-4 p-5">
+                                            <h3 className="line-clamp-2 text-base font-bold leading-6 text-slate-950" title={publicacion.descripcionPublicaciones}>
+                                                {publicacion.descripcionPublicaciones || "Sin descripcion"}
+                                            </h3>
+                                            <div className="flex flex-wrap items-center gap-2">
+                                                <button
+                                                    onClick={() => {
+                                                        setId_publicaciones(String(publicacion.id_publicaciones));
+                                                        setDescripcionPublicaciones(publicacion.descripcionPublicaciones || "");
+                                                        window.scrollTo({top: 0, behavior: "smooth"});
+                                                    }}
+                                                    className="inline-flex items-center justify-center rounded-2xl border border-indigo-200 bg-indigo-50 px-3.5 py-2 text-sm font-bold text-indigo-700 transition hover:bg-indigo-100"
+                                                >
+                                                    Editar
+                                                </button>
+                                                <button
+                                                    onClick={async () => {
+                                                        if (isProtected) {
+                                                            toast.error("No se puede eliminar la publicacion con id 10.");
+                                                            return;
+                                                        }
+                                                        if (!confirm("Deseas eliminar esta publicacion?")) return;
+                                                        await eliminarPublicacion(publicacion.id_publicaciones);
+                                                    }}
+                                                    className={`inline-flex items-center justify-center rounded-2xl px-3.5 py-2 text-sm font-bold shadow-sm transition ${isProtected ? "cursor-not-allowed bg-slate-200 text-slate-500" : "border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100"}`}
+                                                    disabled={isProtected}
+                                                >
+                                                    Eliminar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </article>
+                                );
+                            })}
+                        </div>
+                    )}
                 </section>
             </div>
-
-            <section aria-labelledby="publications-title" className="space-y-4">
-                <h2 id="publications-title" className="text-2xl font-semibold tracking-tight">Publicaciones</h2>
-                {listaPublicaciones.length === 0 ? (
-                    <div className="rounded-2xl border border-dashed p-8 text-center text-sm text-gray-500">Aún no hay publicaciones.</div>
-                ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {listaPublicaciones.map((publicaciones) => (
-                            <article key={publicaciones.id_publicaciones} className="group rounded-2xl border bg-white shadow-sm hover:shadow-lg transition-shadow">
-                                <div className="p-4">
-                                    <h3 className="text-base font-medium truncate" title={publicaciones.descripcionPublicaciones}>{publicaciones.descripcionPublicaciones}</h3>
-                                </div>
-                                <div className="p-4 pt-0">
-                                    <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-gray-50 ring-1 ring-black/5">
-                                        {publicaciones.imagenPublicaciones_primera ? (
-                                            <>
-                                                <img
-                                                    src={cfToSrc(publicaciones.imagenPublicaciones_primera, VARIANT_FULL)}
-                                                    alt=""
-                                                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                                                />
-                                                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-black/0 to-black/0" />
-                                            </>
-                                        ) : (
-                                            <div className="h-full w-full flex items-center justify-center text-gray-300">
-                                                No image
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    <div className="mt-3 flex items-center justify-between gap-3">
-
-                                    </div>
-                                </div>
-                                <div className="p-4 flex gap-3">
-                                    <button
-                                        onClick={async () => {
-                                            if (Number(publicaciones.id_publicaciones) === 10) {
-                                                toast.error('No se puede eliminar la publicación con id 10');
-                                                return;
-                                            }
-                                            if (!confirm('¿Deseas eliminar esta publicación?')) return;
-                                            await eliminarPublicacion(publicaciones.id_publicaciones);
-                                        }}
-                                        className={`inline-flex items-center justify-center px-3 py-2 rounded-2xl text-white text-sm font-medium shadow-sm transition ${Number(publicaciones.id_publicaciones) === 10 ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'}`}
-                                        disabled={Number(publicaciones.id_publicaciones) === 10}
-                                    >Eliminar</button>
-                                </div>
-                            </article>
-                        ))}
-                    </div>
-                )}
-            </section>
-
-
-        </div>)
-
-
-
-
+        </div>
+    )
 }
-

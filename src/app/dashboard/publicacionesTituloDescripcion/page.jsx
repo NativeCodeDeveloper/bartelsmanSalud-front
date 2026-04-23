@@ -274,19 +274,19 @@ export default function PublicacionesTituloDescripcion() {
     }
 
     return (
-        <div className="min-h-screen px-4 py-6 sm:px-6 lg:px-10 space-y-8">
+        <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.14),_transparent_32%),radial-gradient(circle_at_right,_rgba(6,182,212,0.12),_transparent_28%),linear-gradient(180deg,_#f1f5f9_0%,_#f8fafc_55%,_#f1f5f9_100%)] px-4 py-6 sm:px-6 lg:px-10 space-y-8">
             <ToasterClient/>
             {/* Header */}
-            <div className="space-y-1">
-                <p className="text-xs font-semibold uppercase tracking-widest text-sky-600">Gestión de contenido</p>
-                <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-slate-800">Publicaciones Tratamientos</h1>
+            <div className="rounded-[28px] border border-slate-300/80 bg-white/90 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.12)] backdrop-blur-sm">
+                <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-indigo-700">Gestión de contenido</p>
+                <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">Publicaciones Tratamientos</h1>
                 <p className="text-sm text-slate-500">Crea y administra las publicaciones de tratamientos clínicos.</p>
             </div>
 
             <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
 
             {/* Formulario de creación / edición */}
-            <div ref={formularioRef} className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-6 md:p-8 shadow-sm space-y-6 max-w-3xl">
+            <div ref={formularioRef} className="rounded-[24px] border border-slate-300 bg-white p-4 sm:p-6 md:p-8 shadow-[0_18px_50px_rgba(15,23,42,0.12)] space-y-6 max-w-3xl">
                 <div className="space-y-1">
                     <h2 className="text-lg font-semibold text-slate-800 tracking-tight">
                         {publicacionEditando ? "Editar publicacion" : "Nueva publicación"}
@@ -306,7 +306,7 @@ export default function PublicacionesTituloDescripcion() {
                         <input
                             value={publicacionesTitulo}
                             onChange={(e) => setPublicacionesTitulo(e.target.value)}
-                            className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-800 shadow-sm outline-none transition focus:border-sky-500 focus:ring-4 focus:ring-sky-100"
+                            className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-800 shadow-sm outline-none transition focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100"
                             placeholder="Título de la publicación"
                         />
                     </div>
@@ -316,7 +316,7 @@ export default function PublicacionesTituloDescripcion() {
                         <textarea
                             value={publicacionesDescripcion}
                             onChange={(e) => setPublicacionesDescripcion(e.target.value)}
-                            className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-800 shadow-sm outline-none transition focus:border-sky-500 focus:ring-4 focus:ring-sky-100 resize-none"
+                            className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-800 shadow-sm outline-none transition focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 resize-none"
                             placeholder="Descripción de la publicación"
                             rows={4}
                         />
@@ -325,7 +325,7 @@ export default function PublicacionesTituloDescripcion() {
                     <div className="space-y-1.5">
                         <label className="text-xs font-semibold uppercase tracking-wide text-slate-500">Imagen</label>
                         <div className="flex items-center gap-3">
-                            <label className="cursor-pointer inline-flex items-center gap-2 rounded-xl border border-dashed border-slate-300 bg-slate-50 px-5 py-3 text-sm font-medium text-slate-600 transition hover:border-sky-400 hover:bg-sky-50 hover:text-sky-700 max-w-full">
+                            <label className="cursor-pointer inline-flex items-center gap-2 rounded-xl border border-dashed border-slate-300 bg-slate-50 px-5 py-3 text-sm font-medium text-slate-600 transition hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-700 max-w-full">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                                 <span className="truncate">{imagenArchivo ? imagenArchivo.name : "Seleccionar imagen"}</span>
                                 <input type="file" accept="image/*" onChange={capturarImagen} className="hidden" />
@@ -367,26 +367,26 @@ export default function PublicacionesTituloDescripcion() {
                 <div className="h-px bg-slate-100" />
 
                 <div className="flex flex-wrap items-center gap-3 pt-1">
-                    <ButtonDinamic onClick={publicacionEditando ? actualizarPublicacion : guardarPublicacionConImagen}>
+                    <ButtonDinamic className="rounded-xl bg-gradient-to-r from-indigo-700 to-teal-600 shadow-md shadow-indigo-500/20 hover:from-indigo-800 hover:to-teal-700" onClick={publicacionEditando ? actualizarPublicacion : guardarPublicacionConImagen}>
                         {cargandoGuardado
                             ? (publicacionEditando ? "Actualizando..." : "Guardando...")
                             : (publicacionEditando ? "Actualizar publicacion" : "Guardar publicación")}
                     </ButtonDinamic>
                     {publicacionEditando && (
-                        <ButtonDinamic onClick={limpiarFormulario}>Cancelar</ButtonDinamic>
+                        <ButtonDinamic className="rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100" onClick={limpiarFormulario}>Cancelar</ButtonDinamic>
                     )}
-                    <ButtonDinamic onClick={limpiarFormulario}>Limpiar</ButtonDinamic>
+                    <ButtonDinamic className="rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100" onClick={limpiarFormulario}>Limpiar</ButtonDinamic>
                 </div>
             </div>
 
             {/* Detalle de publicación seleccionada */}
             {dataPublicacionesEspecifica.length > 0 && (
                 <div className="space-y-4">
-                    <p className="text-xs font-semibold uppercase tracking-widest text-sky-600">Detalle de publicación</p>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-indigo-700">Detalle de publicación</p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                         {dataPublicacionesEspecifica.map((publicacion) => {
                             return (
-                                <div key={publicacion.id_publicacionesTituloDescripcion} className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden transition hover:shadow-md">
+                                <div key={publicacion.id_publicacionesTituloDescripcion} className="rounded-2xl border border-slate-300 bg-white shadow-[0_14px_40px_rgba(15,23,42,0.10)] overflow-hidden transition hover:border-indigo-200 hover:shadow-md">
                                     <img
                                         src={`https://imagedelivery.net/${CLOUDFLARE_ACCOUNT_HASH}/${publicacion.publicacionesTituloDescripcionImagen}/${CARD}`}
                                         alt={publicacion.publicacionesTitulo}
@@ -398,7 +398,7 @@ export default function PublicacionesTituloDescripcion() {
                                         <div className="flex flex-wrap items-center gap-2">
                                             <button
                                                 onClick={() => cargarParaEditar(publicacion)}
-                                                className="inline-flex items-center gap-1.5 rounded-lg border border-sky-200 bg-sky-50 px-3.5 py-2 text-xs font-semibold text-sky-600 transition hover:bg-sky-100 hover:border-sky-300 hover:text-sky-700"
+                                                className="inline-flex items-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-3.5 py-2 text-xs font-semibold text-indigo-700 transition hover:bg-indigo-100 hover:border-indigo-300 hover:text-indigo-800"
                                             >
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                                                 Editar
@@ -420,8 +420,8 @@ export default function PublicacionesTituloDescripcion() {
             )}
 
             {/* Listado de publicaciones */}
-            <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-                <div className="px-4 sm:px-6 py-5 border-b border-slate-100">
+            <div className="rounded-[24px] border border-slate-300 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.12)] overflow-hidden">
+                <div className="px-4 sm:px-6 py-5 border-b border-slate-100 bg-[linear-gradient(180deg,rgba(248,250,252,0.98)_0%,rgba(241,245,249,0.8)_100%)]">
                     <h2 className="text-lg font-semibold text-slate-800 tracking-tight">Publicaciones existentes</h2>
                     <p className="text-xs text-slate-400 mt-0.5">Selecciona una publicación para ver su detalle.</p>
                 </div>
@@ -438,7 +438,7 @@ export default function PublicacionesTituloDescripcion() {
                             <div className="min-w-0 flex-1 space-y-1.5">
                                 <p className="text-sm font-medium text-slate-700 break-words">{item.publicacionesTitulo}</p>
                                 <p className="text-xs text-slate-500 line-clamp-2 break-words">{item.publicacionesDescripcion}</p>
-                                <ButtonDinamic onClick={() => seleccionarPublicacionesTituloDetallePorID(item.id_publicacionesTituloDescripcion)}>
+                                <ButtonDinamic className="rounded-lg border border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100" onClick={() => seleccionarPublicacionesTituloDetallePorID(item.id_publicacionesTituloDescripcion)}>
                                     Seleccionar
                                 </ButtonDinamic>
                             </div>
@@ -454,16 +454,16 @@ export default function PublicacionesTituloDescripcion() {
                     <Table>
                         <TableCaption className="py-4 text-xs text-slate-400">Lista de publicaciones de tratamientos</TableCaption>
                         <TableHeader>
-                            <TableRow className="bg-slate-50/80">
-                                <TableHead className="text-xs font-semibold uppercase tracking-wide text-slate-500">Imagen</TableHead>
-                                <TableHead className="text-xs font-semibold uppercase tracking-wide text-slate-500">Título</TableHead>
-                                <TableHead className="text-xs font-semibold uppercase tracking-wide text-slate-500">Descripción</TableHead>
-                                <TableHead className="text-xs font-semibold uppercase tracking-wide text-slate-500">Acción</TableHead>
+                            <TableRow className="bg-gradient-to-r from-indigo-700 to-teal-600 hover:from-indigo-700 hover:to-teal-600">
+                                <TableHead className="text-xs font-semibold uppercase tracking-wide text-white">Imagen</TableHead>
+                                <TableHead className="text-xs font-semibold uppercase tracking-wide text-white">Título</TableHead>
+                                <TableHead className="text-xs font-semibold uppercase tracking-wide text-white">Descripción</TableHead>
+                                <TableHead className="text-xs font-semibold uppercase tracking-wide text-white">Acción</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {dataPublicaciones.map((item) => (
-                                <TableRow key={item.id_publicacionesTituloDescripcion} className="hover:bg-slate-50/60 transition-colors">
+                                <TableRow key={item.id_publicacionesTituloDescripcion} className="hover:bg-indigo-50/60 transition-colors">
                                     <TableCell className="py-3">
                                         <img
                                             src={`https://imagedelivery.net/${CLOUDFLARE_ACCOUNT_HASH}/${item.publicacionesTituloDescripcionImagen}/${CARD}`}
@@ -476,7 +476,7 @@ export default function PublicacionesTituloDescripcion() {
                                     <TableCell className="text-sm font-medium text-slate-700">{item.publicacionesTitulo}</TableCell>
                                     <TableCell className="text-sm text-slate-500 max-w-xs truncate">{item.publicacionesDescripcion}</TableCell>
                                     <TableCell>
-                                        <ButtonDinamic onClick={() => seleccionarPublicacionesTituloDetallePorID(item.id_publicacionesTituloDescripcion)}>
+                                        <ButtonDinamic className="rounded-lg border border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100" onClick={() => seleccionarPublicacionesTituloDetallePorID(item.id_publicacionesTituloDescripcion)}>
                                             Seleccionar
                                         </ButtonDinamic>
                                     </TableCell>

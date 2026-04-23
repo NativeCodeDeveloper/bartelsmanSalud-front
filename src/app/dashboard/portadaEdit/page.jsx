@@ -284,7 +284,7 @@ export default function CarruselPortada() {
 
     return(
 
-        <div className="min-h-screen bg-white text-slate-900">
+        <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.14),_transparent_32%),radial-gradient(circle_at_right,_rgba(6,182,212,0.12),_transparent_28%),linear-gradient(180deg,_#f1f5f9_0%,_#f8fafc_55%,_#f1f5f9_100%)] text-slate-900">
             <ToasterClient />
 
 
@@ -307,8 +307,9 @@ export default function CarruselPortada() {
 
                 </div>
 
-                <div className="flex flex-col gap-2">
-                    <h1 className='text-3xl md:text-4xl font-semibold tracking-tight'>
+                <div className="rounded-[28px] border border-slate-300/80 bg-white/90 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.12)] backdrop-blur-sm">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-indigo-700">Administracion</p>
+                    <h1 className='text-3xl md:text-4xl font-bold tracking-tight'>
                         Imagenes del Carrusel de Portada
                     </h1>
                     <p className="text-sm text-slate-600">
@@ -325,12 +326,12 @@ export default function CarruselPortada() {
                 <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-12">
                     {/* Form */}
                     <div className="lg:col-span-5">
-                        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                        <div className="rounded-[24px] border border-slate-300 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.12)]">
                             <div className="flex flex-col gap-5">
 
                                 <div>
                                     <label className="mb-2 block text-sm font-medium text-slate-900">Titulo de la Portada</label>
-                                    <div className="rounded-xl border border-slate-200 bg-white">
+                                    <div className="rounded-xl border border-slate-200 bg-white focus-within:border-indigo-400 focus-within:ring-2 focus-within:ring-indigo-100">
                                         <ShadcnInput
                                             value={tituloPortadaCarrusel}
                                             onChange={(e) => settituloPortadaCarrusel(e.target.value)}
@@ -340,7 +341,7 @@ export default function CarruselPortada() {
 
                                 <div>
                                     <label className="mb-2 block text-sm font-medium text-slate-900">Descripcion de la Portada</label>
-                                    <div className="rounded-xl border border-slate-200 bg-white">
+                                    <div className="rounded-xl border border-slate-200 bg-white focus-within:border-indigo-400 focus-within:ring-2 focus-within:ring-indigo-100">
                                         <ShadcnInput
                                             value={descripcionPublicacionesPortada}
                                             onChange={(e) => setdescripcionPublicacionesPortada(e.target.value)}
@@ -353,7 +354,7 @@ export default function CarruselPortada() {
                                     <input
                                         type='file'
                                         accept="image/*"
-                                        className='w-full cursor-pointer rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-900 file:mr-4 file:rounded-lg file:border-0 file:bg-slate-800 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-slate-100 hover:border-slate-700'
+                                        className='w-full cursor-pointer rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-900 file:mr-4 file:rounded-lg file:border-0 file:bg-gradient-to-r file:from-indigo-700 file:to-teal-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:border-indigo-300'
                                         onChange={capturarImagen}
                                     />
                                     <p className="mt-2 text-xs text-slate-500">
@@ -365,16 +366,21 @@ export default function CarruselPortada() {
                                     <div className="flex flex-col gap-3 sm:flex-row">
                                         <ShadcnButton
                                             nombre={'Subir Imagen'}
-                                            funcion={()=>subirPortadaClick()}/>
+                                            funcion={()=>subirPortadaClick()}
+                                            className="rounded-xl bg-gradient-to-r from-indigo-700 to-teal-600 text-white shadow-md shadow-indigo-500/20 hover:from-indigo-800 hover:to-teal-700"/>
 
                                         <ShadcnButton
                                             nombre={'Limpiar Informacion'}
-                                            funcion={()=>limpiarDataInputs()}/>
+                                            funcion={()=>limpiarDataInputs()}
+                                            className="rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100"/>
 
                                     </div>
 
                                     {id_publicacionesPortada > 0 && (
-                                        <ShadcnButton nombre={'Actualizar Datos'} funcion={()=> actualizaroPortadaClick()}/>
+                                        <ShadcnButton
+                                            nombre={'Actualizar Datos'}
+                                            funcion={()=> actualizaroPortadaClick()}
+                                            className="rounded-xl bg-gradient-to-r from-indigo-700 to-teal-600 text-white shadow-md shadow-indigo-500/20 hover:from-indigo-800 hover:to-teal-700"/>
                                     )}
                                 </div>
 
@@ -384,8 +390,8 @@ export default function CarruselPortada() {
                         {/* Preview */}
                         <div className="mt-6">
                             {vistaPrevia && (
-                                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
-                                    <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
+                                <div className="overflow-hidden rounded-[24px] border border-slate-300 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.12)]">
+                                    <div className="flex items-center justify-between border-b border-slate-100 bg-[linear-gradient(180deg,rgba(248,250,252,0.98)_0%,rgba(241,245,249,0.8)_100%)] px-4 py-3">
                                         <span className="text-sm font-medium text-slate-900">Vista previa</span>
                                         <span className="text-xs text-slate-500">CARD</span>
                                     </div>
@@ -399,10 +405,10 @@ export default function CarruselPortada() {
 
                     {/* List */}
                     <div className="lg:col-span-7">
-                        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                        <div className="rounded-[24px] border border-slate-300 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.12)]">
                             <div className="flex items-center justify-between">
                                 <h2 className="text-lg font-semibold text-slate-900">Portadas</h2>
-                                <span className="rounded-lg border border-slate-200 bg-white px-3 py-1 text-xs text-slate-600">
+                                <span className="rounded-lg border border-indigo-200 bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-700">
                                     Total: {dataPublicacionesCarrusel.length}
                                 </span>
                             </div>
@@ -410,7 +416,7 @@ export default function CarruselPortada() {
                             <div className="mt-6 grid grid-cols-1 gap-6">
                                 {
                                     dataPublicacionesCarrusel.map((carruselPortada, index) => (
-                                        <div key={index} className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                                        <div key={index} className="overflow-hidden rounded-2xl border border-slate-200 bg-white transition hover:border-indigo-200 hover:shadow-md">
                                             <div className='flex flex-col md:flex-row'>
                                                 <div className='relative w-full md:w-80 shrink-0'>
                                                     <img
@@ -431,8 +437,8 @@ export default function CarruselPortada() {
                                                     </div>
 
                                                     <div className="mt-2 flex flex-col gap-3 ">
-                                                        <ShadcnButton className="w-25" nombre={'Eliminar'} funcion={()=> eliminarPortada(carruselPortada.id_publicacionesPortada)}/>
-                                                        <ShadcnButton className="w-25" nombre={'Seleccionar'} funcion={()=> seleccionarPortada(carruselPortada.id_publicacionesPortada )}/>
+                                                        <ShadcnButton className="w-25 rounded-lg border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100" nombre={'Eliminar'} funcion={()=> eliminarPortada(carruselPortada.id_publicacionesPortada)}/>
+                                                        <ShadcnButton className="w-25 rounded-lg border border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100" nombre={'Seleccionar'} funcion={()=> seleccionarPortada(carruselPortada.id_publicacionesPortada )}/>
                                                     </div>
                                                 </div>
                                             </div>

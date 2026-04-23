@@ -235,7 +235,7 @@ export default function NuevaFicha() {
     }, [id_paciente]);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-sky-50/30">
+        <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.14),_transparent_32%),radial-gradient(circle_at_right,_rgba(6,182,212,0.12),_transparent_28%),linear-gradient(180deg,_#f1f5f9_0%,_#f8fafc_55%,_#f1f5f9_100%)]">
             <ToasterClient/>
 
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
@@ -244,17 +244,18 @@ export default function NuevaFicha() {
                 <div className="mb-8">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div>
-                            <h1 className="text-2xl md:text-3xl font-bold text-slate-800 tracking-tight">
+                            <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.22em] text-indigo-700">Nuevo registro</p>
+                            <h1 className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">
                                 Nueva Ficha Cl&iacute;nica
                             </h1>
-                            <p className="text-sm text-slate-500 mt-1">
+                            <p className="text-sm text-slate-600 mt-1">
                                 Complete los campos para registrar la atenci&oacute;n del paciente
                             </p>
                         </div>
 
                         <div className="flex items-center gap-2">
                             <Link href={"/dashboard/FichaClinica"}>
-                                <button className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:border-slate-300 transition-all duration-150 shadow-sm">
+                                <button className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-all duration-150 hover:border-slate-400 hover:bg-slate-200 shadow-sm">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                                     </svg>
@@ -277,9 +278,9 @@ export default function NuevaFicha() {
                 {dataPaciente.map((paciente) => (
                     <div
                         key={paciente.id_paciente}
-                        className="mb-8 bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden"
+                        className="mb-8 overflow-hidden rounded-[24px] border border-slate-300 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.12)]"
                     >
-                        <div className="border-b border-slate-100 bg-gradient-to-r from-sky-600 to-cyan-500 px-5 py-3">
+                        <div className="bg-[linear-gradient(135deg,#0f172a_0%,#312e81_58%,#0891b2_100%)] px-5 py-3.5">
                             <h2 className="text-sm font-semibold text-white tracking-wide uppercase">
                                 Datos del Paciente
                             </h2>
@@ -287,47 +288,47 @@ export default function NuevaFicha() {
                         <div className="p-5 md:p-6">
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                                 <div className="flex flex-col gap-1">
-                                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">ID</span>
-                                    <span className="text-sm font-semibold text-sky-600">#{paciente.id_paciente}</span>
+                                    <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-[0.18em]">ID</span>
+                                    <span className="text-sm font-semibold text-indigo-700">#{paciente.id_paciente}</span>
                                 </div>
                                 <div className="flex flex-col gap-1">
-                                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Nombre</span>
+                                    <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-[0.18em]">Nombre</span>
                                     <span className="text-sm font-medium text-slate-800">{paciente.nombre}</span>
                                 </div>
                                 <div className="flex flex-col gap-1">
-                                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Apellido</span>
+                                    <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-[0.18em]">Apellido</span>
                                     <span className="text-sm font-medium text-slate-800">{paciente.apellido}</span>
                                 </div>
                                 <div className="flex flex-col gap-1">
-                                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">RUT</span>
+                                    <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-[0.18em]">RUT</span>
                                     <span className="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap">{paciente.rut}</span>
                                 </div>
                                 <div className="flex flex-col gap-1">
-                                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Tel&eacute;fono</span>
+                                    <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-[0.18em]">Tel&eacute;fono</span>
                                     <span className="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap">{paciente.telefono || "-"}</span>
                                 </div>
                                 <div className="flex flex-col gap-1">
-                                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Correo</span>
+                                    <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-[0.18em]">Correo</span>
                                     <span className="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap">{paciente.correo || "-"}</span>
                                 </div>
                                 <div className="flex flex-col gap-1">
-                                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Apoderado</span>
+                                    <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-[0.18em]">Apoderado</span>
                                     <span className="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap">{paciente.apoderado || "-"}</span>
                                 </div>
                                 <div className="flex flex-col gap-1">
-                                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">RUT Apoderado</span>
+                                    <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-[0.18em]">RUT Apoderado</span>
                                     <span className="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap">{paciente.apoderado_rut || "-"}</span>
                                 </div>
                                 <div className="sm:col-span-2 lg:col-span-4 flex flex-col gap-1">
-                                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Medicamentos Usados</span>
+                                    <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-[0.18em]">Medicamentos Usados</span>
                                     <span className="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap">{paciente.medicamentosUsados || "-"}</span>
                                 </div>
                                 <div className="sm:col-span-2 lg:col-span-2 flex flex-col gap-1">
-                                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">H&aacute;bitos</span>
+                                    <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-[0.18em]">H&aacute;bitos</span>
                                     <span className="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap">{paciente.habitos || "-"}</span>
                                 </div>
                                 <div className="sm:col-span-2 lg:col-span-2 flex flex-col gap-1">
-                                    <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Comentarios Adicionales</span>
+                                    <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-[0.18em]">Comentarios Adicionales</span>
                                     <span className="text-sm font-medium text-slate-800 break-words whitespace-pre-wrap">{paciente.comentariosAdicionales || "-"}</span>
                                 </div>
                             </div>
@@ -336,11 +337,11 @@ export default function NuevaFicha() {
                 ))}
 
                 {/* Formulario principal */}
-                <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+                <div className="bg-white border border-slate-300 rounded-[24px] shadow-[0_18px_50px_rgba(15,23,42,0.12)] overflow-hidden">
 
                     {/* Secci&oacute;n: Informaci&oacute;n General */}
-                    <div className="border-b border-slate-100 bg-slate-50/50 px-5 py-3">
-                        <h2 className="text-sm font-semibold text-slate-700 tracking-wide uppercase">
+                    <div className="border-b border-slate-200 bg-slate-100/80 px-5 py-3">
+                        <h2 className="text-sm font-semibold text-slate-800 tracking-wide uppercase">
                             Informaci&oacute;n de la Consulta
                         </h2>
                     </div>
@@ -356,7 +357,7 @@ export default function NuevaFicha() {
                             <select
                                 value={idPlantilla}
                                 onChange={(e) => seleccionarPlantilla(e.target.value)}
-                                className="w-full h-10 px-3.5 text-sm border border-slate-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-400 transition-all text-slate-700"
+                                className="w-full h-10 px-3.5 text-sm border border-slate-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all text-slate-700"
                             >
                                 <option value="">Seleccione una plantilla...</option>
                                 {plantillas.map((p) => (
@@ -374,7 +375,7 @@ export default function NuevaFicha() {
                                     Fecha de Consulta
                                 </label>
                                 <ShadcnDatePicker
-                                    className="border-slate-300 focus:border-sky-500"
+                                    className="border-slate-300 focus:border-indigo-500"
                                     label=""
                                     value={fechaConsulta}
                                     onChange={(fecha) => setFechaConsulta(fecha)}
@@ -399,8 +400,8 @@ export default function NuevaFicha() {
                     {plantillaCompleta && plantillaCompleta.categorias.map(categoria => (
                         <div key={categoria.id_categoria}>
                             {/* Header de categor&iacute;a */}
-                            <div className="border-t border-b border-slate-100 bg-slate-50/50 px-5 py-3">
-                                <h2 className="text-sm font-semibold text-slate-700 tracking-wide uppercase">
+                            <div className="border-t border-b border-slate-200 bg-slate-100/80 px-5 py-3">
+                                <h2 className="text-sm font-semibold text-slate-800 tracking-wide uppercase">
                                     {categoria.nombre}
                                 </h2>
                             </div>
@@ -413,7 +414,7 @@ export default function NuevaFicha() {
                                             {campo.requerido === 1 && <span className="text-red-500 ml-1">*</span>}
                                         </label>
                                         <Textarea
-                                            className="min-h-[100px] resize-y border-slate-300 focus:border-sky-500 focus:ring-sky-500/20"
+                                            className="min-h-[100px] resize-y border-slate-300 focus:border-indigo-500 focus:ring-indigo-500/20"
                                             value={datosDinamicos[campo.id_campo] || ""}
                                             onChange={(e) => setDatosDinamicos(prev => ({
                                                 ...prev,
@@ -429,13 +430,13 @@ export default function NuevaFicha() {
 
                     {/* Mensaje cuando no hay plantilla seleccionada */}
                     {!plantillaCompleta && (
-                        <div className="p-8 text-center border-t border-slate-100">
-                            <div className="mx-auto mb-3 flex items-center justify-center h-12 w-12 rounded-xl bg-slate-100">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <div className="p-8 text-center border-t border-slate-200">
+                            <div className="mx-auto mb-3 flex items-center justify-center h-12 w-12 rounded-xl bg-indigo-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                 </svg>
                             </div>
-                            <p className="text-sm text-slate-500 font-medium">Seleccione una plantilla para ver los campos del formulario</p>
+                            <p className="text-sm text-slate-600 font-medium">Seleccione una plantilla para ver los campos del formulario</p>
                         </div>
                     )}
                 </div>
@@ -443,14 +444,14 @@ export default function NuevaFicha() {
                 {/* Bot&oacute;n de acci&oacute;n */}
                 <div className="mt-8 flex flex-col-reverse sm:flex-row justify-end gap-3">
                     <Link href={"/dashboard/FichaClinica"}>
-                        <button className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:border-slate-300 transition-all duration-150 shadow-sm">
+                        <button className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-xl hover:bg-slate-100 hover:border-slate-400 transition-all duration-150 shadow-sm">
                             Cancelar
                         </button>
                     </Link>
 
                     <button
                         onClick={() => insertarFicha()}
-                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-sky-600 to-cyan-500 rounded-lg hover:from-sky-700 hover:to-cyan-600 transition-all duration-150 shadow-md hover:shadow-lg"
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-indigo-700 to-teal-600 rounded-xl hover:from-indigo-800 hover:to-teal-700 transition-all duration-150 shadow-md hover:shadow-lg"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>

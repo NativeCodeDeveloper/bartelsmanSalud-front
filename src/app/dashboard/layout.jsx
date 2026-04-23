@@ -1,8 +1,11 @@
 // app/dashboard/layout.jsx
 import { ClerkProvider } from "@clerk/nextjs";
 import Link from "next/link";
+import { Michroma } from "next/font/google";
 import MobileNav from "./MobileNav";
 import SignOutBtn from "./SignOutBtn";
+
+const michroma = Michroma({ weight: "400", subsets: ["latin"], display: "swap" });
 
 export const metadata = {
     title: "Dashboard",
@@ -18,20 +21,19 @@ export default function DashboardLayout({ children }) {
                 <aside className="hidden md:flex h-screen w-[230px] shrink-0 flex-col bg-gray-900 text-white border-r border-white/[0.04] selection:bg-violet-500/30 font-[family-name:var(--font-inter)]">
 
                     {/* ── Brand ── */}
-                    <div className="relative px-5 py-4 shrink-0">
-                        <div className="relative flex items-center gap-2.5">
-                            <div className="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-violet-500 to-fuchsia-600 shadow-lg shadow-violet-500/20">
-                                <span className="text-[10px] font-black text-white leading-none tracking-tight">AC</span>
-                            </div>
-                            <div className="leading-none">
-                                <div className="text-[13px] font-medium tracking-[-0.01em] text-white/90">AgendaClinica</div>
-                                <div className="mt-[3px] text-[10px] font-light text-white/30">Panel admin</div>
-                            </div>
+                    <div className="relative px-3 pb-2 pt-3 shrink-0">
+                        <img
+                            src="/logo.png"
+                            alt="AgendaClinica"
+                            className="h-24 w-full object-contain object-center"
+                        />
+                        <div className={`${michroma.className} -mt-2 text-center`}>
+                            <p className="text-[12px] leading-tight text-white/90">AgendaClinica</p>
                         </div>
                     </div>
 
                     {/* ── Navigation ── */}
-                    <nav className="flex-1 px-3 py-1 overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                    <nav className="flex-1 px-3 pt-1 pb-1 overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                         <div className="space-y-4">
 
                             {/* — Principal — */}
@@ -162,10 +164,10 @@ export default function DashboardLayout({ children }) {
 
 
 
-                            {/* — Administración Web — */}
+                            {/* — Gestion de Contenido — */}
                             <details className="group">
                                 <summary className="flex items-center justify-between px-2 py-1 text-[11px] font-medium text-white/30 hover:text-white/45 transition-colors duration-200 cursor-pointer list-none select-none tracking-normal">
-                                    <span>Administracion web</span>
+                                    <span>Gestion de Contenido</span>
                                     <svg className="h-3 w-3 text-white/15 transition-transform duration-200 group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor">
                                         <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clipRule="evenodd" />
                                     </svg>

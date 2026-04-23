@@ -187,15 +187,15 @@ useEffect(() => {
 
 
 return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-sky-50/30">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.14),_transparent_32%),radial-gradient(circle_at_right,_rgba(6,182,212,0.12),_transparent_28%),linear-gradient(180deg,_#f1f5f9_0%,_#f8fafc_55%,_#f1f5f9_100%)]">
         <ToasterClient />
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
 
             {/* Header */}
             <div className="mb-8">
-                <p className="text-xs font-semibold uppercase tracking-widest text-sky-600 mb-1">Administracion</p>
-                <h1 className="text-2xl md:text-3xl font-bold text-slate-800 tracking-tight">
+                <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-indigo-700 mb-1">Administracion</p>
+                <h1 className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">
                     Gestion de Categorias
                 </h1>
                 <p className="text-sm text-slate-500 mt-1">Crea, edita y administra las categorias de tus productos.</p>
@@ -204,9 +204,9 @@ return (
             <div className="space-y-6">
 
                 {/* Formulario de ingreso */}
-                <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-                    <div className="border-b border-slate-100 bg-slate-50/50 px-5 py-3 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <div className="bg-white border border-slate-300 rounded-[24px] shadow-[0_18px_50px_rgba(15,23,42,0.12)] overflow-hidden">
+                    <div className="border-b border-slate-100 bg-[linear-gradient(180deg,rgba(248,250,252,0.98)_0%,rgba(241,245,249,0.8)_100%)] px-5 py-4 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-indigo-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4"/>
                         </svg>
                         <h2 className="text-sm font-semibold text-slate-700 tracking-wide uppercase">
@@ -223,7 +223,7 @@ return (
                                     value={descripcionCategoria}
                                     onChange={(event) => setdescripcionCategoria(event.target.value)}
                                     placeholder="Ej: Tratamientos faciales, Insumos, Equipamiento..."
-                                    className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 shadow-sm outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 placeholder:text-slate-400 transition disabled:opacity-60 disabled:cursor-not-allowed"
+                                    className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 placeholder:text-slate-400 transition disabled:opacity-60 disabled:cursor-not-allowed"
                                     disabled={isLoading}
                                 />
                             </div>
@@ -233,7 +233,7 @@ return (
                                     <button
                                         type="submit"
                                         disabled={isLoading}
-                                        className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-sky-600 to-cyan-500 rounded-lg hover:from-sky-700 hover:to-cyan-600 transition-all duration-150 shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
+                                        className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-indigo-700 to-teal-600 rounded-xl hover:from-indigo-800 hover:to-teal-700 transition-all duration-150 shadow-md shadow-indigo-500/20 hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4"/>
@@ -248,7 +248,7 @@ return (
                                             onClick={() => actualizarCategoria(categoriaSelecionado.id_categoriaProducto, descripcionCategoria)}
                                             type="button"
                                             disabled={isLoading}
-                                            className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-emerald-600 to-teal-500 rounded-lg hover:from-emerald-700 hover:to-teal-600 transition-all duration-150 shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
+                                            className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-indigo-700 to-teal-600 rounded-xl hover:from-indigo-800 hover:to-teal-700 transition-all duration-150 shadow-md shadow-indigo-500/20 hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
                                         >
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
@@ -261,7 +261,7 @@ return (
                                                 setdescripcionCategoria("");
                                             }}
                                             type="button"
-                                            className="inline-flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-all duration-150"
+                                            className="inline-flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium text-slate-700 bg-slate-50 border border-slate-200 rounded-xl hover:bg-slate-100 transition-all duration-150"
                                         >
                                             Cancelar
                                         </button>
@@ -273,15 +273,15 @@ return (
                 </div>
 
                 {/* Lista de categorias */}
-                <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-                    <div className="border-b border-slate-100 bg-slate-50/50 px-5 py-3 flex items-center justify-between">
+                <div className="bg-white border border-slate-300 rounded-[24px] shadow-[0_18px_50px_rgba(15,23,42,0.12)] overflow-hidden">
+                    <div className="border-b border-slate-100 bg-[linear-gradient(180deg,rgba(248,250,252,0.98)_0%,rgba(241,245,249,0.8)_100%)] px-5 py-4 flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-indigo-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z"/>
                             </svg>
                             <h2 className="text-sm font-semibold text-slate-700 tracking-wide uppercase">Lista de Categorias</h2>
                         </div>
-                        <span className="inline-flex items-center justify-center h-6 min-w-[24px] px-2 rounded-full text-xs font-bold bg-sky-100 text-sky-700">
+                        <span className="inline-flex items-center justify-center h-6 min-w-[24px] px-2 rounded-full text-xs font-bold bg-indigo-100 text-indigo-700">
                             {categorias.length}
                         </span>
                     </div>
@@ -317,7 +317,7 @@ return (
                                         className={
                                             "flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-lg border px-4 py-3.5 transition-all duration-150 " +
                                             (categoriaSelecionado?.id_categoriaProducto === categoria.id_categoriaProducto
-                                                ? "border-sky-300 bg-sky-50/50 shadow-sm ring-1 ring-sky-200"
+                                                ? "border-indigo-300 bg-indigo-50/70 shadow-sm ring-1 ring-indigo-200"
                                                 : "border-slate-100 bg-white hover:border-slate-200 hover:shadow-sm")
                                         }
                                         key={categoria.id_categoriaProducto}
@@ -325,7 +325,7 @@ return (
                                         <h3 className="text-sm font-medium text-slate-800 truncate">{categoria.descripcionCategoria}</h3>
                                         <div className="flex gap-2 flex-shrink-0">
                                             <button
-                                                className="inline-flex items-center gap-1.5 rounded-lg border border-sky-200 bg-sky-50 px-3 py-1.5 text-xs font-semibold text-sky-700 hover:bg-sky-100 focus:outline-none focus:ring-2 focus:ring-sky-200 active:scale-[0.98] transition disabled:opacity-60 disabled:cursor-not-allowed"
+                                                className="inline-flex items-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-200 active:scale-[0.98] transition disabled:opacity-60 disabled:cursor-not-allowed"
                                                 onClick={() => seleccionarCategoriaEspecifica(categoria.id_categoriaProducto)}
                                                 disabled={isLoading}
                                             >
@@ -347,7 +347,7 @@ return (
                                             </button>
 
                                             <button
-                                                className="inline-flex items-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-200 active:scale-[0.98] transition disabled:opacity-60 disabled:cursor-not-allowed"
+                                                className="inline-flex items-center gap-1.5 rounded-lg border border-teal-200 bg-teal-50 px-3 py-1.5 text-xs font-semibold text-teal-700 hover:bg-teal-100 focus:outline-none focus:ring-2 focus:ring-teal-200 active:scale-[0.98] transition disabled:opacity-60 disabled:cursor-not-allowed"
                                                 onClick={() => navegarSubcategoria(categoria.id_categoriaProducto)}
                                                 disabled={isLoading}
                                             >

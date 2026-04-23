@@ -200,15 +200,16 @@ export default function Profesionales() {
 
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.14),_transparent_32%),radial-gradient(circle_at_right,_rgba(6,182,212,0.12),_transparent_28%),linear-gradient(180deg,_#f1f5f9_0%,_#f8fafc_55%,_#f1f5f9_100%)]">
             <ToasterClient />
 
             <div className="mx-auto w-full max-w-6xl px-6 py-10">
 
                 {/* Header */}
-                <div className="mb-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div className="mb-8 rounded-[28px] border border-slate-300/80 bg-white/90 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.12)] backdrop-blur-sm">
                     <div className="flex flex-col gap-1">
-                        <h1 className="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">
+                        <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-indigo-700">Administracion</p>
+                        <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
                             Profesionales
                         </h1>
                         <p className="text-sm text-slate-500">
@@ -218,13 +219,13 @@ export default function Profesionales() {
                 </div>
 
                 {/* Form */}
-                <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div className="rounded-[24px] border border-slate-300 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.12)]">
                     <div className="flex flex-col gap-6">
 
                         <div className="space-y-1">
                             <h2 className="text-base font-semibold text-slate-900">
                                 Ingreso y edición
-                                <span className="ml-2 text-blue-700">(Profesional)</span>
+                                <span className="ml-2 text-indigo-700">(Profesional)</span>
                             </h2>
                             <p className="text-sm text-slate-500">
                                 Complete los campos para registrar o actualizar un profesional.
@@ -239,7 +240,7 @@ export default function Profesionales() {
                                     value={nombreProfesional}
                                     onChange={(e) => setNombreProfesional(e.target.value)}
                                     placeholder="Ej: Dr. Juan Pérez"
-                                    className="w-full"
+                                    className="w-full rounded-xl border-slate-200 focus:border-indigo-400 focus:ring-indigo-100"
                                 />
 
                                 <p className="text-xs text-slate-400">Solo se permiten letras y espacios.</p>
@@ -251,7 +252,7 @@ export default function Profesionales() {
                                     value={descripcionProfesional}
                                     onChange={(e) => setDescripcionProfesional(e.target.value)}
                                     placeholder="Ej: Especialista en ortodoncia con 10 años de experiencia"
-                                    className="w-full"
+                                    className="w-full rounded-xl border-slate-200 focus:border-indigo-400 focus:ring-indigo-100"
                                 />
                             </div>
                         </div>
@@ -259,13 +260,14 @@ export default function Profesionales() {
                         <div className="flex flex-col gap-3 border-t border-slate-100 pt-6 sm:flex-row">
                             <ButtonDinamic
                                 onClick={() => insertarProfesional(nombreProfesional,descripcionProfesional)}
+                                className="rounded-xl bg-gradient-to-r from-indigo-700 to-teal-600 shadow-md shadow-indigo-500/20 hover:from-indigo-800 hover:to-teal-700"
                             >
                                 Guardar Profesional
                             </ButtonDinamic>
 
                             <ButtonDinamic
                                 onClick={() => actualizarProfesional(nombreProfesional,descripcionProfesional,id_profesional)}
-                                className="bg-blue-700 hover:bg-blue-600"
+                                className="rounded-xl bg-gradient-to-r from-indigo-700 to-teal-600 shadow-md shadow-indigo-500/20 hover:from-indigo-800 hover:to-teal-700"
                             >
                                 Actualizar Profesional
                             </ButtonDinamic>
@@ -273,7 +275,7 @@ export default function Profesionales() {
 
                             <ButtonDinamic
                                 onClick={() => eliminarProfesional(id_profesional)}
-                                className="bg-red-700 hover:bg-red-600"
+                                className="rounded-xl bg-rose-700 hover:bg-rose-600"
                             >
                                 Eliminar Profesional
                             </ButtonDinamic>
@@ -282,7 +284,7 @@ export default function Profesionales() {
                 </div>
 
                 {/* Selector */}
-                <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div className="mt-8 rounded-[24px] border border-slate-300 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.12)]">
                     <div className="space-y-1 mb-5">
                         <h2 className="text-base font-semibold text-slate-900">Seleccionar profesional</h2>
                         <p className="text-sm text-slate-500">Seleccione un profesional para editar o eliminar.</p>
@@ -292,6 +294,7 @@ export default function Profesionales() {
                             <SelectDinamic
                                 value={id_profesional}
                                 onChange={(e) => setIdProfesional(e.target.value)}
+                                className="rounded-xl border-slate-200 focus:border-indigo-400 focus:ring-indigo-100"
                                 options={listaProfesionales.map(profesional => ({
                                     value: profesional.id_profesional,
                                     label: profesional.nombreProfesional
@@ -301,7 +304,8 @@ export default function Profesionales() {
                             />
                         </div>
                         <ButtonDinamic
-                            onClick={() => seleccionarProfesional(id_profesional)}>
+                            onClick={() => seleccionarProfesional(id_profesional)}
+                            className="rounded-xl border border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100">
                             Seleccionar
                         </ButtonDinamic>
                     </div>

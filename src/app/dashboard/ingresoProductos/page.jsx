@@ -413,17 +413,17 @@ useEffect(() => {
 
             {/* ── HEADER ── */}
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 mt-14">
-                <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_16px_40px_rgba(15,23,42,0.08)]">
+                <div className="relative overflow-hidden rounded-[28px] border border-slate-300 bg-white p-6 shadow-[0_16px_40px_rgba(15,23,42,0.12)]">
                     {/* Gradient blob decorativo */}
-                    <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br from-cyan-400/20 to-indigo-400/20 blur-3xl" />
-                    <div className="pointer-events-none absolute -left-10 -bottom-10 h-36 w-36 rounded-full bg-gradient-to-tr from-indigo-400/10 to-cyan-400/10 blur-2xl" />
+                    <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br from-teal-400/20 to-indigo-400/20 blur-3xl" />
+                    <div className="pointer-events-none absolute -left-10 -bottom-10 h-36 w-36 rounded-full bg-gradient-to-tr from-indigo-400/10 to-teal-400/10 blur-2xl" />
 
                     <div className="relative flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                         <div>
-                            <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-cyan-50 to-indigo-50 px-3 py-1 text-[11px] font-semibold text-indigo-700 ring-1 ring-indigo-100">
+                            <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-teal-50 to-indigo-50 px-3 py-1 text-[11px] font-semibold text-indigo-700 ring-1 ring-indigo-100">
                                 <span className="relative flex h-1.5 w-1.5">
-                                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75" />
-                                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-cyan-500" />
+                                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-teal-400 opacity-75" />
+                                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-teal-500" />
                                 </span>
                                 Panel de administracion
                             </span>
@@ -437,7 +437,7 @@ useEffect(() => {
 
                         {/* KPI rapido + Info */}
                         <div className="flex items-center gap-3">
-                            <div className="rounded-xl border border-slate-200 bg-slate-50/80 px-4 py-2.5 text-center">
+                            <div className="rounded-xl border border-slate-300 bg-slate-50/80 px-4 py-2.5 text-center">
                                 <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Total</p>
                                 <p className="text-lg font-bold text-slate-900">{productos.length}</p>
                             </div>
@@ -446,17 +446,17 @@ useEffect(() => {
                     </div>
 
                     {/* Linea gradiente */}
-                    <div className="mt-5 h-px w-full bg-gradient-to-r from-cyan-300 via-indigo-300 to-cyan-300 opacity-60" />
+                    <div className="mt-5 h-px w-full bg-gradient-to-r from-teal-300 via-indigo-300 to-teal-300 opacity-60" />
                 </div>
             </div>
 
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
                 {/* ── FORMULARIO ── */}
-                <div className="rounded-2xl border border-slate-200 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
+                <div className="rounded-[24px] border border-slate-300 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.12)]">
                     {/* Cabecera del card */}
-                    <div className="border-b border-slate-200 bg-slate-50/50 px-5 py-3 flex items-center gap-2.5">
-                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-500 to-indigo-500 shadow-md shadow-cyan-500/20">
+                    <div className="border-b border-slate-200 bg-slate-100/80 px-5 py-3 flex items-center gap-2.5">
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-700 to-teal-600 shadow-md shadow-indigo-500/20">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5 text-white">
                                 <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
                             </svg>
@@ -468,7 +468,7 @@ useEffect(() => {
                             <p className="text-[11px] text-slate-400">Complete los campos requeridos</p>
                         </div>
                         {id_producto && (
-                            <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-sky-50 px-2.5 py-0.5 text-[11px] font-semibold text-sky-700 ring-1 ring-sky-200">
+                            <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-indigo-50 px-2.5 py-0.5 text-[11px] font-semibold text-indigo-700 ring-1 ring-indigo-200">
                                 Editando ID: {id_producto}
                             </span>
                         )}
@@ -485,7 +485,7 @@ useEffect(() => {
                                 <select
                                     value={categoriaProducto}
                                     onChange={(e) => setcategoriaProducto(e.target.value)}
-                                    className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-700 shadow-sm outline-none transition duration-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 hover:border-slate-300 cursor-pointer placeholder:text-slate-400"
+                                    className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-700 shadow-sm outline-none transition duration-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 hover:border-slate-300 cursor-pointer placeholder:text-slate-400"
                                 >
                                     <option value="" disabled>Seleccione una categoria</option>
                                     {listadoCategorias.map((categoria) => (
@@ -504,7 +504,7 @@ useEffect(() => {
                                 <select
                                     value={subcategorias}
                                     onChange={(e) => setsubcategorias(e.target.value)}
-                                    className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-700 shadow-sm outline-none transition duration-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 hover:border-slate-300 cursor-pointer placeholder:text-slate-400"
+                                    className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-700 shadow-sm outline-none transition duration-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 hover:border-slate-300 cursor-pointer placeholder:text-slate-400"
                                 >
                                     <option value="" disabled>Seleccione</option>
                                     {listaSubcategorias.map((subcategoria) => (
@@ -523,7 +523,7 @@ useEffect(() => {
                                 <select
                                     value={subsubcategorias}
                                     onChange={(e) => setsubsubcategorias(e.target.value)}
-                                    className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-700 shadow-sm outline-none transition duration-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 hover:border-slate-300 cursor-pointer placeholder:text-slate-400"
+                                    className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-700 shadow-sm outline-none transition duration-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 hover:border-slate-300 cursor-pointer placeholder:text-slate-400"
                                 >
                                     <option value="" disabled>Seleccione</option>
                                     {listaSubSubCategorias.map((subsubcategoria) => (
@@ -546,7 +546,7 @@ useEffect(() => {
                                         value={valorProducto}
                                         onChange={(e) => setvalorProducto(e.target.value)}
                                         placeholder="0"
-                                        className="w-full rounded-lg border border-slate-200 bg-white pl-8 pr-3.5 py-2.5 text-sm text-slate-700 shadow-sm outline-none transition duration-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 hover:border-slate-300 placeholder:text-slate-400"
+                                        className="w-full rounded-lg border border-slate-200 bg-white pl-8 pr-3.5 py-2.5 text-sm text-slate-700 shadow-sm outline-none transition duration-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 hover:border-slate-300 placeholder:text-slate-400"
                                     />
                                 </div>
                             </div>
@@ -561,7 +561,7 @@ useEffect(() => {
                                     value={tituloProducto}
                                     onChange={(e) => settituloProducto(e.target.value)}
                                     placeholder="Ej: Limpieza facial profunda"
-                                    className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-700 shadow-sm outline-none transition duration-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 hover:border-slate-300 placeholder:text-slate-400"
+                                    className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-700 shadow-sm outline-none transition duration-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 hover:border-slate-300 placeholder:text-slate-400"
                                 />
                             </div>
 
@@ -575,7 +575,7 @@ useEffect(() => {
                                     onChange={(e) => setdescripcionProducto(e.target.value)}
                                     rows={3}
                                     placeholder="Describa brevemente el servicio o producto..."
-                                    className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-700 shadow-sm outline-none transition duration-200 resize-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 hover:border-slate-300 placeholder:text-slate-400"
+                                    className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-700 shadow-sm outline-none transition duration-200 resize-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 hover:border-slate-300 placeholder:text-slate-400"
                                 />
                             </div>
                         </div>
@@ -584,7 +584,7 @@ useEffect(() => {
                         <div className="mt-6 flex flex-wrap items-center gap-2.5">
                             <button
                                 onClick={() => insertarProducto(tituloProducto, descripcionProducto, valorProducto, categoriaProducto, subcategorias, subsubcategorias)}
-                                className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-sky-600 to-cyan-500 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-cyan-500/20 transition duration-200 hover:from-sky-700 hover:to-cyan-600 hover:shadow-lg hover:shadow-cyan-500/30 active:scale-[0.98] disabled:opacity-60"
+                                className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-indigo-700 to-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition duration-200 hover:from-indigo-800 hover:to-teal-700 hover:shadow-lg hover:shadow-indigo-500/30 active:scale-[0.98] disabled:opacity-60"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
                                     <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
@@ -595,7 +595,7 @@ useEffect(() => {
                             {id_producto && (
                                 <button
                                     onClick={() => actualizarProducto(tituloProducto, descripcionProducto, valorProducto, categoriaProducto, subcategorias, subsubcategorias, id_producto)}
-                                    className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-indigo-500 to-cyan-500 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition duration-200 hover:from-indigo-600 hover:to-cyan-600 hover:shadow-lg hover:shadow-indigo-500/30 active:scale-[0.98]"
+                                    className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-indigo-700 to-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition duration-200 hover:from-indigo-800 hover:to-teal-700 hover:shadow-lg hover:shadow-indigo-500/30 active:scale-[0.98]"
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
                                         <path d="m5.433 13.917 1.262-3.155A4 4 0 0 1 7.58 9.42l6.92-6.918a2.121 2.121 0 0 1 3 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 0 1-.65-.65Z" />
@@ -607,7 +607,7 @@ useEffect(() => {
 
                             <button
                                 onClick={() => limpiarFormulario()}
-                                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-600 shadow-sm transition duration-200 hover:bg-slate-50 hover:border-slate-300 active:scale-[0.98]"
+                                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition duration-200 hover:bg-slate-200 hover:border-slate-400 active:scale-[0.98]"
                             >
                                 Limpiar
                             </button>
@@ -620,17 +620,17 @@ useEffect(() => {
                 <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
 
                     {/* Filtro por categoria */}
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <div className="rounded-[24px] border border-slate-300 bg-white p-5 shadow-[0_18px_50px_rgba(15,23,42,0.12)]">
                         <div className="flex items-center gap-2 mb-3">
                             <div className="flex h-6 w-6 items-center justify-center rounded-md bg-indigo-50">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5 text-indigo-500">
                                     <path fillRule="evenodd" d="M2.628 1.601C5.028 1.206 7.49 1 10 1s4.973.206 7.372.601a.75.75 0 0 1 .628.74v2.288a2.25 2.25 0 0 1-.659 1.59l-4.682 4.683a2.25 2.25 0 0 0-.659 1.59v3.037c0 .684-.31 1.33-.844 1.757l-1.937 1.55A.75.75 0 0 1 8 18.25v-5.757a2.25 2.25 0 0 0-.659-1.591L2.659 6.22A2.25 2.25 0 0 1 2 4.629V2.34a.75.75 0 0 1 .628-.74Z" clipRule="evenodd" />
                                 </svg>
                             </div>
-                            <h3 className="text-sm font-semibold text-slate-700">Filtrar por categoria</h3>
+                            <h3 className="text-sm font-semibold text-slate-800">Filtrar por categoria</h3>
                         </div>
                         <select
-                            className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm shadow-sm outline-none transition duration-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 hover:border-slate-300 cursor-pointer"
+                            className="w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm shadow-sm outline-none transition duration-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 hover:border-slate-300 cursor-pointer"
                             value={categoriaProductoSeleccion}
                             onChange={(e) => {
                                 const value = e.target.value;
@@ -648,26 +648,26 @@ useEffect(() => {
                     </div>
 
                     {/* Busqueda por similitud */}
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <div className="rounded-[24px] border border-slate-300 bg-white p-5 shadow-[0_18px_50px_rgba(15,23,42,0.12)]">
                         <div className="flex items-center gap-2 mb-3">
-                            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-cyan-50">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5 text-cyan-500">
+                            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-teal-50">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5 text-teal-500">
                                     <path fillRule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clipRule="evenodd" />
                                 </svg>
                             </div>
-                            <h3 className="text-sm font-semibold text-slate-700">Buscar por nombre</h3>
+                            <h3 className="text-sm font-semibold text-slate-800">Buscar por nombre</h3>
                         </div>
                         <div className="flex gap-2">
                             <input
                                 onChange={(e) => settituloSimilar(e.target.value)}
                                 type="text"
                                 placeholder="Ej: limpieza, masaje..."
-                                className="flex-1 rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm shadow-sm outline-none transition duration-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 hover:border-slate-300 placeholder:text-slate-400"
+                                className="flex-1 rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm shadow-sm outline-none transition duration-200 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-500/20 hover:border-slate-300 placeholder:text-slate-400"
                             />
                             <button
                                 onClick={() => buscarSimilar(tituloSimilar)}
                                 type="button"
-                                className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-cyan-500 to-indigo-500 px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-cyan-500/20 transition duration-200 hover:from-cyan-600 hover:to-indigo-600 hover:shadow-lg active:scale-[0.98]"
+                                className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-indigo-700 to-teal-600 px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition duration-200 hover:from-indigo-800 hover:to-teal-700 hover:shadow-lg active:scale-[0.98]"
                             >
                                 Buscar
                             </button>
@@ -677,11 +677,11 @@ useEffect(() => {
 
 
                 {/* ── TABLA ── */}
-                <div className="mt-8 rounded-2xl border border-slate-200 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.08)] overflow-hidden">
+                <div className="mt-8 rounded-[24px] border border-slate-300 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.12)] overflow-hidden">
                     {/* Cabecera de tabla */}
-                    <div className="border-b border-slate-200 bg-slate-50/50 px-5 py-3 flex items-center justify-between">
+                    <div className="border-b border-slate-200 bg-slate-100/80 px-5 py-3 flex items-center justify-between">
                         <div className="flex items-center gap-2.5">
-                            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-cyan-500 shadow-md shadow-indigo-500/20">
+                            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-700 to-teal-600 shadow-md shadow-indigo-500/20">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5 text-white">
                                     <path fillRule="evenodd" d="M.99 5.24A2.25 2.25 0 0 1 3.25 3h13.5A2.25 2.25 0 0 1 19 5.25l.01 9.5A2.25 2.25 0 0 1 16.76 17H3.26A2.25 2.25 0 0 1 1 14.75l-.01-9.5Zm8.26 9.52v-.625a.75.75 0 0 0-.75-.75H3.25a.75.75 0 0 0-.75.75v.615c0 .414.336.75.75.75h5.373a.75.75 0 0 0 .627-.74Zm1.5 0a.75.75 0 0 0 .627.74h5.373a.75.75 0 0 0 .75-.75v-.615a.75.75 0 0 0-.75-.75H11.5a.75.75 0 0 0-.75.75v.625Zm6.75-5.995v-.625a.75.75 0 0 0-.75-.75H11.5a.75.75 0 0 0-.75.75v.625c0 .414.336.75.75.75h5.25a.75.75 0 0 0 .75-.75Zm-8.5 0v-.625a.75.75 0 0 0-.75-.75H3.25a.75.75 0 0 0-.75.75v.625c0 .414.336.75.75.75H8.5a.75.75 0 0 0 .75-.75Z" clipRule="evenodd" />
                                 </svg>
@@ -691,14 +691,14 @@ useEffect(() => {
                         <div className="flex items-center gap-2">
                             <button
                                 onClick={() => { cargarProductos(); toast.success("Listado actualizado"); }}
-                                className="inline-flex items-center gap-1.5 rounded-lg border border-sky-200 bg-sky-50 px-3 py-1.5 text-xs font-semibold text-sky-700 transition hover:bg-sky-100 active:scale-[0.97]"
+                                className="inline-flex items-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700 transition hover:bg-indigo-100 active:scale-[0.97]"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5">
                                     <path fillRule="evenodd" d="M15.312 11.424a5.5 5.5 0 0 1-9.201 2.466l-.312-.311h2.451a.75.75 0 0 0 0-1.5H4.5a.75.75 0 0 0-.75.75v3.75a.75.75 0 0 0 1.5 0v-2.033l.364.363a7 7 0 0 0 11.712-3.138.75.75 0 0 0-1.449-.39Zm-10.624-2.85a5.5 5.5 0 0 1 9.201-2.465l.312.31H11.75a.75.75 0 0 0 0 1.5h3.75a.75.75 0 0 0 .75-.75V3.42a.75.75 0 0 0-1.5 0v2.033l-.364-.364A7 7 0 0 0 3.239 8.227a.75.75 0 0 0 1.449.39Z" clipRule="evenodd" />
                                 </svg>
                                 Recargar todo
                             </button>
-                            <span className="inline-flex h-6 min-w-[24px] items-center justify-center rounded-full bg-sky-100 px-2 text-[11px] font-bold text-sky-700">
+                            <span className="inline-flex h-6 min-w-[24px] items-center justify-center rounded-full bg-indigo-100 px-2 text-[11px] font-bold text-indigo-700">
                                 {productos.length}
                             </span>
                         </div>
@@ -726,7 +726,7 @@ useEffect(() => {
                                 {productos.map((producto) => (
                                     <TableRow
                                         key={producto.id_producto}
-                                        className={`transition-colors duration-150 hover:bg-sky-50/40 cursor-pointer ${id_producto === producto.id_producto ? "bg-sky-50/60 border-l-2 border-l-sky-400" : ""}`}
+                                        className={`transition-colors duration-150 hover:bg-indigo-50/50 cursor-pointer ${id_producto === producto.id_producto ? "bg-indigo-50/60 border-l-2 border-l-indigo-400" : ""}`}
                                     >
                                         <TableCell className="py-3 px-4 font-medium text-slate-800 max-w-[200px] truncate">
                                             {producto.tituloProducto}
@@ -744,7 +744,7 @@ useEffect(() => {
                                             <div className="flex items-center justify-center gap-1.5">
                                                 <button
                                                     onClick={() => cargarProductoEspecifico(producto.id_producto)}
-                                                    className="inline-flex items-center justify-center rounded-md border border-sky-200 bg-sky-50 px-2.5 py-1.5 text-xs font-semibold text-sky-700 transition hover:bg-sky-100 active:scale-[0.97]"
+                                                    className="inline-flex items-center justify-center rounded-md border border-indigo-200 bg-indigo-50 px-2.5 py-1.5 text-xs font-semibold text-indigo-700 transition hover:bg-indigo-100 active:scale-[0.97]"
                                                 >
                                                     Editar
                                                 </button>

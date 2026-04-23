@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Michroma } from "next/font/google";
 import { Menu, X } from "lucide-react";
+
+const michroma = Michroma({ weight: "400", subsets: ["latin"], display: "swap" });
 
 const links = [
   { label: "Inicio", href: "/dashboard" },
@@ -19,7 +22,7 @@ const sections = [
   { title: "Principal", items: [links[0]] },
   { title: "Agenda Clínica", items: [links[1], links[2], links[3]] },
   { title: "Registros Clínicos", items: [links[4], links[5]] },
-  { title: "Administración Web", items: [links[6], links[7]] },
+  { title: "Gestion de Contenido", items: [links[6], links[7]] },
 ];
 
 export default function MobileNav() {
@@ -31,10 +34,14 @@ export default function MobileNav() {
       <div className="border-b border-slate-200/80 bg-white/80 backdrop-blur-xl">
         <div className="px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-indigo-400 to-blue-900">
-              <span className="text-[10px] font-bold text-white leading-none">AC</span>
+            <img
+              src="/logo.png"
+              alt="AgendaClinica"
+              className="h-10 w-30 object-contain object-left"
+            />
+            <div className={`${michroma.className} -ml-1 leading-none`}>
+              <p className="text-[10px] text-slate-900">AgendaClinica</p>
             </div>
-            <span className="text-sm font-semibold text-slate-900">AgendaClinica</span>
           </div>
           <button
             onClick={() => setOpen(!open)}
@@ -56,7 +63,17 @@ export default function MobileNav() {
           />
           {/* Menu panel */}
           <div className="absolute left-0 right-0 z-50 mx-3 mt-1 max-h-[70vh] overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-xl">
-            <nav className="p-3 space-y-3">
+            <div className="border-b border-slate-100 px-4 py-3">
+              <img
+                src="/logo.png"
+                alt="AgendaClinica"
+                className="h-28 w-full object-contain object-center"
+              />
+              <div className={`${michroma.className} -mt-4 pb-3 text-center`}>
+                <p className="text-[13px] text-slate-900">AgendaClinica</p>
+              </div>
+            </div>
+            <nav className="px-3 pb-3 pt-3 space-y-3">
               {sections.map((section) => (
                 <div key={section.title}>
                   <div className="px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-slate-400">

@@ -178,11 +178,11 @@ export default function FichasClinicasPlantillas() {
     // RENDER
     // =============================================
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-sky-50/30 relative overflow-hidden">
+        <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.14),_transparent_32%),radial-gradient(circle_at_right,_rgba(6,182,212,0.12),_transparent_28%),linear-gradient(180deg,_#f1f5f9_0%,_#f8fafc_55%,_#f1f5f9_100%)] relative overflow-hidden">
 <ToasterClient/>
             {/* Decorative blobs */}
-            <div className="pointer-events-none absolute -top-32 -right-32 h-96 w-96 rounded-full bg-sky-100/40 blur-3xl" />
-            <div className="pointer-events-none absolute top-1/2 -left-48 h-80 w-80 rounded-full bg-cyan-100/30 blur-3xl" />
+            <div className="pointer-events-none absolute -top-32 -right-32 h-96 w-96 rounded-full bg-indigo-100/40 blur-3xl" />
+            <div className="pointer-events-none absolute top-1/2 -left-48 h-80 w-80 rounded-full bg-teal-100/30 blur-3xl" />
 
             <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
 
@@ -190,11 +190,11 @@ export default function FichasClinicasPlantillas() {
                 <div className="mb-8 sm:mb-10">
                     <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5">
                         <div>
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-50 border border-sky-100 mb-3">
-                                <span className="h-1.5 w-1.5 rounded-full bg-sky-500" />
-                                <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-sky-600">Configuraci&oacute;n</span>
+                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100 border border-indigo-200 mb-3">
+                                <span className="h-1.5 w-1.5 rounded-full bg-indigo-600" />
+                                <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-indigo-700">Configuraci&oacute;n</span>
                             </div>
-                            <h1 className="text-2xl md:text-3xl font-bold text-slate-800 tracking-tight">
+                            <h1 className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">
                                 Plantillas de Ficha Cl&iacute;nica
                             </h1>
                             <p className="text-sm text-slate-500 mt-1.5 max-w-lg leading-relaxed">
@@ -204,7 +204,7 @@ export default function FichasClinicasPlantillas() {
 
                         <button
                             onClick={abrirModalNuevaPlantilla}
-                            className="group inline-flex items-center gap-2.5 px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-sky-600 to-cyan-500 rounded-xl hover:from-sky-700 hover:to-cyan-600 active:scale-[0.98] transition-all duration-150 shadow-lg shadow-sky-500/25 hover:shadow-sky-500/40 self-start sm:self-auto"
+                            className="group inline-flex items-center gap-2.5 px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-indigo-700 to-teal-600 rounded-xl hover:from-indigo-800 hover:to-teal-700 active:scale-[0.98] transition-all duration-150 shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 self-start sm:self-auto"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 transition-transform duration-200 group-hover:rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4"/>
@@ -219,8 +219,8 @@ export default function FichasClinicasPlantillas() {
 
                     {/* Empty state */}
                     {plantillas.length === 0 && (
-                        <div className="bg-white/80 backdrop-blur-sm border border-slate-200/80 rounded-2xl shadow-[0_8px_30px_rgba(15,23,42,0.04)] p-10 sm:p-14 text-center">
-                            <div className="mx-auto mb-5 flex items-center justify-center h-16 w-16 rounded-2xl bg-slate-50 border border-slate-200">
+                        <div className="bg-white/80 backdrop-blur-sm border border-slate-300 rounded-2xl shadow-[0_8px_30px_rgba(15,23,42,0.04)] p-10 sm:p-14 text-center">
+                            <div className="mx-auto mb-5 flex items-center justify-center h-16 w-16 rounded-2xl bg-slate-50 border border-slate-300">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                 </svg>
@@ -233,13 +233,13 @@ export default function FichasClinicasPlantillas() {
                     {plantillas.map((plantilla) => (
                         <div
                             key={plantilla.id_plantilla}
-                            className="bg-white/80 backdrop-blur-sm border border-slate-200/80 rounded-2xl shadow-[0_4px_24px_rgba(15,23,42,0.04)] hover:shadow-[0_8px_30px_rgba(15,23,42,0.07)] transition-all duration-200 overflow-hidden"
+                            className="bg-white/80 backdrop-blur-sm border border-slate-300 rounded-2xl shadow-[0_4px_24px_rgba(15,23,42,0.04)] hover:shadow-[0_8px_30px_rgba(15,23,42,0.07)] transition-all duration-200 overflow-hidden"
                         >
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between px-4 sm:px-6 py-4 sm:py-5 gap-4">
 
                                 {/* Info de la plantilla */}
                                 <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
-                                    <div className="flex-shrink-0 flex items-center justify-center h-11 w-11 rounded-xl bg-gradient-to-br from-sky-500 to-cyan-400 shadow-sm shadow-sky-500/20">
+                                    <div className="flex-shrink-0 flex items-center justify-center h-11 w-11 rounded-xl bg-gradient-to-br from-indigo-600 to-teal-500 shadow-sm shadow-indigo-500/20">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                         </svg>
@@ -254,7 +254,7 @@ export default function FichasClinicasPlantillas() {
                                 <div className="flex items-center gap-2 sm:gap-2.5 flex-shrink-0 pl-14 sm:pl-0">
                                     <button
                                         onClick={() => irACategoriaPlatilla(plantilla.id_plantilla)}
-                                        className="inline-flex items-center justify-center gap-1.5 h-8 sm:h-9 px-3 sm:px-4 text-xs font-semibold text-white bg-gradient-to-r from-sky-600 to-cyan-500 rounded-lg hover:from-sky-700 hover:to-cyan-600 active:scale-[0.97] transition-all duration-150 shadow-sm shadow-sky-500/20"
+                                        className="inline-flex items-center justify-center gap-1.5 h-8 sm:h-9 px-3 sm:px-4 text-xs font-semibold text-white bg-gradient-to-r from-indigo-700 to-teal-600 rounded-lg hover:from-indigo-800 hover:to-teal-700 active:scale-[0.97] transition-all duration-150 shadow-sm shadow-indigo-500/20"
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -265,7 +265,7 @@ export default function FichasClinicasPlantillas() {
 
                                     <button
                                         onClick={() => abrirModalEditarPlantilla(plantilla)}
-                                        className="inline-flex items-center justify-center gap-1.5 h-8 sm:h-9 px-2.5 sm:px-3.5 text-xs font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:border-slate-300 active:scale-[0.97] transition-all duration-150"
+                                        className="inline-flex items-center justify-center gap-1.5 h-8 sm:h-9 px-2.5 sm:px-3.5 text-xs font-medium text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 hover:border-slate-300 active:scale-[0.97] transition-all duration-150"
                                         title="Editar plantilla"
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -295,9 +295,9 @@ export default function FichasClinicasPlantillas() {
             {modalPlantilla && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setModalPlantilla(false)}/>
-                    <div className="relative bg-white rounded-2xl shadow-[0_24px_80px_rgba(15,23,42,0.18)] w-full max-w-md overflow-hidden border border-slate-200/50">
+                    <div className="relative bg-white rounded-2xl shadow-[0_24px_80px_rgba(15,23,42,0.18)] w-full max-w-md overflow-hidden border border-slate-300/50">
                         {/* Header */}
-                        <div className="relative px-6 py-5 bg-gradient-to-r from-sky-600 to-cyan-500 overflow-hidden">
+                        <div className="relative px-6 py-5 bg-[linear-gradient(135deg,#0f172a_0%,#312e81_58%,#0891b2_100%)] overflow-hidden">
                             <div className="pointer-events-none absolute -top-8 -right-8 h-24 w-24 rounded-full bg-white/10" />
                             <div className="pointer-events-none absolute -bottom-4 -left-4 h-16 w-16 rounded-full bg-white/5" />
                             <div className="relative">
@@ -321,7 +321,7 @@ export default function FichasClinicasPlantillas() {
                                     value={nuevaPlantillaNombre}
                                     onChange={(e) => setNuevaPlantillaNombre(e.target.value)}
                                     placeholder="Ej: Dermatolog&iacute;a, Pediatr&iacute;a..."
-                                    className="w-full h-10 px-3.5 text-sm border border-slate-200 rounded-xl bg-slate-50/50 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-400 focus:bg-white transition-all placeholder:text-slate-400"
+                                    className="w-full h-10 px-3.5 text-sm border border-slate-200 rounded-xl bg-slate-50/50 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 focus:bg-white transition-all placeholder:text-slate-400"
                                     autoFocus
                                 />
                             </div>
@@ -332,21 +332,21 @@ export default function FichasClinicasPlantillas() {
                                     onChange={(e) => setNuevaPlantillaDescripcion(e.target.value)}
                                     placeholder="Descripci&oacute;n breve de para qu&eacute; sirve esta plantilla..."
                                     rows={3}
-                                    className="w-full px-3.5 py-2.5 text-sm border border-slate-200 rounded-xl bg-slate-50/50 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-400 focus:bg-white transition-all resize-none placeholder:text-slate-400"
+                                    className="w-full px-3.5 py-2.5 text-sm border border-slate-200 rounded-xl bg-slate-50/50 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 focus:bg-white transition-all resize-none placeholder:text-slate-400"
                                 />
                             </div>
                         </div>
                         {/* Footer */}
-                        <div className="flex items-center justify-end gap-2.5 px-6 py-4 border-t border-slate-100 bg-slate-50/50">
+                        <div className="flex items-center justify-end gap-2.5 px-6 py-4 border-t border-slate-200 bg-slate-100/50">
                             <button
                                 onClick={() => setModalPlantilla(false)}
-                                className="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 active:scale-[0.97] transition-all duration-150"
+                                className="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 active:scale-[0.97] transition-all duration-150"
                             >
                                 Cancelar
                             </button>
                             <button
                                 onClick={()=> insertarNuevaPlantilla(nuevaPlantillaNombre,nuevaPlantillaDescripcion)}
-                                className="px-5 py-2 text-sm font-semibold text-white bg-gradient-to-r from-sky-600 to-cyan-500 rounded-xl hover:from-sky-700 hover:to-cyan-600 active:scale-[0.97] transition-all duration-150 shadow-sm shadow-sky-500/25"
+                                className="px-5 py-2 text-sm font-semibold text-white bg-gradient-to-r from-indigo-700 to-teal-600 rounded-xl hover:from-indigo-800 hover:to-teal-700 active:scale-[0.97] transition-all duration-150 shadow-sm shadow-indigo-500/25"
                             >
                                 Crear Plantilla
                             </button>
@@ -359,9 +359,9 @@ export default function FichasClinicasPlantillas() {
             {modalEditarPlantilla && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setModalEditarPlantilla(false)}/>
-                    <div className="relative bg-white rounded-2xl shadow-[0_24px_80px_rgba(15,23,42,0.18)] w-full max-w-md overflow-hidden border border-slate-200/50">
+                    <div className="relative bg-white rounded-2xl shadow-[0_24px_80px_rgba(15,23,42,0.18)] w-full max-w-md overflow-hidden border border-slate-300/50">
                         {/* Header */}
-                        <div className="relative px-6 py-5 bg-gradient-to-r from-sky-600 to-cyan-500 overflow-hidden">
+                        <div className="relative px-6 py-5 bg-[linear-gradient(135deg,#0f172a_0%,#312e81_58%,#0891b2_100%)] overflow-hidden">
                             <div className="pointer-events-none absolute -top-8 -right-8 h-24 w-24 rounded-full bg-white/10" />
                             <div className="relative">
                                 <div className="flex items-center gap-2 mb-1">
@@ -383,7 +383,7 @@ export default function FichasClinicasPlantillas() {
                                     type="text"
                                     value={nuevaPlantillaNombre}
                                     onChange={(e) => setNuevaPlantillaNombre(e.target.value)}
-                                    className="w-full h-10 px-3.5 text-sm border border-slate-200 rounded-xl bg-slate-50/50 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-400 focus:bg-white transition-all placeholder:text-slate-400"
+                                    className="w-full h-10 px-3.5 text-sm border border-slate-200 rounded-xl bg-slate-50/50 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 focus:bg-white transition-all placeholder:text-slate-400"
                                     autoFocus
                                 />
                             </div>
@@ -393,21 +393,21 @@ export default function FichasClinicasPlantillas() {
                                     value={nuevaPlantillaDescripcion}
                                     onChange={(e) => setNuevaPlantillaDescripcion(e.target.value)}
                                     rows={3}
-                                    className="w-full px-3.5 py-2.5 text-sm border border-slate-200 rounded-xl bg-slate-50/50 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:border-sky-400 focus:bg-white transition-all resize-none placeholder:text-slate-400"
+                                    className="w-full px-3.5 py-2.5 text-sm border border-slate-200 rounded-xl bg-slate-50/50 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 focus:bg-white transition-all resize-none placeholder:text-slate-400"
                                 />
                             </div>
                         </div>
                         {/* Footer */}
-                        <div className="flex items-center justify-end gap-2.5 px-6 py-4 border-t border-slate-100 bg-slate-50/50">
+                        <div className="flex items-center justify-end gap-2.5 px-6 py-4 border-t border-slate-200 bg-slate-100/50">
                             <button
                                 onClick={() => setModalEditarPlantilla(false)}
-                                className="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 active:scale-[0.97] transition-all duration-150"
+                                className="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 active:scale-[0.97] transition-all duration-150"
                             >
                                 Cancelar
                             </button>
                             <button
                                 onClick={()=>  editarPlantilla(nuevaPlantillaNombre,nuevaPlantillaDescripcion,id_plantilla)}
-                                className="px-5 py-2 text-sm font-semibold text-white bg-gradient-to-r from-sky-600 to-cyan-500 rounded-xl hover:from-sky-700 hover:to-cyan-600 active:scale-[0.97] transition-all duration-150 shadow-sm shadow-sky-500/25"
+                                className="px-5 py-2 text-sm font-semibold text-white bg-gradient-to-r from-indigo-700 to-teal-600 rounded-xl hover:from-indigo-800 hover:to-teal-700 active:scale-[0.97] transition-all duration-150 shadow-sm shadow-indigo-500/25"
                             >
                                 Guardar Cambios
                             </button>
