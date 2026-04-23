@@ -103,7 +103,7 @@ export default function Page() {
               <img
                 src="/logo.png"
                 alt="AgendaClinica"
-                className="h-14 w-20 object-contain object-left"
+                className="h-20 w-28 object-contain object-left shrink-0"
               />
               <div>
                 <p className={michroma.className + " text-[13px] text-slate-900"}>AgendaClinica</p>
