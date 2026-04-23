@@ -100,9 +100,11 @@ export default function Page() {
             className="mb-6 flex items-center justify-between"
           >
             <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-500 to-indigo-600 shadow-[0_14px_35px_rgba(14,165,233,0.28)]">
-                <span className="text-[10px] font-black leading-none text-white">AC</span>
-              </div>
+              <img
+                src="/logo.png"
+                alt="AgendaClinica"
+                className="h-10 w-14 object-contain object-left"
+              />
               <div>
                 <p className={michroma.className + " text-[13px] text-slate-900"}>AgendaClinica</p>
                 <p className="text-[10px] uppercase tracking-[0.22em] text-slate-400">Healthcare OS</p>
