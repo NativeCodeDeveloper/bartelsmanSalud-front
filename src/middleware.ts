@@ -44,9 +44,9 @@ export default clerkMiddleware(async (auth, req) => {
   const { userId, sessionClaims } = await auth()
 
   // No autenticado → sign-in
-  if (!userId) {
-    return NextResponse.redirect(new URL('/sign-in', req.url))
-  }
+  // if (!userId) {
+   //  return NextResponse.redirect(new URL('/sign-in', req.url))
+ // }
 
   // Leer rol desde publicMetadata (configurado en Clerk Dashboard)
   const role = (sessionClaims?.metadata as { role?: string } | undefined)?.role
