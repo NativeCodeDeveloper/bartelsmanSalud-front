@@ -24,6 +24,7 @@ export default function FichasClinicasPlantillas() {
     const [modalEditarPlantilla, setModalEditarPlantilla] = useState(false)
     const [plantillaEditando, setPlantillaEditando] = useState(null)
     const [id_plantilla, setId_plantilla] = useState(null)
+    const [mostrarGuia, setMostrarGuia] = useState(false)
 
     // =============================================
     // HANDLERS
@@ -212,6 +213,114 @@ export default function FichasClinicasPlantillas() {
                             Nueva Plantilla
                         </button>
                     </div>
+                </div>
+
+                <div className="mb-8">
+                    <button
+                        onClick={() => setMostrarGuia((prev) => !prev)}
+                        className="group inline-flex w-full items-center justify-between gap-4 rounded-2xl border border-amber-200/80 bg-[linear-gradient(135deg,rgba(255,251,235,0.96)_0%,rgba(255,247,237,0.98)_100%)] px-5 py-4 text-left shadow-[0_12px_35px_rgba(120,53,15,0.08)] transition-all duration-150 hover:border-amber-300 hover:shadow-[0_16px_40px_rgba(120,53,15,0.12)]"
+                    >
+                        <div className="flex items-center gap-3">
+                            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-500 text-white shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.228 9c.549-1.165 1.918-2 3.522-2 2.071 0 3.75 1.343 3.75 3 0 1.235-.934 2.296-2.267 2.75-.827.282-1.483 1.02-1.483 1.894V15m0 3h.008M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p className="text-base font-semibold text-slate-900">¿C&oacute;mo creo una Ficha?</p>
+                                <p className="text-sm text-slate-600">Abre esta ayuda para ver los pasos recomendados.</p>
+                            </div>
+                        </div>
+
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className={`h-5 w-5 flex-shrink-0 text-slate-500 transition-transform duration-200 ${mostrarGuia ? "rotate-180" : ""}`}
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2.2}
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    {mostrarGuia && (
+                        <div className="mt-3 rounded-3xl border border-amber-200/80 bg-[linear-gradient(135deg,rgba(255,251,235,0.96)_0%,rgba(255,247,237,0.98)_100%)] p-5 sm:p-6 shadow-[0_12px_35px_rgba(120,53,15,0.08)]">
+                            <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                                <div className="max-w-2xl">
+                                    <div className="inline-flex items-center gap-2 rounded-full border border-amber-300 bg-white/70 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-amber-700">
+                                        <span className="h-2 w-2 rounded-full bg-amber-500" />
+                                        Gu&iacute;a R&aacute;pida
+                                    </div>
+                                    <h2 className="mt-3 text-xl font-semibold text-slate-900">
+                                        C&oacute;mo crear fichas cl&iacute;nicas personalizadas
+                                    </h2>
+                                    <p className="mt-2 text-sm leading-6 text-slate-600">
+                                        Esta secci&oacute;n te permite armar plantillas para cada especialidad o tipo de atenci&oacute;n. No necesitas conocimientos t&eacute;cnicos: primero creas la plantilla y luego agregas sus categor&iacute;as y campos.
+                                    </p>
+                                </div>
+
+                                <div className="rounded-2xl border border-amber-200 bg-white/80 px-4 py-3 text-sm text-slate-600 shadow-sm">
+                                    <p className="font-semibold text-slate-800">Consejo pr&aacute;ctico</p>
+                                    <p className="mt-1 leading-6">
+                                        Piensa en la ficha como un formulario que el profesional completar&aacute; durante la atenci&oacute;n.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                                <div className="rounded-2xl border border-white/70 bg-white/75 p-4 shadow-sm">
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-900 text-sm font-bold text-white">1</div>
+                                        <h3 className="text-sm font-semibold text-slate-900">Crear la plantilla</h3>
+                                    </div>
+                                    <p className="mt-3 text-sm leading-6 text-slate-600">
+                                        Pulsa <span className="font-semibold text-slate-800">&quot;Nueva Plantilla&quot;</span> y escribe un nombre claro, por ejemplo: <span className="font-medium text-slate-700">&quot;Evaluaci&oacute;n Nutricional&quot;</span> o <span className="font-medium text-slate-700">&quot;Primera Atenci&oacute;n Psicol&oacute;gica&quot;</span>.
+                                    </p>
+                                </div>
+
+                                <div className="rounded-2xl border border-white/70 bg-white/75 p-4 shadow-sm">
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-700 text-sm font-bold text-white">2</div>
+                                        <h3 className="text-sm font-semibold text-slate-900">Describir su uso</h3>
+                                    </div>
+                                    <p className="mt-3 text-sm leading-6 text-slate-600">
+                                        En la descripci&oacute;n, explica para qu&eacute; servir&aacute; la ficha. Eso ayuda a que otros usuarios sepan cu&aacute;ndo usarla y evita crear plantillas duplicadas.
+                                    </p>
+                                </div>
+
+                                <div className="rounded-2xl border border-white/70 bg-white/75 p-4 shadow-sm">
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-600 text-sm font-bold text-white">3</div>
+                                        <h3 className="text-sm font-semibold text-slate-900">Entrar a configurar</h3>
+                                    </div>
+                                    <p className="mt-3 text-sm leading-6 text-slate-600">
+                                        Luego pulsa <span className="font-semibold text-slate-800">&quot;Seleccionar&quot;</span>. Ah&iacute; podr&aacute;s ordenar la ficha por secciones, como <span className="font-medium text-slate-700">Antecedentes</span>, <span className="font-medium text-slate-700">Motivo de consulta</span> o <span className="font-medium text-slate-700">Indicaciones</span>.
+                                    </p>
+                                </div>
+
+                                <div className="rounded-2xl border border-white/70 bg-white/75 p-4 shadow-sm">
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500 text-sm font-bold text-white">4</div>
+                                        <h3 className="text-sm font-semibold text-slate-900">Agregar campos &uacute;tiles</h3>
+                                    </div>
+                                    <p className="mt-3 text-sm leading-6 text-slate-600">
+                                        Dentro de cada secci&oacute;n, agrega solo la informaci&oacute;n que el profesional realmente necesita registrar. Mantener la ficha simple mejora el uso diario.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="mt-5 rounded-2xl border border-slate-200/80 bg-white/70 p-4">
+                                <h3 className="text-sm font-semibold text-slate-900">Buenas pr&aacute;cticas para usuarios no t&eacute;cnicos</h3>
+                                <div className="mt-3 grid gap-2 text-sm leading-6 text-slate-600 md:grid-cols-2">
+                                    <p><span className="font-semibold text-slate-800">Usa nombres simples:</span> evita abreviaturas internas si varias personas usar&aacute;n la ficha.</p>
+                                    <p><span className="font-semibold text-slate-800">Piensa en el flujo real:</span> ordena las secciones como ocurre la atenci&oacute;n.</p>
+                                    <p><span className="font-semibold text-slate-800">No sobrecargues:</span> si un dato casi nunca se usa, probablemente no deba ir en la plantilla base.</p>
+                                    <p><span className="font-semibold text-slate-800">Revisa antes de duplicar:</span> si ya existe una plantilla parecida, ed&iacute;tala en vez de crear otra muy similar.</p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* ========== LISTA DE PLANTILLAS ========== */}

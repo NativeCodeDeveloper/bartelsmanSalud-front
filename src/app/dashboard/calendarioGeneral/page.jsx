@@ -9,10 +9,8 @@ import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
 import ShadcnInput from "@/Componentes/shadcnInput2";
 import ShadcnFechaHora from "@/Componentes/ShadcnFechaHora";
-import ShadcnButton2 from "@/Componentes/shadcnButton2";
 import ToasterClient from "@/Componentes/ToasterClient";
 import {toast} from "react-hot-toast";
-
 
 import es from "date-fns/locale/es";
 import {SelectDinamic} from "@/Componentes/SelectDinamic";
@@ -36,55 +34,106 @@ export default function Calendario() {
 
     const API = process.env.NEXT_PUBLIC_API_URL;
 
-    // Estilos CSS personalizados para mejorar la visualización de eventos
     useEffect(() => {
         const style = document.createElement('style');
         style.textContent = `
-            /* Estilos para eventos en vista mes */
+            .rbc-calendar, .rbc-time-view, .rbc-month-view {
+                border: 0 !important;
+                background: transparent !important;
+            }
+            .rbc-toolbar {
+                margin-bottom: 16px !important;
+                gap: 10px !important;
+            }
+            .rbc-toolbar button {
+                border-radius: 12px !important;
+                border: 1px solid #e2e8f0 !important;
+                background: #ffffff !important;
+                color: #475569 !important;
+                box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+            }
+            .rbc-toolbar button:hover,
+            .rbc-toolbar button:focus {
+                background: #faf5ff !important;
+                border-color: #c084fc !important;
+                color: #7c3aed !important;
+            }
+            .rbc-toolbar button.rbc-active {
+                background: linear-gradient(135deg, #9333ea, #7c3aed) !important;
+                border-color: #7c3aed !important;
+                color: #ffffff !important;
+                box-shadow: 0 12px 24px rgba(124, 58, 237, 0.22) !important;
+            }
+            .rbc-header {
+                padding: 12px 8px !important;
+                border-bottom: 1px solid #e2e8f0 !important;
+                color: #475569 !important;
+                font-size: 12px !important;
+                font-weight: 700 !important;
+                text-transform: uppercase !important;
+                letter-spacing: 0.08em !important;
+                background: rgba(248, 250, 252, 0.85) !important;
+            }
+            .rbc-time-header-content,
+            .rbc-time-content,
+            .rbc-time-view,
+            .rbc-timeslot-group,
+            .rbc-day-bg + .rbc-day-bg,
+            .rbc-month-row + .rbc-month-row,
+            .rbc-header + .rbc-header,
+            .rbc-time-header-content + .rbc-time-header-content {
+                border-color: #e2e8f0 !important;
+            }
+            .rbc-time-slot {
+                transition: background-color 120ms ease !important;
+            }
+            .rbc-day-slot .rbc-time-slot:hover {
+                background: rgba(168, 85, 247, 0.06) !important;
+            }
+            .rbc-today {
+                background: rgba(237, 233, 254, 0.42) !important;
+            }
+            .rbc-current-time-indicator {
+                background-color: #7c3aed !important;
+                height: 2px !important;
+            }
+            .rbc-slot-selection {
+                background: rgba(124, 58, 237, 0.22) !important;
+                border: 1px solid rgba(124, 58, 237, 0.42) !important;
+                border-radius: 16px !important;
+                box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2) !important;
+            }
+            .rbc-selected-cell {
+                background: rgba(124, 58, 237, 0.08) !important;
+            }
+            .rbc-event,
+            .rbc-background-event {
+                border-radius: 0 !important;
+                box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08) !important;
+            }
+            .rbc-background-event {
+                background-color: rgba(107, 114, 128, 0.28) !important;
+                border: 1px solid rgba(107, 114, 128, 0.38) !important;
+                border-left: 4px solid rgba(71, 85, 105, 0.95) !important;
+                box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16) !important;
+            }
             .rbc-month-view .rbc-event {
-                min-height: 28px !important;
-                height: auto !important;
-                padding: 6px 8px !important;
-                line-height: 1.3 !important;
-                white-space: normal !important;
-                overflow: visible !important;
-                word-break: break-word !important;
+                min-height: 0 !important; height: auto !important; padding: 2px 3px !important;
+                line-height: 1.1 !important; white-space: normal !important; overflow: visible !important; word-break: break-word !important;
+                font-size: 40% !important;
             }
-            
-            /* Estilos para eventos en vista semana y día */
             .rbc-time-view .rbc-event {
-                min-height: 30px !important;
-                height: auto !important;
-                padding: 6px 8px !important;
-                line-height: 1.3 !important;
-                white-space: normal !important;
-                overflow: visible !important;
-                word-break: break-word !important;
+                min-height: 0 !important; padding: 1px 2px !important;
+                line-height: 1.1 !important; white-space: normal !important; overflow: hidden !important; word-break: break-word !important;
+                font-size: 40% !important;
             }
-            
-            /* Aumentar altura de las celdas del mes para que quepan los nombres */
-            .rbc-month-view .rbc-day-slot {
-                min-height: 80px !important;
-            }
-            
-            /* Contenedor de eventos en mes */
-            .rbc-row-segment {
-                z-index: 1 !important;
-            }
-            
-            /* Texto del evento */
-            .rbc-event-label,
-            .rbc-event-content {
-                white-space: normal !important;
-                overflow: visible !important;
-                word-break: break-word !important;
-            }
+            .rbc-month-view .rbc-day-slot { min-height: 80px !important; }
+            .rbc-row-segment { z-index: 1 !important; }
+            .rbc-event-label, .rbc-event-content { white-space: normal !important; overflow: visible !important; word-break: break-word !important; font-size: 40% !important; }
+            .rbc-event-label { display: none !important; }
         `;
         document.head.appendChild(style);
-
-        return () => {
-            document.head.removeChild(style);
-        };
+        return () => { document.head.removeChild(style); };
     }, []);
 
     const [events, setEvents] = useState([]);
@@ -106,6 +155,7 @@ export default function Calendario() {
 
     const [dataAgenda, setDataAgenda] = useState([]);
     const [dataBloqueos, setDataBloqueos] = useState([]);
+    const [backgroundCalendarEvents, setBackgroundCalendarEvents] = useState([]);
     const [listaProfesionales, setListaProfesionales] = useState([]);
     const [id_profesional, setId_profesional] = useState("");
 
@@ -180,6 +230,64 @@ export default function Calendario() {
         return false;
     }
 
+
+    function formatHoraCorta(date) {
+        return format(date, "HH:mm", {locale: es});
+    }
+
+    function obtenerTituloReserva(cita) {
+        const nombre = (cita?.nombrePaciente ?? "").trim();
+        const apellido = (cita?.apellidoPaciente ?? "").trim();
+        const inicialApellido = apellido ? `${apellido.charAt(0).toUpperCase()}.` : "";
+        return [nombre, inicialApellido].filter(Boolean).join(" ");
+    }
+
+    function obtenerTooltipEvento(event) {
+        if (event?.tipo === "bloqueo") {
+            return event.title || "Bloqueo";
+        }
+        if (event?.tipo === "reserva") {
+            const nombre = (event.resource?.nombrePaciente ?? "").trim();
+            const apellido = (event.resource?.apellidoPaciente ?? "").trim();
+            const horario = event.start && event.end
+                ? `${formatHoraCorta(event.start)} - ${formatHoraCorta(event.end)}`
+                : "";
+            return [nombre, apellido, horario].filter(Boolean).join(" | ");
+        }
+        return event?.title || "";
+    }
+
+    function expandirBloqueosPorDia(bloqueos) {
+        const resultado = [];
+        for (const bloqueo of bloqueos) {
+            const horaIni = bloqueo.horaInicio ?? "00:00:00";
+            const horaFin = bloqueo.horaFinalizacion ?? "23:59:00";
+            const fechaIniStr = (bloqueo.fechaInicio ?? "").slice(0, 10);
+            const fechaFinStr = (bloqueo.fechaFinalizacion ?? "").slice(0, 10);
+            const primerDia = new Date(fechaIniStr + "T00:00:00");
+            const ultimoDia = new Date(fechaFinStr + "T00:00:00");
+            if (isNaN(primerDia.getTime()) || isNaN(ultimoDia.getTime())) continue;
+
+            let cursor = new Date(primerDia);
+            while (cursor <= ultimoDia) {
+                const y = cursor.getFullYear();
+                const m = String(cursor.getMonth() + 1).padStart(2, "0");
+                const d = String(cursor.getDate()).padStart(2, "0");
+                const fechaDia = `${y}-${m}-${d}`;
+                resultado.push({
+                    id_bloqueo: bloqueo.id_bloqueo,
+                    title: bloqueo.motivo || "Sin motivo",
+                    start: new Date(`${fechaDia}T${horaIni}`),
+                    end: new Date(`${fechaDia}T${horaFin}`),
+                    allDay: false,
+                    tipo: "bloqueo",
+                    resource: bloqueo,
+                });
+                cursor = new Date(y, cursor.getMonth(), cursor.getDate() + 1, 0, 0, 0);
+            }
+        }
+        return resultado;
+    }
 
     async function cargarDataAgenda() {
         try {
@@ -361,57 +469,130 @@ export default function Calendario() {
     useEffect(() => {
         const eventosReservas = (dataAgenda || []).map((cita) => ({
             id_reserva: cita.id_reserva,
-            title: cita.nombrePaciente + " " + cita.apellidoPaciente,
+            title: obtenerTituloReserva(cita),
             start: convertirAFechaCalendario(cita.fechaInicio, cita.horaInicio),
             end: convertirAFechaCalendario(cita.fechaFinalizacion, cita.horaFinalizacion),
+            allDay: false,
             tipo: "reserva",
             resource: cita,
         }));
-        const eventosBloqueos = (dataBloqueos || []).map((bloqueo) => ({
-            id_bloqueo: bloqueo.id_bloqueo,
-            title: "BLOQUEADO" + (bloqueo.motivo ? " - " + bloqueo.motivo : ""),
-            start: convertirAFechaCalendario(bloqueo.fechaInicio, bloqueo.horaInicio),
-            end: convertirAFechaCalendario(bloqueo.fechaFinalizacion, bloqueo.horaFinalizacion),
-            tipo: "bloqueo",
-            resource: bloqueo,
+        const eventosBloqueos = expandirBloqueosPorDia(dataBloqueos || []).map((bloqueo) => ({
+            ...bloqueo,
+            allDay: currentView === "month",
         }));
-        setEvents([...eventosReservas, ...eventosBloqueos]);
-    }, [dataAgenda, dataBloqueos]);
+
+        if (currentView === "month") {
+            setEvents([...eventosReservas, ...eventosBloqueos]);
+            setBackgroundCalendarEvents([]);
+            return;
+        }
+
+        setEvents(eventosReservas);
+        setBackgroundCalendarEvents(eventosBloqueos);
+    }, [dataAgenda, dataBloqueos, currentView]);
 
     const eventStyleGetter = (event) => {
         const esBloqueo = event.tipo === "bloqueo";
+        const esVistaMes = currentView === "month";
         const estadoReservaNormalizado = event.resource?.estadoReserva?.toLowerCase?.() ?? "";
         const paletteReserva = estadoReservaNormalizado === "confirmada"
-            ? {backgroundColor: "#16a34a", color: "#ffffff"}
+            ? {
+                backgroundColor: "rgba(34, 197, 94, 0.22)",
+                color: "#14532d",
+                accentColor: "#166534",
+                borderColor: "rgba(34, 197, 94, 0.30)"
+            }
             : estadoReservaNormalizado === "anulada"
-                ? {backgroundColor: "#9f1239", color: "#ffffff"}
-                : {backgroundColor: "#7c3aed", color: "#ffffff"};
+                ? {
+                    backgroundColor: "rgba(244, 63, 94, 0.18)",
+                    color: "#881337",
+                    accentColor: "#881337",
+                    borderColor: "rgba(225, 29, 72, 0.28)"
+                }
+                : {
+                    backgroundColor: "rgba(124, 58, 237, 0.20)",
+                    color: "#5b21b6",
+                    accentColor: "#5b21b6",
+                    borderColor: "rgba(124, 58, 237, 0.28)"
+                };
+
+        if (esBloqueo) {
+            return {
+                style: {
+                    display: 'flex',
+                    alignItems: 'center',
+                    height: esVistaMes ? 'auto' : '100%',
+                    minHeight: esVistaMes ? '20px' : '0',
+                    maxHeight: 'none',
+                    whiteSpace: 'normal',
+                    overflow: 'hidden',
+                    textOverflow: 'clip',
+                    lineHeight: esVistaMes ? '1' : '1.3',
+                    padding: esVistaMes ? '2px 4px' : '6px 8px',
+                    fontSize: esVistaMes ? '0.45rem' : '0.32rem',
+                    boxSizing: 'border-box',
+                    borderRadius: '0px',
+                    backgroundColor: 'rgba(107, 114, 128, 0.28)',
+                    color: '#334155',
+                    fontWeight: '600',
+                    wordBreak: 'break-word',
+                    border: '1px solid rgba(107, 114, 128, 0.38)',
+                    borderLeft: '4px solid rgba(71, 85, 105, 0.95)',
+                    boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.18)',
+                },
+            };
+        }
 
         return {
             style: {
                 display: 'flex',
-                alignItems: 'center',
-                height: 'auto',
-                minHeight: '28px',
+                alignItems: 'stretch',
+                height: esVistaMes ? 'auto' : '100%',
+                minHeight: esVistaMes ? '20px' : '0',
                 maxHeight: 'none',
                 whiteSpace: 'normal',
-                overflow: 'visible',
-                textOverflow: 'clip',
-                lineHeight: '1.3',
-                padding: '6px 8px',
-                fontSize: '0.8rem',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                lineHeight: '1',
+                padding: esVistaMes ? '2px 4px' : '0',
+                fontSize: esVistaMes ? '0.45rem' : '0.32rem',
                 boxSizing: 'border-box',
-                borderRadius: '4px',
-                backgroundColor: esBloqueo ? '#dc2626' : paletteReserva.backgroundColor,
-                color: esBloqueo ? '#fff' : paletteReserva.color,
-                fontWeight: '500',
-                wordBreak: 'break-word',
+                borderRadius: '0px',
+                backgroundColor: paletteReserva.backgroundColor,
+                color: paletteReserva.color,
+                fontWeight: '600', wordBreak: 'break-word',
+                border: `1px solid ${paletteReserva.borderColor}`,
+                borderLeft: `4px solid ${paletteReserva.accentColor}`,
+                boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.14)',
             },
         };
     };
 
+    const backgroundEventStyleGetter = (event) => {
+        const esBloqueo = event.tipo === "bloqueo";
+
+        if (esBloqueo) {
+            return {
+                className: "bloqueo-calendario-bg",
+                style: {
+                    backgroundColor: "rgba(107, 114, 128, 0.28)",
+                    border: "1px solid rgba(107, 114, 128, 0.38)",
+                    borderLeft: "4px solid rgba(71, 85, 105, 0.95)",
+                    borderRadius: "0px",
+                    boxShadow: "inset 0 0 0 1px rgba(255, 255, 255, 0.18)",
+                },
+            };
+        }
+
+        return {style: {}};
+    };
+
     const EventComponent = ({event}) => (
-        <div title={event.title} className="break-words text-[13px] leading-snug w-full flex items-center gap-1" style={{whiteSpace: 'normal', overflow: 'visible', wordBreak: 'break-word', hyphens: 'auto'}}>
+        <div
+            title={obtenerTooltipEvento(event)}
+            className="truncate text-[6px] leading-none w-full h-full flex items-center gap-1 px-[2px]"
+            style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}
+        >
             {event.tipo === "bloqueo" && (
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -422,7 +603,7 @@ export default function Calendario() {
     );
 
     const TitleOnlyEvent = ({event}) => (
-        <div title={event.title} className="break-words text-[13px] leading-snug font-medium w-full flex items-center gap-1" style={{whiteSpace: 'normal', overflow: 'visible', wordBreak: 'break-word'}}>
+        <div title={obtenerTooltipEvento(event)} className="truncate text-[6px] leading-none font-medium w-full flex items-center gap-1" style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
             {event.tipo === "bloqueo" && (
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -553,159 +734,124 @@ export default function Calendario() {
 
 
     return (
-        // Contenedor con altura fija para que el calendario se muestre correctamente
-        <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 px-4 py-8 md:px-10">
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-sky-50/30">
             <ToasterClient/>
 
-            <div className="mx-auto w-full max-w-7xl">
-                <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+
+                <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
-                        <h1 className="text-2xl md:text-5xl font-bold tracking-tight text-slate-900">Calendario General</h1>
-                        <p className="text-sm text-slate-600">Revisa tus reservas y actividades.</p>
+                        <p className="text-xs font-semibold uppercase tracking-widest text-sky-600 mb-1">Visualización</p>
+                        <h1 className="text-2xl md:text-3xl font-bold text-slate-800 tracking-tight">Calendario General</h1>
+                        <p className="text-sm text-slate-500 mt-1">Revisa reservas y actividades de todos los profesionales.</p>
                     </div>
                     <InfoButton informacion={"Este apartado le permite tener una vista rápida y general de todos los horarios agendados y los bloqueos de agenda registrados en el sistema.\n\nPara ingresar nuevos agendamientos o citas, debe dirigirse al módulo de Ingreso de Agendamientos.\n\nPara registrar bloqueos de agenda, debe utilizar el módulo de Bloqueo de Agenda.\n\nEste calendario es únicamente de consulta y visualización."}/>
                 </div>
 
-
-                <div className="mt-10">
-                    <div className="bg-white/90 backdrop-blur-sm shadow-lg rounded-2xl border border-slate-200 ring-1 ring-black/5 overflow-hidden">
-                        <div className="px-6 py-4 border-b border-slate-200 bg-white">
-                            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-                                <div>
-                                    <h3 className="text-sm font-semibold text-slate-900">Calendario de Reservas</h3>
-                                    <p className="text-xs text-slate-500">Navega por mes/semana/día y selecciona una reserva para ver su detalle.</p>
-                                    {id_profesional && (
-                                        <span className="text-xs text-sky-600 font-medium">
-                                            Agenda de: {listaProfesionales.find(p => p.id_profesional === id_profesional)?.nombreProfesional ?? ""}
-                                        </span>
-                                    )}
-                                </div>
-                                <div className="flex flex-wrap items-center gap-4">
-                                    <div className="w-64">
-                                        <SelectDinamic
-                                            value={id_profesional}
-                                            onChange={(e) => setId_profesional(Number(e.target.value))}
-                                            options={listaProfesionales.map(profesional => ({
-                                                value: profesional.id_profesional,
-                                                label: profesional.nombreProfesional
-                                            }))}
-                                            placeholder="Selecciona un profesional"
-                                        />
-                                    </div>
-                                    <div className="flex items-center gap-1.5">
-                                        <span className="inline-block h-3 w-3 rounded bg-violet-600"></span>
-                                        <span className="text-xs text-slate-500">Reservada</span>
-                                    </div>
-                                    <div className="flex items-center gap-1.5">
-                                        <span className="inline-block h-3 w-3 rounded bg-green-600"></span>
-                                        <span className="text-xs text-slate-500">Confirmada</span>
-                                    </div>
-                                    <div className="flex items-center gap-1.5">
-                                        <span className="inline-block h-3 w-3 rounded bg-rose-800"></span>
-                                        <span className="text-xs text-slate-500">Anulada</span>
-                                    </div>
-                                    <div className="flex items-center gap-1.5">
-                                        <span className="inline-block h-3 w-3 rounded bg-red-600"></span>
-                                        <span className="text-xs text-slate-500">Bloqueado</span>
-                                    </div>
-                                    <div className="text-xs text-slate-500">Vista: <span className="font-medium text-slate-700">{currentView}</span></div>
-                                </div>
-                            </div>
+                <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+                    <div className="border-b border-slate-100 bg-slate-50/50 px-5 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            <h2 className="text-sm font-semibold text-slate-700 tracking-wide uppercase">Calendario de Reservas</h2>
+                            {id_profesional && (
+                                <span className="text-xs text-violet-600 font-medium ml-2">
+                                    — Agenda de: {listaProfesionales.find(p => p.id_profesional === id_profesional)?.nombreProfesional ?? ""}
+                                </span>
+                            )}
                         </div>
-                        <div className="p-6 h-[700px]">
-                            <Calendar
-                                // Pasamos el localizador configurado para manejar fechas y formatos
-                                localizer={localizer}
-                                // Eventos que se mostrarán en el calendario
-                                events={events}
-                                // Evita que el título se corte en vistas comprimidas (p. ej. semana)
-                                eventPropGetter={eventStyleGetter}
-                                // Usamos componentes específicos: para day y agenda mostramos sólo el título
-                                components={{
-                                    event: EventComponent,
-                                    day: {event: TitleOnlyEvent},
-                                    agenda: {event: TitleOnlyEvent}
-                                }}
-                                // Propiedades que indican qué campos del evento usar para inicio y fin
-                                startAccessor="start"
-                                endAccessor="end"
-                                // Mensajes personalizados para la UI del calendario
-                                messages={messages}
-                                culture="es"
-                                date={currentDate}
-                                onNavigate={(nextDate) => setCurrentDate(nextDate)}
-                                view={currentView}
-                                onView={(nextView) => setCurrentView(nextView)}
-                                defaultView="month"
-                                style={{height: "100%"}}
-
-                                // Permite seleccionar rangos de tiempo en el calendario
-                                selectable
-                                // Evitar seleccionar rangos que choquen con reservas existentes
-                                onSelecting={(slot) => {
-                                    // slot puede ser {start, end} o directamente un objeto
-                                    const start = slot.start ?? slot;
-                                    const end = slot.end ?? slot;
-                                    if (isOverlapping(start, end)) {
-                                        toast.error('Horario no disponible (solapa con una reserva existente)');
-                                        return false; // cancela la selección
-                                    }
-                                    return true;
-                                }}
-
-                                onSelectEvent={(event) => {
-                                    if (event.tipo === "bloqueo") {
-                                        return toast("Bloqueo: " + (event.title || "Sin motivo"), {icon: "🔒"});
-                                    }
-                                    if (!event?.id_reserva) {
-                                        toast.error("No se encontró el ID de la reserva");
-                                        return;
-                                    }
-                                    setid_reserva(event.id_reserva)
-                                    seleccionarReservaEspecifica(event.id_reserva)
-                                    toast.success(`Reserva: Numero # ${event.id_reserva}`);
-                                }}
-
-                                /* Función que se ejecuta al seleccionar un rango de tiempo.
-                                   Solicita al usuario el título del evento y lo añade a la lista de eventos */
-                                onSelectSlot={(slotInfo) => {
-                                    const start = slotInfo.start ?? slotInfo;
-                                    const end = slotInfo.end ?? slotInfo;
-                                    if (isOverlapping(start, end)) {
-                                        toast.error('No puede seleccionar un horario que ya está ocupado');
-                                        return;
-                                    }
-                                    const title = prompt("Título del evento");
-                                    if (!title) return;
-
-                                    setEvents((prev) => [
-                                        ...prev,
-                                        {
-                                            title,
-                                            start: slotInfo.start,
-                                            end: slotInfo.end,
-                                        },
-                                    ]);
-                                }}
-                            />
-                            {/* Leyenda / ayuda */}
-                            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-slate-600 mt-6">
-                                <div className="flex items-center gap-1.5">
-                                    <span className="inline-block w-3 h-3 rounded-sm bg-sky-600" aria-hidden="true"/>
-                                    <span>Reserva</span>
-                                </div>
-                                <div className="flex items-center gap-1.5">
-                                    <span className="inline-block w-3 h-3 rounded-sm bg-red-600" aria-hidden="true"/>
-                                    <span>Bloqueado</span>
-                                </div>
-                                <span className="text-xs italic text-slate-500">Pasa el cursor sobre un evento para ver el detalle</span>
+                        <div className="flex flex-wrap items-center gap-4">
+                            <div className="w-64">
+                                <SelectDinamic
+                                    value={id_profesional}
+                                    onChange={(e) => setId_profesional(Number(e.target.value))}
+                                    options={listaProfesionales.map(profesional => ({
+                                        value: profesional.id_profesional,
+                                        label: profesional.nombreProfesional
+                                    }))}
+                                    placeholder="Selecciona un profesional"
+                                />
                             </div>
+                            <div className="flex items-center gap-1.5">
+                                <span className="inline-block w-3 h-3 rounded bg-violet-600"></span>
+                                <span className="text-xs text-slate-500">Reservada</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                                <span className="inline-block w-3 h-3 rounded bg-green-600"></span>
+                                <span className="text-xs text-slate-500">Confirmada</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                                <span className="inline-block w-3 h-3 rounded bg-rose-800"></span>
+                                <span className="text-xs text-slate-500">Anulada</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                                <span className="inline-block h-3 w-3 rounded border border-slate-500/60 bg-slate-500/50"></span>
+                                <span className="text-xs text-slate-500">Bloqueado</span>
+                            </div>
+                            <span className="text-xs text-slate-400">Vista: <span className="font-medium text-slate-600 capitalize">{currentView}</span></span>
                         </div>
                     </div>
+                    <div className="relative p-4 md:p-6 h-[700px]">
+                        <Calendar
+                            localizer={localizer}
+                            events={events}
+                            backgroundEvents={backgroundCalendarEvents}
+                            eventPropGetter={eventStyleGetter}
+                            backgroundEventPropGetter={backgroundEventStyleGetter}
+                            components={{
+                                event: EventComponent,
+                                day: {event: TitleOnlyEvent},
+                                agenda: {event: TitleOnlyEvent}
+                            }}
+                            startAccessor="start"
+                            endAccessor="end"
+                            messages={messages}
+                            culture="es"
+                            date={currentDate}
+                            onNavigate={(nextDate) => setCurrentDate(nextDate)}
+                            view={currentView}
+                            onView={(nextView) => setCurrentView(nextView)}
+                            defaultView="week"
+                            views={["month", "week", "day", "agenda"]}
+                            style={{height: "100%"}}
+                            selectable
+                            popup
+                            step={30}
+                            timeslots={2}
+                            onSelecting={(slot) => {
+                                const start = slot.start ?? slot;
+                                const end = slot.end ?? slot;
+                                if (isOverlapping(start, end)) {
+                                    toast.error('Horario no disponible (solapa con una reserva existente)');
+                                    return false;
+                                }
+                                return true;
+                            }}
+                            onSelectEvent={(event) => {
+                                if (event.tipo === "bloqueo") {
+                                    return toast("Bloqueo: " + (event.title || "Sin motivo"), {icon: "🔒"});
+                                }
+                                if (!event?.id_reserva) {
+                                    toast.error("No se encontró el ID de la reserva");
+                                    return;
+                                }
+                                setid_reserva(event.id_reserva);
+                                seleccionarReservaEspecifica(event.id_reserva);
+                                toast.success(`Reserva: Numero # ${event.id_reserva}`);
+                            }}
+                            onSelectSlot={(slotInfo) => {
+                                const start = slotInfo.start ?? slotInfo;
+                                const end = slotInfo.end ?? slotInfo;
+                                if (isOverlapping(start, end)) {
+                                    toast.error('No puede seleccionar un horario que ya está ocupado');
+                                    return;
+                                }
+                            }}
+                        />
+                    </div>
                 </div>
-
             </div>
-
         </div>
     );
 }

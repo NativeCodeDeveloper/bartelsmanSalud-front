@@ -283,7 +283,7 @@ export default function AgendaCitas() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-sky-50/30">
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-violet-50/30">
             <ToasterClient/>
 
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
@@ -291,7 +291,7 @@ export default function AgendaCitas() {
                 {/* Header */}
                 <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
-                        <p className="text-xs font-semibold uppercase tracking-widest text-sky-600 mb-1">Agenda</p>
+                        <p className="text-xs font-semibold uppercase tracking-widest text-violet-600 mb-1">Agenda</p>
                         <h1 className="text-2xl md:text-3xl font-bold text-slate-800 tracking-tight">
                             Listado de Reservaciones
                         </h1>
@@ -305,7 +305,7 @@ export default function AgendaCitas() {
                     {/* Filtros de búsqueda */}
                     <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
                         <div className="border-b border-slate-100 bg-slate-50/50 px-5 py-3 flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                             </svg>
                             <h2 className="text-sm font-semibold text-slate-700 tracking-wide uppercase">Filtros de Búsqueda</h2>
@@ -325,7 +325,7 @@ export default function AgendaCitas() {
                                         />
                                         <button
                                             onClick={() => buscarPorNombres(nombrePaciente)}
-                                            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-sky-600 to-cyan-500 rounded-lg hover:from-sky-700 hover:to-cyan-600 transition-all duration-150 shadow-sm flex-shrink-0">
+                                            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-violet-600 to-indigo-500 rounded-lg hover:from-violet-700 hover:to-indigo-600 transition-all duration-150 shadow-sm flex-shrink-0">
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                                             </svg>
@@ -345,7 +345,7 @@ export default function AgendaCitas() {
                                         />
                                         <button
                                             onClick={() => buscarPorRut(rut)}
-                                            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-sky-600 to-cyan-500 rounded-lg hover:from-sky-700 hover:to-cyan-600 transition-all duration-150 shadow-sm flex-shrink-0">
+                                            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-violet-600 to-indigo-500 rounded-lg hover:from-violet-700 hover:to-indigo-600 transition-all duration-150 shadow-sm flex-shrink-0">
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                                             </svg>
@@ -398,7 +398,7 @@ export default function AgendaCitas() {
 
                                 <button
                                     onClick={() => buscarEntreFechas(fechaInicio, fechaFinalizacion)}
-                                    className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-sky-600 to-cyan-500 rounded-lg hover:from-sky-700 hover:to-cyan-600 transition-all duration-150 shadow-sm">
+                                    className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-violet-600 to-indigo-500 rounded-lg hover:from-violet-700 hover:to-indigo-600 transition-all duration-150 shadow-sm">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                     </svg>
@@ -412,11 +412,11 @@ export default function AgendaCitas() {
                     <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
                         <div className="border-b border-slate-100 bg-slate-50/50 px-5 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                             <div className="flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                 </svg>
                                 <h2 className="text-sm font-semibold text-slate-700 tracking-wide uppercase">Reservaciones</h2>
-                                <span className="inline-flex items-center justify-center h-6 min-w-[24px] px-2 rounded-full text-xs font-bold bg-sky-100 text-sky-700">
+                                <span className="inline-flex items-center justify-center h-6 min-w-[24px] px-2 rounded-full text-xs font-bold bg-violet-100 text-violet-700">
                                     {dataLista.length}
                                 </span>
                             </div>
@@ -441,7 +441,7 @@ export default function AgendaCitas() {
                             <Table>
                                 <TableCaption className="font-medium text-slate-400 text-xs py-4">Listado de reservaciones registradas</TableCaption>
                                 <TableHeader>
-                                    <TableRow className="bg-gradient-to-r from-sky-600 to-cyan-500 hover:from-sky-600 hover:to-cyan-500">
+                                    <TableRow className="bg-[linear-gradient(135deg,#0f172a_0%,#312e81_60%,#0891b2_100%)] hover:bg-[linear-gradient(135deg,#0f172a_0%,#312e81_60%,#0891b2_100%)]">
                                         <TableHead className="text-center font-semibold text-white text-xs uppercase tracking-wider px-3 py-3">Fecha</TableHead>
                                         <TableHead className="text-center font-semibold text-white text-xs uppercase tracking-wider px-3 py-3">Paciente</TableHead>
                                         <TableHead className="text-center font-semibold text-white text-xs uppercase tracking-wider px-3 py-3">Profesional</TableHead>
@@ -454,13 +454,13 @@ export default function AgendaCitas() {
                                     {dataLista.map((data, i) => (
                                         <TableRow
                                             key={data.id_reserva}
-                                            className={"hover:bg-sky-50/50 transition-colors duration-100 " + (i % 2 === 0 ? 'bg-white' : 'bg-slate-50/50')}>
+                                            className={"hover:bg-violet-50/50 transition-colors duration-100 " + (i % 2 === 0 ? 'bg-white' : 'bg-slate-50/50')}>
                                             <TableCell className="text-center whitespace-nowrap px-3 py-2.5">
-                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-sky-50 border border-sky-100">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-violet-50 border border-violet-100">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 text-violet-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                                     </svg>
-                                                    <span className="text-sm font-semibold text-sky-700">{formatearFecha(data.fechaInicio)}</span>
+                                                    <span className="text-sm font-semibold text-violet-700">{formatearFecha(data.fechaInicio)}</span>
                                                 </span>
                                             </TableCell>
                                             <TableCell className="text-center font-medium text-slate-800 text-sm px-3 py-2.5 whitespace-nowrap">
@@ -478,7 +478,7 @@ export default function AgendaCitas() {
                                             <TableCell className="text-center px-3 py-2.5">
                                                 <button
                                                     onClick={() => verDetalleAgenda(data.id_reserva)}
-                                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-sky-700 bg-sky-50 border border-sky-200 rounded-lg hover:bg-sky-100 transition-colors duration-150">
+                                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-violet-700 bg-violet-50 border border-violet-200 rounded-lg hover:bg-violet-100 transition-colors duration-150">
                                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>

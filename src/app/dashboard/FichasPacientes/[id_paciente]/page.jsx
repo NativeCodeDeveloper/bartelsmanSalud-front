@@ -346,6 +346,14 @@ export default function Paciente() {
     const pacienteActual = detallePaciente[0];
     const totalFichas = listaFichas.length;
 
+
+
+    function irAReceta(id_paciente) {
+        router.push(`/dashboard/recetaPacientes/${id_paciente}`);
+    }
+
+
+
     return (
         <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.14),_transparent_32%),radial-gradient(circle_at_right,_rgba(6,182,212,0.12),_transparent_28%),linear-gradient(180deg,_#f1f5f9_0%,_#f8fafc_55%,_#f1f5f9_100%)]">
             <ToasterClient/>
@@ -532,6 +540,17 @@ export default function Paciente() {
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4"/>
                             </svg>
                             Nueva Ficha
+                        </button>
+
+
+
+                        <button
+                            onClick={()=> irAReceta(id_paciente)}
+                            className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-sky-600 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(14,165,233,0.24)] transition-all duration-150 hover:from-cyan-600 hover:to-sky-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6M7 4h10a2 2 0 012 2v12a2 2 0 01-2 2H7a2 2 0 01-2-2V6a2 2 0 012-2z"/>
+                            </svg>
+                            Generar Receta Medica
                         </button>
                     </div>
                 </div>
