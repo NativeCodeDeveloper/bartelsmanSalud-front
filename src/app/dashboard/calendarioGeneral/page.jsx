@@ -84,6 +84,11 @@ export default function Calendario() {
             .rbc-time-header-content + .rbc-time-header-content {
                 border-color: #e2e8f0 !important;
             }
+            .rbc-time-content {
+                -webkit-overflow-scrolling: touch !important;
+                touch-action: pan-y !important;
+                overscroll-behavior: contain !important;
+            }
             .rbc-time-slot {
                 transition: background-color 120ms ease !important;
             }
@@ -131,6 +136,20 @@ export default function Calendario() {
             .rbc-row-segment { z-index: 1 !important; }
             .rbc-event-label, .rbc-event-content { white-space: normal !important; overflow: visible !important; word-break: break-word !important; font-size: 40% !important; }
             .rbc-event-label { display: none !important; }
+            @media (max-width: 767px) {
+                .rbc-time-view,
+                .rbc-time-content,
+                .rbc-day-slot,
+                .rbc-time-column {
+                    touch-action: pan-y !important;
+                }
+                .rbc-toolbar {
+                    flex-wrap: wrap !important;
+                }
+                .rbc-toolbar button {
+                    min-height: 38px !important;
+                }
+            }
         `;
         document.head.appendChild(style);
         return () => { document.head.removeChild(style); };
@@ -139,6 +158,7 @@ export default function Calendario() {
     const [events, setEvents] = useState([]);
     const [currentDate, setCurrentDate] = useState(new Date());
     const [currentView, setCurrentView] = useState("month");
+    const [esMobile, setEsMobile] = useState(false);
 
 
     const [nombrePaciente, setNombrePaciente] = useState("");
@@ -158,6 +178,26 @@ export default function Calendario() {
     const [backgroundCalendarEvents, setBackgroundCalendarEvents] = useState([]);
     const [listaProfesionales, setListaProfesionales] = useState([]);
     const [id_profesional, setId_profesional] = useState("");
+
+    useEffect(() => {
+        function actualizarModoMobile() {
+            const mobile = window.innerWidth < 768;
+            setEsMobile(mobile);
+            setCurrentView((prev) => {
+                if (mobile && (prev === "month" || prev === "agenda")) {
+                    return "week";
+                }
+                if (!mobile && prev === "week") {
+                    return prev;
+                }
+                return prev;
+            });
+        }
+
+        actualizarModoMobile();
+        window.addEventListener("resize", actualizarModoMobile);
+        return () => window.removeEventListener("resize", actualizarModoMobile);
+    }, []);
 
     async function seleccionarTodosProfesionalesCalendario() {
         try {
@@ -464,6 +504,8 @@ export default function Calendario() {
         }),
         []
     );
+
+    const vistasDisponibles = esMobile ? ["week", "day"] : ["month", "week", "day", "agenda"];
 
 
     useEffect(() => {
@@ -813,12 +855,13 @@ export default function Calendario() {
                             view={currentView}
                             onView={(nextView) => setCurrentView(nextView)}
                             defaultView="week"
-                            views={["month", "week", "day", "agenda"]}
+                            views={vistasDisponibles}
                             style={{height: "100%"}}
                             selectable
                             popup
                             step={30}
                             timeslots={2}
+                            longPressThreshold={esMobile ? 300 : 10}
                             onSelecting={(slot) => {
                                 const start = slot.start ?? slot;
                                 const end = slot.end ?? slot;
