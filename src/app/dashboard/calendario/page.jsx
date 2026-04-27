@@ -132,7 +132,7 @@ function CalendarioContent() {
             .rbc-month-view .rbc-event {
                 min-height: 0 !important; height: auto !important; padding: 2px 3px !important;
                 line-height: 1.1 !important; white-space: normal !important; overflow: visible !important; word-break: break-word !important;
-                font-size: 40% !important;
+                font-size: 55% !important;
             }
             .rbc-time-view .rbc-event {
                 min-height: 0 !important; padding: 1px 2px !important;
@@ -143,6 +143,12 @@ function CalendarioContent() {
             .rbc-row-segment { z-index: 1 !important; }
             .rbc-event-label, .rbc-event-content { white-space: normal !important; overflow: visible !important; word-break: break-word !important; font-size: 40% !important; }
             .rbc-event-label { display: none !important; }
+            @media (min-width: 768px) {
+                .rbc-month-view .rbc-event-label,
+                .rbc-month-view .rbc-event-content {
+                    font-size: 55% !important;
+                }
+            }
         `;
         document.head.appendChild(style);
         return () => { document.head.removeChild(style); };
@@ -151,6 +157,7 @@ function CalendarioContent() {
     const [events, setEvents] = useState([]);
     const [currentDate, setCurrentDate] = useState(new Date());
     const [currentView, setCurrentView] = useState("week");
+    const [esMobile, setEsMobile] = useState(false);
 
     const searchParams = useSearchParams();
 
@@ -197,6 +204,23 @@ function CalendarioContent() {
         email: "",
         motivoBloqueo: "",
     });
+
+    useEffect(() => {
+        function actualizarModoMobile() {
+            const mobile = window.innerWidth < 768;
+            setEsMobile(mobile);
+            setCurrentView((prev) => {
+                if (mobile && (prev === "month" || prev === "agenda")) {
+                    return "week";
+                }
+                return prev;
+            });
+        }
+
+        actualizarModoMobile();
+        window.addEventListener("resize", actualizarModoMobile);
+        return () => window.removeEventListener("resize", actualizarModoMobile);
+    }, []);
 
     async function seleccionarTodosProfesionalesCalendario() {
         try {
@@ -491,26 +515,48 @@ function CalendarioContent() {
     useEffect(() => {
         if (!draggingPopup) return;
 
+        function actualizarPosicion(clientX, clientY) {
+            const popupWidth = popupRef.current?.offsetWidth ?? 420;
+            const popupHeight = popupRef.current?.offsetHeight ?? 520;
+            const nextX = clientX - popupDragStateRef.current.offsetX;
+            const nextY = clientY - popupDragStateRef.current.offsetY;
+
+            setPopupPosition({
+                x: Math.max(8, Math.min(nextX, window.innerWidth - popupWidth - 8)),
+                y: Math.max(8, Math.min(nextY, window.innerHeight - popupHeight - 8)),
+            });
+        }
+
         function handleMove(event) {
             if (!popupDragStateRef.current.dragging) return;
-            setPopupPosition({
-                x: Math.max(16, event.clientX - popupDragStateRef.current.offsetX),
-                y: Math.max(16, event.clientY - popupDragStateRef.current.offsetY),
-            });
+            actualizarPosicion(event.clientX, event.clientY);
+        }
+
+        function handleTouchMove(event) {
+            if (!popupDragStateRef.current.dragging) return;
+            const touch = event.touches?.[0];
+            if (!touch) return;
+            event.preventDefault();
+            actualizarPosicion(touch.clientX, touch.clientY);
         }
 
         function handleUp() {
             popupDragStateRef.current.dragging = false;
             setDraggingPopup(false);
             document.body.style.userSelect = "";
+            document.body.style.touchAction = "";
         }
 
         window.addEventListener("mousemove", handleMove);
         window.addEventListener("mouseup", handleUp);
+        window.addEventListener("touchmove", handleTouchMove, {passive: false});
+        window.addEventListener("touchend", handleUp);
 
         return () => {
             window.removeEventListener("mousemove", handleMove);
             window.removeEventListener("mouseup", handleUp);
+            window.removeEventListener("touchmove", handleTouchMove);
+            window.removeEventListener("touchend", handleUp);
         };
     }, [draggingPopup]);
 
@@ -715,6 +761,8 @@ function CalendarioContent() {
         next: "Siguiente", previous: "Anterior", today: "Hoy", month: "Mes", week: "Semana", day: "Día", agenda: "Agenda", noEventsInRange: "No hay eventos",
     }), []);
 
+    const vistasDisponibles = esMobile ? ["week", "day"] : ["month", "week", "day", "agenda"];
+
     // Expande bloqueos multi-día en segmentos por día para que
     // react-big-calendar los muestre en la grilla horaria (no en all-day).
     // Cada día del rango usa el MISMO horario (horaInicio → horaFinalizacion).
@@ -818,7 +866,7 @@ function CalendarioContent() {
                     textOverflow: 'clip',
                     lineHeight: esVistaMes ? '1' : '1.3',
                     padding: esVistaMes ? '2px 4px' : '6px 8px',
-                    fontSize: esVistaMes ? '0.45rem' : '0.32rem',
+                    fontSize: esVistaMes ? '0.58rem' : '0.32rem',
                     boxSizing: 'border-box',
                     borderRadius: '0px',
                     backgroundColor: 'rgba(107, 114, 128, 0.28)',
@@ -844,7 +892,7 @@ function CalendarioContent() {
                 textOverflow: 'ellipsis',
                 lineHeight: '1',
                 padding: esVistaMes ? '2px 4px' : '0',
-                fontSize: esVistaMes ? '0.45rem' : '0.32rem',
+                fontSize: esVistaMes ? '0.58rem' : '0.32rem',
                 boxSizing: 'border-box',
                 borderRadius: '0px',
                 backgroundColor: esSeleccion ? 'rgba(124, 58, 237, 0.24)' : paletteReserva.backgroundColor,
@@ -981,13 +1029,16 @@ function CalendarioContent() {
     function iniciarDragPopup(event) {
         if (!popupRef.current) return;
         const rect = popupRef.current.getBoundingClientRect();
+        const point = "touches" in event ? event.touches[0] : event;
+        if (!point) return;
         popupDragStateRef.current = {
             dragging: true,
-            offsetX: event.clientX - rect.left,
-            offsetY: event.clientY - rect.top,
+            offsetX: point.clientX - rect.left,
+            offsetY: point.clientY - rect.top,
         };
         setDraggingPopup(true);
         document.body.style.userSelect = "none";
+        document.body.style.touchAction = "none";
     }
 
     async function confirmarAgendamientoDesdePopup() {
@@ -1039,6 +1090,18 @@ function CalendarioContent() {
 
                 const respuestaBackend = await res.json();
                 if (respuestaBackend.message === true) {
+                    await refrescarCalendario();
+                    setid_reserva(0);
+                    setNombrePaciente("");
+                    setApellidoPaciente("");
+                    setRut("");
+                    setTelefono("");
+                    setEmail("");
+                    setfechaInicio("");
+                    setHoraInicio("");
+                    setfechaFinalizacion("");
+                    setHoraFinalizacion("");
+                    setEstadoReserva("");
                     return toast.success("Se ha eliminado con exito la reserva");
                 } else if (respuestaBackend.message === false) {
                     return toast.success("No se ha podido eliminar la reserva. Intente mas tarde.");
@@ -1343,7 +1406,7 @@ function CalendarioContent() {
                             view={currentView}
                             onView={(nextView) => setCurrentView(nextView)}
                             defaultView="week"
-                            views={["month", "week", "day", "agenda"]}
+                            views={vistasDisponibles}
                             style={{height: "100%"}}
                             selectable
                             resizable
@@ -1400,16 +1463,18 @@ function CalendarioContent() {
             </div>
 
             {selectionDraft && (
-                <div className="fixed inset-0 z-[80] bg-transparent" onMouseDown={(e) => e.preventDefault()}>
+                <div className="fixed inset-0 z-[80] bg-transparent" onMouseDown={(e) => e.preventDefault()} onTouchStart={(e) => e.preventDefault()}>
                     <div
                         ref={popupRef}
-                        className="absolute w-[420px] rounded-3xl border border-violet-200 bg-white/95 shadow-[0_28px_80px_rgba(76,29,149,0.18)] backdrop-blur-xl"
+                        className="absolute w-[calc(100vw-24px)] max-w-[420px] rounded-3xl border border-violet-200 bg-white/95 shadow-[0_28px_80px_rgba(76,29,149,0.18)] backdrop-blur-xl"
                         style={{left: popupPosition.x, top: popupPosition.y}}
                         onMouseDown={(e) => e.stopPropagation()}
+                        onTouchStart={(e) => e.stopPropagation()}
                     >
                         <div
-                            className="flex cursor-move items-center justify-between rounded-t-3xl border-b border-violet-100 bg-[linear-gradient(135deg,rgba(245,243,255,0.98),rgba(237,233,254,0.98))] px-4 py-3"
+                            className="flex cursor-move touch-none items-center justify-between rounded-t-3xl border-b border-violet-100 bg-[linear-gradient(135deg,rgba(245,243,255,0.98),rgba(237,233,254,0.98))] px-4 py-3"
                             onMouseDown={iniciarDragPopup}
+                            onTouchStart={iniciarDragPopup}
                         >
                             <div>
                                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-violet-700">Nuevo agendamiento</p>
