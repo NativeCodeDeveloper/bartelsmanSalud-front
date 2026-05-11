@@ -3,7 +3,7 @@
 import * as React from "react"
 import {CalendarIcon} from "lucide-react"
 import { es } from "date-fns/locale"
-import { format, parseISO } from "date-fns"
+import { format } from "date-fns"
 
 import {Button} from "@/components/ui/button"
 import {Calendar} from "@/components/ui/calendar"
@@ -40,7 +40,7 @@ export function Calendar28({ nombre, onChange, value }) {
     // Si la prop 'value' existe, se analiza para crear un objeto Date. De lo contrario, null.
     const internalDate = React.useMemo(() => {
         if (value) {
-            const parsedDate = parseISO(value); // Usar parseISO
+            const parsedDate = new Date(value + "T00:00:00"); // Parsear como hora local, no UTC
             return isValidDate(parsedDate) ? parsedDate : undefined;
         }
         return undefined;
